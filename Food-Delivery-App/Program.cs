@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using System;
+using Repository;
 using Repository.Data;
+using Service;
+using Service.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
+builder.Services.AddRepositoryLayer();
+builder.Services.AddServiceLayer();
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,6 +32,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
