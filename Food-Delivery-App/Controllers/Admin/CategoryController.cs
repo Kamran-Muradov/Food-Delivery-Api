@@ -31,7 +31,7 @@ namespace Food_Delivery_App.Controllers.Admin
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int? id)
         {
-            return Ok(_categoryService.GetByIdAsync(id));
+            return Ok(await _categoryService.GetByIdAsync(id));
         }
 
         [HttpPut("{id}")]

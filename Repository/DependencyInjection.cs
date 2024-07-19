@@ -11,6 +11,8 @@ namespace Repository
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IIngredientRepository, IngredientRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+            services.AddScoped<IRestaurantImageRepository, RestaurantImageRepository>();
 
             return services;
         }

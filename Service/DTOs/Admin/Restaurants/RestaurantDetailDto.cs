@@ -1,8 +1,6 @@
-﻿using Domain.Common;
-
-namespace Domain.Entities
+﻿namespace Service.DTOs.Admin.Restaurants
 {
-    public class Restaurant : BaseEntity
+    public class RestaurantDetailDto
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -15,8 +13,8 @@ namespace Domain.Entities
         public int MaxDeliveryTime { get; set; }
         public int Rating { get; set; }
         public string Address { get; set; }
-        public string? Website { get; set; }
-        public ICollection<RestaurantCategory> RestaurantCategories { get; set; }
-        public ICollection<RestaurantImage> RestaurantImages { get; set; }
+        public string Website { get; set; }
+        public IEnumerable<string> Categories { get; set; }
+        public IEnumerable<RestaurantImageDto> RestaurantImages { get; set; }
     }
 }
