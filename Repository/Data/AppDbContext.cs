@@ -1,10 +1,11 @@
 ﻿using Domain.Common;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -15,6 +16,7 @@ namespace Repository.Data
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<MenuIngredient> MenuIngredients { get; set; }
+        public DbSet<Setting> Settings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

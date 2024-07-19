@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using Service.DTOs.Admin.Categories;
 using Service.DTOs.Admin.Ingredients;
 using Service.Services;
 using Service.Services.Interfaces;
@@ -19,6 +20,10 @@ namespace Service
             services.AddScoped<IValidator<IngredientCreateDto>, IngredientCreateDtoValidator>();
             services.AddScoped<IValidator<IngredientEditDto>, IngredientEditDtoValidator>();
             services.AddScoped<IIngredientService, IngredientService>();
+
+            services.AddScoped<IValidator<CategoryCreateDto>, CategoryCreateDtoValidator>();
+            services.AddScoped<IValidator<CategoryEditDto>, CategoryEditDtoValidator>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             return services;
         }
