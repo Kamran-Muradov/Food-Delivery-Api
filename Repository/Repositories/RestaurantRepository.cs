@@ -36,5 +36,15 @@ namespace Repository.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<Restaurant> GetByIdWithMenusAsync(int id)
+        {
+            return await _entities
+                .Where(m => m.Id == id)
+                .Include(m => m.Menus)
+                .ThenInclude(m=>m.MenuCategories)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+        }
     }
 }

@@ -16,9 +16,6 @@ namespace Domain.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(m => m.ImageUrl)
-                .IsRequired();
-
             builder.Property(m => m.Price)
                 .IsRequired();
 

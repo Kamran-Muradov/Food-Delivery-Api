@@ -7,5 +7,6 @@ namespace Repository.Repositories.Interfaces
         Task<IEnumerable<Restaurant>> GetPaginateDatasAsync(int page, int take);
         Task<Restaurant> GetByIdWithAllDatasAsync(int id);
         Task<Restaurant> GetByIdWithImagesAsync(int id);
+        Task<Restaurant> GetByIdWithMenusAsync(int id);
     }
 }

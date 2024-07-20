@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Service.DTOs.Admin.Categories;
 using Service.DTOs.Admin.Ingredients;
+using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.Restaurants;
 
 namespace Service.Helpers
@@ -25,9 +26,19 @@ namespace Service.Helpers
             CreateMap<RestaurantImage, RestaurantImageDto>();
             CreateMap<Restaurant, RestaurantDetailDto>()
                 .ForMember(d => d.Categories, opt => opt.MapFrom(s => s.RestaurantCategories.Select(m => m.Category.Name)));
-                //.ForMember(d => d.Images, opt => opt.MapFrom(s => s.RestaurantImages.Select(m => m.Url)));
             CreateMap<RestaurantCreateDto, Restaurant>();
             CreateMap<RestaurantEditDto, Restaurant>();
+
+            //Menu
+            CreateMap<Menu, MenuDto>()
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.MenuImage.Url));
+            CreateMap<Menu, MenuDetailDto>()
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.MenuImage.Url))
+                .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Restaurant.Name))
+                .ForMember(d => d.Ingredients, opt => opt.MapFrom(s => s.MenuIngredients.Select(m => m.Ingredient.Name)))
+                .ForMember(d => d.Categories, opt => opt.MapFrom(s => s.MenuCategories.Select(m => m.Category.Name)));
+            CreateMap<MenuCreateDto, Menu>();
+            CreateMap<MenuEditDto, Menu>();
         }
     }
 }

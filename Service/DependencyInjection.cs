@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Service.DTOs.Admin.Categories;
 using Service.DTOs.Admin.Ingredients;
+using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.Restaurants;
 using Service.Services;
 using Service.Services.Interfaces;
@@ -31,6 +32,10 @@ namespace Service
             services.AddScoped<IValidator<RestaurantCreateDto>, RestaurantCreateDtoValidator>();
             services.AddScoped<IValidator<RestaurantEditDto>, RestaurantEditDtoValidator>();
             services.AddScoped<IRestaurantService, RestaurantService>();
+
+            services.AddScoped<IValidator<MenuCreateDto>, MenuCreateDtoValidator>();
+            services.AddScoped<IValidator<MenuEditDto>, MenuEditDtoValidator>();
+            services.AddScoped<IMenuService, MenuService>();
 
 
             return services;

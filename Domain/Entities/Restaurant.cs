@@ -18,5 +18,6 @@ namespace Domain.Entities
         public string? Website { get; set; }
         public ICollection<RestaurantCategory> RestaurantCategories { get; set; }
         public ICollection<RestaurantImage> RestaurantImages { get; set; }
+        public ICollection<Menu> Menus { get; set; }
     }
 }

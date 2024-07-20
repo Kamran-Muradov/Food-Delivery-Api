@@ -16,6 +16,8 @@ namespace Repository.Data
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<MenuIngredient> MenuIngredients { get; set; }
+        public DbSet<MenuCategory> MenuCategories { get; set; }
+        public DbSet<MenuImage> MenuImages { get; set; }
         public DbSet<Setting> Settings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

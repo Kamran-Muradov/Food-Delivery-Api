@@ -61,7 +61,7 @@ namespace Service.DTOs.Admin.Restaurants
                 .NotEmpty()
                 .WithMessage("Delivery fee is required")
                 .GreaterThan(0)
-                .WithMessage("Delivery fee must be greater than 0"); ;
+                .WithMessage("Delivery fee must be greater than 0");
 
             RuleFor(m => m.IsActive)
                 .NotEmpty()
