@@ -43,10 +43,6 @@ namespace Domain.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
-            builder.Property(m => m.Website)
-                .IsRequired()
-                .HasMaxLength(50);
-
             builder.Property(m => m.Rating)
                 .IsRequired();
         }

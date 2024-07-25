@@ -33,7 +33,7 @@ namespace Repository.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Menu> GetByIdWithImagesAsync(int id)
+        public async Task<Menu> GetByIdWithImageAsync(int id)
         {
             return await _entities
                 .Where(m => m.Id == id)

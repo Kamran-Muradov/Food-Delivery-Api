@@ -14,6 +14,8 @@
         public int Rating { get; set; }
         public string Address { get; set; }
         public string Website { get; set; }
+        public string CreatedDate { get; set; }
+        public string UpdatedDate { get; set; }
         public IEnumerable<string> Categories { get; set; }
         public IEnumerable<RestaurantImageDto> RestaurantImages { get; set; }
     }

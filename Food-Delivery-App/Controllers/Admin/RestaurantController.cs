@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Service.DTOs.Admin.Restaurants;
 using Service.Helpers.Constants;
 using Service.Services.Interfaces;
@@ -16,6 +16,7 @@ namespace Food_Delivery_App.Controllers.Admin
         }
 
         [HttpPost]
+        [Authorize(Policy = "RequireSuperAdminRole")]
         public async Task<IActionResult> Create([FromForm] RestaurantCreateDto request)
         {
             await _restaurantService.CreateAsync(request);
@@ -43,6 +44,7 @@ namespace Food_Delivery_App.Controllers.Admin
         }
 
         [HttpDelete]
+        [Authorize(Policy = "RequireSuperAdminRole")]
         public async Task<IActionResult> Delete([FromQuery] int id)
         {
             await _restaurantService.DeleteAsync(id);

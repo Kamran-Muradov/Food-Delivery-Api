@@ -11,8 +11,18 @@ namespace Repository.Repositories
         public async Task<IEnumerable<Restaurant>> GetPaginateDatasAsync(int page, int take)
         {
             return await _entities
+                .OrderByDescending(m => m.Id)
                 .Skip((page - 1) * take)
                 .Take(take)
+                .Include(m => m.RestaurantImages)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Restaurant>> GetAllWithImagesAsync()
+        {
+            return await _entities
+                .Include(m => m.RestaurantImages)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -42,7 +52,7 @@ namespace Repository.Repositories
             return await _entities
                 .Where(m => m.Id == id)
                 .Include(m => m.Menus)
-                .ThenInclude(m=>m.MenuCategories)
+                .ThenInclude(m => m.MenuCategories)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }

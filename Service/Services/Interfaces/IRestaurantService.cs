@@ -9,6 +9,7 @@ namespace Service.Services.Interfaces
         Task EditAsync(int? id, RestaurantEditDto model);
         Task DeleteAsync(int? id);
         Task<PaginationResponse<RestaurantDto>> GetPaginateAsync(int? page, int? take);
+        Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllWithMainImageAsync();
         Task<RestaurantDetailDto> GetByIdDetailAsync(int? id);
         Task SetMainImageAsync(MainAndDeleteImageDto model);
         Task DeleteImageAsync(MainAndDeleteImageDto model);

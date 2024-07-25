@@ -17,6 +17,7 @@ namespace Repository
             services.AddScoped<IMenuImageRepository, MenuImageRepository>();
             services.AddScoped<IRestaurantCategoryRepository, RestaurantCategoryRepository>();
             services.AddScoped<IMenuCategoryRepository, MenuCategoryRepository>();
+            services.AddScoped<ICategoryImageRepository, CategoryImageRepository>();
 
             return services;
         }

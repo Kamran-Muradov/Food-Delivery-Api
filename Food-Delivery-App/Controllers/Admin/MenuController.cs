@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Service.DTOs.Admin.Menus;
 using Service.Helpers.Constants;
 using Service.Services.Interfaces;
@@ -15,6 +16,7 @@ namespace Food_Delivery_App.Controllers.Admin
         }
 
         [HttpPost]
+        [Authorize(Policy = "RequireSuperAdminRole")]
         public async Task<IActionResult> Create([FromForm] MenuCreateDto request)
         {
             await _menuService.CreateAsync(request);
@@ -42,6 +44,7 @@ namespace Food_Delivery_App.Controllers.Admin
         }
 
         [HttpDelete]
+        [Authorize(Policy = "RequireSuperAdminRole")]
         public async Task<IActionResult> Delete([FromQuery] int id)
         {
             await _menuService.DeleteAsync(id);

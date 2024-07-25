@@ -64,17 +64,19 @@ namespace Service.Services
 
             if (model.Images is not null)
             {
+                List<RestaurantImage> images = new();
                 foreach (var image in model.Images)
                 {
                     ImageUploadResult uploadResult = await _photoService.AddPhoto(image);
 
-                    restaurant.RestaurantImages.Add(new RestaurantImage
+                    images.Add(new RestaurantImage
                     {
                         PublicId = uploadResult.PublicId,
                         Url = uploadResult.SecureUrl.ToString(),
                         RestaurantId = restaurant.Id
                     });
                 }
+                restaurant.RestaurantImages = images;
             }
 
             restaurant.UpdatedDate = DateTime.Now;
@@ -107,6 +109,11 @@ namespace Service.Services
             var mappedDatas = _mapper.Map<IEnumerable<RestaurantDto>>(await _restaurantRepository.GetPaginateDatasAsync((int)page, (int)take));
 
             return new PaginationResponse<RestaurantDto>(mappedDatas, totalPage, (int)page);
+        }
+
+        public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllWithMainImageAsync()
+        {
+            return _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllWithImagesAsync());
         }
 
         public async Task<RestaurantDetailDto> GetByIdDetailAsync(int? id)

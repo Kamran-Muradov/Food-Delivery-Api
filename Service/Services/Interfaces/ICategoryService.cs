@@ -1,4 +1,6 @@
 ﻿using Service.DTOs.Admin.Categories;
+using Service.Helpers;
+using CategoryDto = Service.DTOs.UI.Categories.CategoryDto;
 
 namespace Service.Services.Interfaces
 {
@@ -8,6 +10,7 @@ namespace Service.Services.Interfaces
         Task EditAsync(int? id, CategoryEditDto model);
         Task DeleteAsync(int? id);
         Task<IEnumerable<CategoryDto>> GetAllAsync();
+        Task<PaginationResponse<DTOs.Admin.Categories.CategoryDto>> GetPaginateAsync(int? page, int? take);
         Task<CategoryDto> GetByIdAsync(int? id);
     }
 }

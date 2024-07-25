@@ -92,7 +92,7 @@ namespace Service.Services
             ArgumentNullException.ThrowIfNull(id);
             ArgumentNullException.ThrowIfNull(model);
 
-            var menu = await _menuRepository.GetByIdWithImagesAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
+            var menu = await _menuRepository.GetByIdWithImageAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
 
             if (model.Image is not null)
             {
@@ -119,21 +119,21 @@ namespace Service.Services
         {
             ArgumentNullException.ThrowIfNull(id);
 
-            var menu = await _menuRepository.GetByIdWithImagesAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
+            var menu = await _menuRepository.GetByIdWithImageAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
 
             var restaurant = await _restaurantRepository.GetByIdWithMenusAsync(menu.RestaurantId);
 
-            foreach (var menuCategory in menu.MenuCategories)
-            {
-                var test = restaurant.Menus.FirstOrDefault(m => m.MenuCategories.Any(mc => mc.CategoryId != menuCategory.CategoryId));
+            //foreach (var menuCategory in menu.MenuCategories)
+            //{
+            //    var test = restaurant.Menus.FirstOrDefault(m => m.MenuCategories.Any(mc => mc.CategoryId != menuCategory.CategoryId));
 
-                if (!restaurant.Menus.Any(m => m.MenuCategories.Any(mc => mc.CategoryId == menuCategory.CategoryId)))
-                {
-                    var restaurantCategory = await _restaurantCategoryRepository.GetByIdAsync(menuCategory.CategoryId);
+            //    if (!restaurant.Menus.Any(m => m.MenuCategories.Any(mc => mc.CategoryId == menuCategory.CategoryId)))
+            //    {
+            //        var restaurantCategory = await _restaurantCategoryRepository.GetByIdAsync(menuCategory.CategoryId);
 
-                    await _restaurantCategoryRepository.DeleteAsync(restaurantCategory);
-                }
-            }
+            //        await _restaurantCategoryRepository.DeleteAsync(restaurantCategory);
+            //    }
+            //}
 
             await _photoService.DeletePhoto(menu.MenuImage.PublicId);
 
