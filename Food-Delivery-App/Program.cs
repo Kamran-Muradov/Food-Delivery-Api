@@ -102,7 +102,7 @@ app.UseCors(
         .AllowAnyHeader()
 );
 
-app.UseMiddleware<ExceptionHandlingMiddleware>();
+//app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

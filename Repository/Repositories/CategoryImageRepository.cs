@@ -10,7 +10,9 @@ namespace Repository.Repositories
         public CategoryImageRepository(AppDbContext context) : base(context) { }
         public async Task<CategoryImage> GetByCategoryIdAsync(int categoryId)
         {
-            return await _entities.FirstOrDefaultAsync(m => m.CategoryId == categoryId);
+            return await _entities
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.CategoryId == categoryId);
         }
     }
 }

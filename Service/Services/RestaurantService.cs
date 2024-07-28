@@ -116,6 +116,13 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllWithImagesAsync());
         }
 
+        public async Task<IEnumerable<RestaurantSelectDto>> GetAllForSelectAsync(int? excludeId = null)
+        {
+            var restaurants = await _restaurantRepository.GetAllWithExpressionAsync(r => r.Menus.All(m => m.Id != excludeId));
+
+            return _mapper.Map<IEnumerable<RestaurantSelectDto>>(restaurants);
+        }
+
         public async Task<RestaurantDetailDto> GetByIdDetailAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);

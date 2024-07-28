@@ -26,9 +26,6 @@ namespace Domain.Configurations
             builder.Property(m => m.IsActive)
                 .IsRequired();
 
-            builder.Property(m => m.MaxDeliveryTime)
-                .IsRequired();
-
             builder.Property(m => m.MinDeliveryTime)
                 .IsRequired();
 

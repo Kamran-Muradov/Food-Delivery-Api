@@ -5,7 +5,7 @@ namespace Food_Delivery_App.Controllers.Admin
 {
     [Route("api/admin/[controller]/[action]")]
     [ApiController]
-    //[Authorize(Policy = "RequireAdminRole")]
+    [Authorize(Policy = "RequireAdminRole")]
     public abstract class BaseController : ControllerBase
     {
     }

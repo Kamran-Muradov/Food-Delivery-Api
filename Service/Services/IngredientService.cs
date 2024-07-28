@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Repository.Repositories;
 using Repository.Repositories.Interfaces;
 using Service.DTOs.Admin.Ingredients;
+using Service.Helpers;
 using Service.Helpers.Constants;
 using Service.Helpers.Exceptions;
 using Service.Services.Interfaces;
@@ -12,24 +14,25 @@ namespace Service.Services
     {
         private readonly IIngredientRepository _ingredientRepository;
         private readonly IMapper _mapper;
+        private readonly IMenuIngredientRepository _menuIngredientRepository;
 
         public IngredientService(IIngredientRepository ingredientRepository,
-                                 IMapper mapper)
+                                 IMapper mapper, 
+                                 IMenuIngredientRepository menuIngredientRepository)
         {
             _ingredientRepository = ingredientRepository;
             _mapper = mapper;
+            _menuIngredientRepository = menuIngredientRepository;
         }
 
         public async Task CreateAsync(IngredientCreateDto model)
         {
             ArgumentNullException.ThrowIfNull(model);
 
-            if (await _ingredientRepository.GetByNameAsync(model.Name) is not null)
+            if (!await _ingredientRepository.ExistAsync(model.Name))
             {
-                throw new BadRequestException(ResponseMessages.ExistData);
+                await _ingredientRepository.CreateAsync(_mapper.Map<Ingredient>(model));
             }
-
-            await _ingredientRepository.CreateAsync(_mapper.Map<Ingredient>(model));
         }
 
         public async Task EditAsync(int? id, IngredientEditDto model)
@@ -40,13 +43,11 @@ namespace Service.Services
 
             var ingredient = await _ingredientRepository.GetByIdAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
 
-            if (ingredient.Id != id && await _ingredientRepository.GetByNameAsync(model.Name) is not null)
+            if (!await _ingredientRepository.ExistAsync(model.Name, id))
             {
-                throw new BadRequestException(ResponseMessages.ExistData);
+                ingredient.UpdatedDate = DateTime.Now;
+                await _ingredientRepository.EditAsync(_mapper.Map(model, ingredient));
             }
-
-            ingredient.UpdatedDate = DateTime.Now;
-            await _ingredientRepository.EditAsync(_mapper.Map(model, ingredient));
         }
 
         public async Task DeleteAsync(int? id)
@@ -63,11 +64,44 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<IngredientDto>>(await _ingredientRepository.GetAllAsync());
         }
 
+        public async Task<IEnumerable<IngredientSelectDto>> GetAllForSelectAsync(int? excludeId = null)
+        {
+            var ingredientIds = _menuIngredientRepository
+                .GetAllWithExpressionAsync(m => m.MenuId == excludeId).Result
+                .Select(m => m.IngredientId);
+
+            var ingredients = _ingredientRepository.
+                GetAllAsync().Result.
+                Where(m => !ingredientIds.Contains(m.Id));
+
+            return _mapper.Map<IEnumerable<IngredientSelectDto>>(ingredients);
+        }
+
+        public async Task<PaginationResponse<IngredientDto>> GetPaginateAsync(int? page, int? take)
+        {
+            ArgumentNullException.ThrowIfNull(page);
+            ArgumentNullException.ThrowIfNull(take);
+
+            var categories = await _ingredientRepository.GetAllAsync();
+            int totalPage = (int)Math.Ceiling((decimal)categories.Count() / (int)take);
+
+            var mappedDatas = _mapper.Map<IEnumerable<IngredientDto>>(await _ingredientRepository.GetPaginateDatasAsync((int)page, (int)take));
+
+            return new PaginationResponse<IngredientDto>(mappedDatas, totalPage, (int)page);
+        }
+
         public async Task<IngredientDto> GetByIdAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);
 
             return _mapper.Map<IngredientDto>(await _ingredientRepository.GetByIdAsync((int)id));
+        }
+
+        public async Task<bool> ExistAsync(string name, int? excludeId = null)
+        {
+            ArgumentNullException.ThrowIfNull(name);
+
+            return await _ingredientRepository.ExistAsync(name, excludeId);
         }
     }
 }

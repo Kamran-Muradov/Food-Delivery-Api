@@ -19,6 +19,7 @@ namespace Service.Services
         private readonly IRestaurantCategoryRepository _restaurantCategoryRepository;
         private readonly IRestaurantRepository _restaurantRepository;
         private readonly IMenuCategoryRepository _menuCategoryRepository;
+        private readonly IMenuIngredientRepository _menuIngredientRepository;
 
         public MenuService(IMenuRepository menuRepository,
                            IMapper mapper,
@@ -26,7 +27,8 @@ namespace Service.Services
                            IMenuImageRepository menuImageRepository,
                            IRestaurantCategoryRepository restaurantCategoryRepository,
                            IRestaurantRepository restaurantRepository,
-                           IMenuCategoryRepository menuCategoryRepository)
+                           IMenuCategoryRepository menuCategoryRepository, 
+                           IMenuIngredientRepository menuIngredientRepository)
         {
             _menuRepository = menuRepository;
             _mapper = mapper;
@@ -35,6 +37,7 @@ namespace Service.Services
             _restaurantCategoryRepository = restaurantCategoryRepository;
             _restaurantRepository = restaurantRepository;
             _menuCategoryRepository = menuCategoryRepository;
+            _menuIngredientRepository = menuIngredientRepository;
         }
 
         public async Task CreateAsync(MenuCreateDto model)
@@ -92,7 +95,41 @@ namespace Service.Services
             ArgumentNullException.ThrowIfNull(id);
             ArgumentNullException.ThrowIfNull(model);
 
-            var menu = await _menuRepository.GetByIdWithImageAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
+            var menu = await _menuRepository.GetByIdWithAllDatasAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
+
+            var removedCategories = menu.MenuCategories
+                .Where(mc => !model.CategoryIds.Contains(mc.CategoryId));
+
+            foreach (var menuCategory in removedCategories)
+            {
+                await _menuCategoryRepository.DeleteAsync(menuCategory);
+            }
+
+            foreach (var categoryId in model.CategoryIds.Where(categoryId => menu.MenuCategories.All(m => m.CategoryId != categoryId)))
+            {
+                await _menuCategoryRepository.CreateAsync(new MenuCategory
+                {
+                    MenuId = (int)id,
+                    CategoryId = categoryId
+                });
+            }
+
+            var removedIngredients = menu.MenuIngredients
+                .Where(mc => !model.CategoryIds.Contains(mc.IngredientId));
+
+            foreach (var menuIngredient in removedIngredients)
+            {
+                await _menuIngredientRepository.DeleteAsync(menuIngredient);
+            }
+
+            foreach (var ingredientId in model.IngredientIds.Where(ingredientId => menu.MenuIngredients.All(m => m.IngredientId != ingredientId)))
+            {
+                await _menuIngredientRepository.CreateAsync(new MenuIngredient
+                {
+                    MenuId = (int)id,
+                    IngredientId = ingredientId
+                });
+            }
 
             if (model.Image is not null)
             {
@@ -151,6 +188,13 @@ namespace Service.Services
             var mappedDatas = _mapper.Map<IEnumerable<MenuDto>>(await _menuRepository.GetPaginateDatasAsync((int)page, (int)take));
 
             return new PaginationResponse<MenuDto>(mappedDatas, totalPage, (int)page);
+        }
+
+        public async Task<IEnumerable<MenuSelectDto>> GetAllForSelectAsync(int? excludeId = null)
+        {
+            var menus = await _menuRepository.GetAllWithExpressionAsync(r => r.MenuVariants.All(m => m.Id != excludeId));
+
+            return _mapper.Map<IEnumerable<MenuSelectDto>>(menus);
         }
 
         public async Task<MenuDetailDto> GetByIdDetailAsync(int? id)

@@ -17,60 +17,28 @@ namespace Service.Services
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly ICategoryImageRepository _categoryImageRepository;
+        private readonly IMenuCategoryRepository _menuCategoryRepository;
 
         public CategoryService(ICategoryRepository categoryRepository,
-                               IMapper mapper, 
-                               IPhotoService photoService, 
-                               ICategoryImageRepository categoryImageRepository)
+                               IMapper mapper,
+                               IPhotoService photoService,
+                               ICategoryImageRepository categoryImageRepository,
+                               IMenuCategoryRepository menuCategoryRepository)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
             _photoService = photoService;
             _categoryImageRepository = categoryImageRepository;
+            _menuCategoryRepository = menuCategoryRepository;
         }
 
         public async Task CreateAsync(CategoryCreateDto model)
         {
             ArgumentNullException.ThrowIfNull(model);
 
-            if (await _categoryRepository.GetByNameAsync(model.Name) is not null)
+            if (!await _categoryRepository.ExistAsync(model.Name))
             {
-                throw new BadRequestException(ResponseMessages.ExistData);
-            }
-
-            Category category = _mapper.Map<Category>(model);
-
-            ImageUploadResult uploadResult = await _photoService.AddPhoto(model.Image);
-
-            CategoryImage categoryImage = new()
-            {
-                Url = uploadResult.SecureUrl.ToString(),
-                PublicId = uploadResult.PublicId,
-                CategoryId = category.Id
-            };
-
-            category.CategoryImage = categoryImage;
-
-            await _categoryRepository.CreateAsync(category);
-        }
-
-        public async Task EditAsync(int? id, CategoryEditDto model)
-        {
-            ArgumentNullException.ThrowIfNull(id);
-
-            ArgumentNullException.ThrowIfNull(model);
-
-            var category = await _categoryRepository.GetByIdWithImageAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
-
-            if (category.Id != id && await _categoryRepository.GetByNameAsync(model.Name) is not null)
-            {
-                throw new BadRequestException(ResponseMessages.ExistData);
-            }
-
-            if (model.Image is not null)
-            {
-                await _photoService.DeletePhoto(category.CategoryImage.PublicId);
-                await _categoryImageRepository.DeleteAsync(category.CategoryImage);
+                Category category = _mapper.Map<Category>(model);
 
                 ImageUploadResult uploadResult = await _photoService.AddPhoto(model.Image);
 
@@ -82,10 +50,41 @@ namespace Service.Services
                 };
 
                 category.CategoryImage = categoryImage;
-            }
 
-            category.UpdatedDate = DateTime.Now;
-            await _categoryRepository.EditAsync(_mapper.Map(model, category));
+                await _categoryRepository.CreateAsync(category);
+            }
+        }
+
+        public async Task EditAsync(int? id, CategoryEditDto model)
+        {
+            ArgumentNullException.ThrowIfNull(id);
+
+            ArgumentNullException.ThrowIfNull(model);
+
+            var category = await _categoryRepository.GetByIdWithImageAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
+
+            if (!await _categoryRepository.ExistAsync(model.Name, id))
+            {
+                if (model.Image is not null)
+                {
+                    await _photoService.DeletePhoto(category.CategoryImage.PublicId);
+                    await _categoryImageRepository.DeleteAsync(category.CategoryImage);
+
+                    ImageUploadResult uploadResult = await _photoService.AddPhoto(model.Image);
+
+                    CategoryImage categoryImage = new()
+                    {
+                        Url = uploadResult.SecureUrl.ToString(),
+                        PublicId = uploadResult.PublicId,
+                        CategoryId = category.Id
+                    };
+
+                    category.CategoryImage = categoryImage;
+                }
+
+                category.UpdatedDate = DateTime.Now;
+                await _categoryRepository.EditAsync(_mapper.Map(model, category));
+            }
         }
 
         public async Task DeleteAsync(int? id)
@@ -97,6 +96,19 @@ namespace Service.Services
             await _photoService.DeletePhoto(category.CategoryImage.PublicId);
 
             await _categoryRepository.DeleteAsync(category);
+        }
+
+        public async Task<IEnumerable<CategorySelectDto>> GetAllForSelectAsync(int? excludeId = null)
+        {
+            var categoryIds = _menuCategoryRepository
+                .GetAllWithExpressionAsync(m => m.MenuId == excludeId).Result
+                .Select(m => m.CategoryId);
+
+            var categories = _categoryRepository.
+                GetAllAsync().Result.
+                Where(m => !categoryIds.Contains(m.Id));
+
+            return _mapper.Map<IEnumerable<CategorySelectDto>>(categories);
         }
 
         public async Task<PaginationResponse<DTOs.Admin.Categories.CategoryDto>> GetPaginateAsync(int? page, int? take)
@@ -122,6 +134,13 @@ namespace Service.Services
             ArgumentNullException.ThrowIfNull(id);
 
             return _mapper.Map<CategoryDto>(await _categoryRepository.GetByIdAsync((int)id));
+        }
+
+        public async Task<bool> ExistAsync(string name, int? excludeId = null)
+        {
+            ArgumentNullException.ThrowIfNull(name);
+
+            return await _categoryRepository.ExistAsync(name, excludeId);
         }
     }
 }

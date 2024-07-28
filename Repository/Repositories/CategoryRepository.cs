@@ -15,7 +15,7 @@ namespace Repository.Repositories
                 .OrderByDescending(m => m.Id)
                 .Skip((page - 1) * take)
                 .Take(take)
-                .Include(m=>m.CategoryImage)
+                .Include(m => m.CategoryImage)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -40,6 +40,13 @@ namespace Repository.Repositories
         public async Task<Category> GetByNameAsync(string name)
         {
             return await _entities.AsNoTracking().FirstOrDefaultAsync(m => m.Name == name);
+        }
+
+        public async Task<bool> ExistAsync(string name, int? excludeId = null)
+        {
+            return await _entities
+                .Where(m => m.Id != excludeId)
+                .AnyAsync(m => m.Name == name);
         }
     }
 }

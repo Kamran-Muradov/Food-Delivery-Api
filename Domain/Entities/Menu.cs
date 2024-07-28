@@ -12,5 +12,6 @@ namespace Domain.Entities
         public MenuImage MenuImage { get; set; }
         public ICollection<MenuIngredient> MenuIngredients { get; set; }
         public ICollection<MenuCategory> MenuCategories { get; set; }
+        public ICollection<MenuVariant> MenuVariants { get; set; }
     }
 }

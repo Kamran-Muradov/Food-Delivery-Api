@@ -10,7 +10,9 @@ namespace Service.Services.Interfaces
         Task EditAsync(int? id, CategoryEditDto model);
         Task DeleteAsync(int? id);
         Task<IEnumerable<CategoryDto>> GetAllAsync();
+        Task<IEnumerable<CategorySelectDto>> GetAllForSelectAsync(int? excludeId = null);
         Task<PaginationResponse<DTOs.Admin.Categories.CategoryDto>> GetPaginateAsync(int? page, int? take);
         Task<CategoryDto> GetByIdAsync(int? id);
+        Task<bool> ExistAsync(string name, int? excludeId = null);
     }
 }

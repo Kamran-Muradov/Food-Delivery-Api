@@ -278,6 +278,43 @@ namespace Repository.Migrations
                     b.ToTable("MenuIngredients");
                 });
 
+            modelBuilder.Entity("Domain.Entities.MenuVariant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal?>("AdditionalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MenuId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Option")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VariantTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MenuId");
+
+                    b.HasIndex("VariantTypeId");
+
+                    b.ToTable("MenuVariants");
+                });
+
             modelBuilder.Entity("Domain.Entities.Restaurant", b =>
                 {
                     b.Property<int>("Id")
@@ -309,9 +346,6 @@ namespace Repository.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
-
-                    b.Property<int>("MaxDeliveryTime")
-                        .HasColumnType("int");
 
                     b.Property<int>("MinDeliveryTime")
                         .HasColumnType("int");
@@ -423,6 +457,56 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Settings");
+                });
+
+            modelBuilder.Entity("Domain.Entities.VariantType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VariantTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2024, 7, 27, 21, 27, 51, 979, DateTimeKind.Local).AddTicks(8311),
+                            Name = "Size"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(2024, 7, 27, 21, 27, 51, 979, DateTimeKind.Local).AddTicks(8313),
+                            Name = "Sauce"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedDate = new DateTime(2024, 7, 27, 21, 27, 51, 979, DateTimeKind.Local).AddTicks(8314),
+                            Name = "Drink"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedDate = new DateTime(2024, 7, 27, 21, 27, 51, 979, DateTimeKind.Local).AddTicks(8315),
+                            Name = "Crust"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -629,6 +713,25 @@ namespace Repository.Migrations
                     b.Navigation("Menu");
                 });
 
+            modelBuilder.Entity("Domain.Entities.MenuVariant", b =>
+                {
+                    b.HasOne("Domain.Entities.Menu", "Menu")
+                        .WithMany("MenuVariants")
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.VariantType", "VariantType")
+                        .WithMany("MenuVariants")
+                        .HasForeignKey("VariantTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Menu");
+
+                    b.Navigation("VariantType");
+                });
+
             modelBuilder.Entity("Domain.Entities.RestaurantCategory", b =>
                 {
                     b.HasOne("Domain.Entities.Category", "Category")
@@ -726,6 +829,8 @@ namespace Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("MenuIngredients");
+
+                    b.Navigation("MenuVariants");
                 });
 
             modelBuilder.Entity("Domain.Entities.Restaurant", b =>
@@ -735,6 +840,11 @@ namespace Repository.Migrations
                     b.Navigation("RestaurantCategories");
 
                     b.Navigation("RestaurantImages");
+                });
+
+            modelBuilder.Entity("Domain.Entities.VariantType", b =>
+                {
+                    b.Navigation("MenuVariants");
                 });
 #pragma warning restore 612, 618
         }

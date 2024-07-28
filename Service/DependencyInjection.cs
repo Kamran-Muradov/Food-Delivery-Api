@@ -5,6 +5,7 @@ using Service.DTOs.Account;
 using Service.DTOs.Admin.Categories;
 using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
+using Service.DTOs.Admin.MenuVariants;
 using Service.DTOs.Admin.Restaurants;
 using Service.Services;
 using Service.Services.Interfaces;
@@ -39,12 +40,19 @@ namespace Service
             services.AddScoped<IValidator<MenuCreateDto>, MenuCreateDtoValidator>();
             services.AddScoped<IValidator<MenuEditDto>, MenuEditDtoValidator>();
             services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<IMenuImageService, MenuImageService>();
 
             services.AddScoped<IValidator<LoginDto>, LoginDtoValidator>();
             services.AddScoped<IValidator<RegisterDto>, RegisterDtoValidator>();
             services.AddScoped<IValidator<ForgotPasswordDto>, ForgotPasswordDtoValidator>();
             services.AddScoped<IValidator<PasswordResetDto>, PasswordResetDtoValidator>();
             services.AddScoped<IAccountService, AccountService>();
+
+            services.AddScoped<IValidator<MenuVariantCreateDto>, MenuVariantCreateDtoValidator>();
+            services.AddScoped<IValidator<MenuVariantEditDto>, MenuVariantEditDtoValidator>();
+            services.AddScoped<IMenuVariantService, MenuVariantService>();
+            services.AddScoped<IVariantTypeService, VariantTypeService>();
+
 
             return services;
         }

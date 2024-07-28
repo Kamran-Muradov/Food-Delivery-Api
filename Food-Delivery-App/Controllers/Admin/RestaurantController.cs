@@ -30,13 +30,19 @@ namespace Food_Delivery_App.Controllers.Admin
             return Ok(await _restaurantService.GetPaginateAsync(page, take));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllForSelect([FromQuery] int? excludeId = null)
+        {
+            return Ok(await _restaurantService.GetAllForSelectAsync(excludeId));
+        }
+
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int? id)
         {
             return Ok(await _restaurantService.GetByIdDetailAsync(id));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Edit([FromRoute] int id, [FromForm] RestaurantEditDto request)
         {
             await _restaurantService.EditAsync(id, request);
@@ -44,7 +50,6 @@ namespace Food_Delivery_App.Controllers.Admin
         }
 
         [HttpDelete]
-        [Authorize(Policy = "RequireSuperAdminRole")]
         public async Task<IActionResult> Delete([FromQuery] int id)
         {
             await _restaurantService.DeleteAsync(id);

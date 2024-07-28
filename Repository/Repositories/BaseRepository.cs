@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using System.Linq.Expressions;
+using Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Repository.Data;
 using Repository.Repositories.Interfaces;
@@ -37,6 +38,11 @@ namespace Repository.Repositories
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _entities.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetAllWithExpressionAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _entities.AsNoTracking().Where(predicate).ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)

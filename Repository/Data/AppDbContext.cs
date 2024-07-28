@@ -20,10 +20,39 @@ namespace Repository.Data
         public DbSet<MenuImage> MenuImages { get; set; }
         public DbSet<Setting> Settings { get; set; }
         public DbSet<CategoryImage> CategoryImages { get; set; }
+        public DbSet<MenuVariant> MenuVariants { get; set; }
+        public DbSet<VariantType> VariantTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(BaseEntity).Assembly);
+
+            modelBuilder.Entity<VariantType>().HasData(
+                new VariantType
+                {
+                    Id = 1,
+                    Name = "Size",
+                    CreatedDate = DateTime.Now
+                },
+                new VariantType
+                {
+                    Id = 2,
+                    Name = "Sauce",
+                    CreatedDate = DateTime.Now
+                },
+                new VariantType
+                {
+                    Id = 3,
+                    Name = "Drink",
+                    CreatedDate = DateTime.Now
+                },
+                new VariantType
+                {
+                    Id = 4,
+                    Name = "Crust",
+                    CreatedDate = DateTime.Now
+                }
+            );
 
             base.OnModelCreating(modelBuilder);
         }

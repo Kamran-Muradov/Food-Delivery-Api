@@ -12,7 +12,7 @@ namespace Food_Delivery_App.Controllers.Admin
             _categoryImageService = categoryImageService;
         }
 
-        [HttpGet("{categoryId}")]
+        [HttpGet("{categoryId:int}")]
         public async Task<IActionResult> GetByCategoryId([FromRoute] int categoryId)
         {
             return Ok(await _categoryImageService.GetByCategoryIdAsync(categoryId));

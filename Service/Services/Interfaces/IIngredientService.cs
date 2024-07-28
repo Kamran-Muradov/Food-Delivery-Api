@@ -1,4 +1,5 @@
 ﻿using Service.DTOs.Admin.Ingredients;
+using Service.Helpers;
 
 namespace Service.Services.Interfaces
 {
@@ -8,6 +9,9 @@ namespace Service.Services.Interfaces
         Task EditAsync(int? id, IngredientEditDto model);
         Task DeleteAsync(int? id);
         Task<IEnumerable<IngredientDto>> GetAllAsync();
+        Task<IEnumerable<IngredientSelectDto>> GetAllForSelectAsync(int? excludeId = null);
+        Task<PaginationResponse<IngredientDto>> GetPaginateAsync(int? page, int? take);
         Task<IngredientDto> GetByIdAsync(int? id);
+        Task<bool> ExistAsync(string name, int? excludeId = null);
     }
 }

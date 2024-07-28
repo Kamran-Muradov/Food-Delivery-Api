@@ -9,6 +9,7 @@ namespace Service.Services.Interfaces
         Task EditAsync(int? id, MenuEditDto model);
         Task DeleteAsync(int? id);
         Task<PaginationResponse<MenuDto>> GetPaginateAsync(int? page, int? take);
+        Task<IEnumerable<MenuSelectDto>> GetAllForSelectAsync(int? excludeId = null);
         Task<MenuDetailDto> GetByIdDetailAsync(int? id);
     }
 }

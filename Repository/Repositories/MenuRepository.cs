@@ -11,6 +11,7 @@ namespace Repository.Repositories
         public async Task<IEnumerable<Menu>> GetPaginateDatasAsync(int page, int take)
         {
             return await _entities
+                .OrderByDescending(m => m.Id)
                 .Skip((page - 1) * take)
                 .Take(take)
                 .Include(m => m.MenuImage)
@@ -38,7 +39,7 @@ namespace Repository.Repositories
             return await _entities
                 .Where(m => m.Id == id)
                 .Include(m => m.MenuImage)
-                .Include(m=>m.MenuCategories)
+                .Include(m => m.MenuCategories)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }

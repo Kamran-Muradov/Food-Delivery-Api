@@ -18,6 +18,9 @@ namespace Repository
             services.AddScoped<IRestaurantCategoryRepository, RestaurantCategoryRepository>();
             services.AddScoped<IMenuCategoryRepository, MenuCategoryRepository>();
             services.AddScoped<ICategoryImageRepository, CategoryImageRepository>();
+            services.AddScoped<IMenuIngredientRepository, MenuIngredientRepository>();
+            services.AddScoped<IMenuVariantRepository, MenuVariantRepository>();
+            services.AddScoped<IVariantTypeRepository, VariantTypeRepository>();
 
             return services;
         }
