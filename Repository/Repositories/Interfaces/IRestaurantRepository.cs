@@ -9,5 +9,6 @@ namespace Repository.Repositories.Interfaces
         Task<Restaurant> GetByIdWithAllDatasAsync(int id);
         Task<Restaurant> GetByIdWithImagesAsync(int id);
         Task<Restaurant> GetByIdWithMenusAsync(int id);
+        Task<IEnumerable<Restaurant>> SearchByNameAndCategory(string searchText);
     }
 }

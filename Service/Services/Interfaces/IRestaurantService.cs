@@ -11,6 +11,7 @@ namespace Service.Services.Interfaces
         Task<PaginationResponse<RestaurantDto>> GetPaginateAsync(int? page, int? take);
         Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllWithMainImageAsync();
         Task<IEnumerable<RestaurantSelectDto>> GetAllForSelectAsync(int? excludeId = null);
+        Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> SearchByNameAndCategory(string searchText);
         Task<RestaurantDetailDto> GetByIdDetailAsync(int? id);
         Task SetMainImageAsync(MainAndDeleteImageDto model);
         Task DeleteImageAsync(MainAndDeleteImageDto model);

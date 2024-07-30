@@ -43,5 +43,18 @@ namespace Repository.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<Menu>> SearchByNameAndCategory(string searchText)
+        {
+            return await _entities
+                .Where(m => m.Name.Contains(searchText) || m.MenuCategories.Any(mc => mc.Category.Name.Contains(searchText)))
+                .Include(m => m.MenuImage)
+                .Include(m => m.MenuCategories)
+                .ThenInclude(mc => mc.Category)
+                .Include(m => m.MenuIngredients)
+                .ThenInclude(mi => mi.Ingredient)
+                .AsNoTracking()
+                .ToListAsync();
+        }
     }
 }

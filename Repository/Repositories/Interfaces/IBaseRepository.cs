@@ -10,6 +10,7 @@ namespace Repository.Repositories.Interfaces
         Task DeleteAsync(T entity);
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> GetAllWithExpressionAsync(Expression<Func<T, bool>> predicate);
+        Task<T> GetFirstWithExpressionAsync(Expression<Func<T, bool>> predicate);
         Task<T> GetByIdAsync(int id);
     }
 }

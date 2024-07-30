@@ -45,6 +45,11 @@ namespace Repository.Repositories
             return await _entities.AsNoTracking().Where(predicate).ToListAsync();
         }
 
+        public async Task<T> GetFirstWithExpressionAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _entities.AsNoTracking().Where(predicate).FirstOrDefaultAsync();
+        }
+
         public async Task<T> GetByIdAsync(int id)
         {
             return await _entities.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);

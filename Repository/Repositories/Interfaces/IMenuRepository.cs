@@ -7,5 +7,6 @@ namespace Repository.Repositories.Interfaces
         Task<IEnumerable<Menu>> GetPaginateDatasAsync(int page, int take);
         Task<Menu> GetByIdWithAllDatasAsync(int id);
         Task<Menu> GetByIdWithImageAsync(int id);
+        Task<IEnumerable<Menu>> SearchByNameAndCategory(string searchText);
     }
 }

@@ -123,6 +123,12 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<RestaurantSelectDto>>(restaurants);
         }
 
+        public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> SearchByNameAndCategory(string searchText)
+        {
+            ArgumentNullException.ThrowIfNull(searchText);
+            return _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.SearchByNameAndCategory(searchText));
+        }
+
         public async Task<RestaurantDetailDto> GetByIdDetailAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);

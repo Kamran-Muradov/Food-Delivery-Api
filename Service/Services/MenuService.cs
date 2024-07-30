@@ -27,7 +27,7 @@ namespace Service.Services
                            IMenuImageRepository menuImageRepository,
                            IRestaurantCategoryRepository restaurantCategoryRepository,
                            IRestaurantRepository restaurantRepository,
-                           IMenuCategoryRepository menuCategoryRepository, 
+                           IMenuCategoryRepository menuCategoryRepository,
                            IMenuIngredientRepository menuIngredientRepository)
         {
             _menuRepository = menuRepository;
@@ -97,8 +97,7 @@ namespace Service.Services
 
             var menu = await _menuRepository.GetByIdWithAllDatasAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
 
-            var removedCategories = menu.MenuCategories
-                .Where(mc => !model.CategoryIds.Contains(mc.CategoryId));
+            var removedCategories = menu.MenuCategories.Where(mc => !model.CategoryIds.Contains(mc.CategoryId));
 
             foreach (var menuCategory in removedCategories)
             {
@@ -156,25 +155,30 @@ namespace Service.Services
         {
             ArgumentNullException.ThrowIfNull(id);
 
-            var menu = await _menuRepository.GetByIdWithImageAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
+            var menu = await _menuRepository.GetByIdWithAllDatasAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
 
-            var restaurant = await _restaurantRepository.GetByIdWithMenusAsync(menu.RestaurantId);
-
-            //foreach (var menuCategory in menu.MenuCategories)
-            //{
-            //    var test = restaurant.Menus.FirstOrDefault(m => m.MenuCategories.Any(mc => mc.CategoryId != menuCategory.CategoryId));
-
-            //    if (!restaurant.Menus.Any(m => m.MenuCategories.Any(mc => mc.CategoryId == menuCategory.CategoryId)))
-            //    {
-            //        var restaurantCategory = await _restaurantCategoryRepository.GetByIdAsync(menuCategory.CategoryId);
-
-            //        await _restaurantCategoryRepository.DeleteAsync(restaurantCategory);
-            //    }
-            //}
+            var categoriesToRemove = menu.MenuCategories.Select(mc => mc.Category).ToList();
 
             await _photoService.DeletePhoto(menu.MenuImage.PublicId);
 
             await _menuRepository.DeleteAsync(menu);
+
+            foreach (var category in categoriesToRemove)
+            {
+                var categoryStillInRestaurant = await _menuCategoryRepository
+                    .GetFirstWithExpressionAsync(mc => mc.CategoryId == category.Id && mc.Menu.RestaurantId == menu.RestaurantId);
+
+                if (categoryStillInRestaurant is null)
+                {
+                    var restaurantCategory = await _restaurantCategoryRepository
+                        .GetFirstWithExpressionAsync(rc => rc.CategoryId == category.Id && rc.RestaurantId == menu.RestaurantId);
+
+                    if (restaurantCategory != null)
+                    {
+                       await _restaurantCategoryRepository.DeleteAsync(restaurantCategory);
+                    }
+                }
+            }
         }
 
         public async Task<PaginationResponse<MenuDto>> GetPaginateAsync(int? page, int? take)
@@ -202,6 +206,12 @@ namespace Service.Services
             ArgumentNullException.ThrowIfNull(id);
 
             return _mapper.Map<MenuDetailDto>(await _menuRepository.GetByIdWithAllDatasAsync((int)id));
+        }
+
+        public async Task<IEnumerable<MenuDto>> SearchByNameAndCategory(string searchText)
+        {
+            ArgumentNullException.ThrowIfNull(searchText);
+            return _mapper.Map<IEnumerable<MenuDto>>(await _menuRepository.SearchByNameAndCategory(searchText));
         }
     }
 }

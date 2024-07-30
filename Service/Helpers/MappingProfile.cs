@@ -40,7 +40,7 @@ namespace Service.Helpers
             CreateMap<Restaurant, RestaurantDto>()
                 .ForMember(d => d.MainImage, opt => opt.MapFrom(s => s.RestaurantImages.FirstOrDefault(m => m.IsMain).Url));
             CreateMap<Restaurant, DTOs.UI.Restaurants.RestaurantDto>()
-                .ForMember(d => d.MainImage, opt => opt.MapFrom(s => s.RestaurantImages.FirstOrDefault(m => m.IsMain).Url));
+                .ForMember(d => d.Categories, opt => opt.MapFrom(s => s.RestaurantCategories.Select(m => m.Category)));
             CreateMap<RestaurantImage, RestaurantImageDto>();
             CreateMap<Restaurant, RestaurantDetailDto>()
                 .ForMember(d => d.Categories, opt => opt.MapFrom(s => s.RestaurantCategories.Select(m => m.Category.Name)))
@@ -48,6 +48,10 @@ namespace Service.Helpers
                 .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
             CreateMap<RestaurantCreateDto, Restaurant>();
             CreateMap<RestaurantEditDto, Restaurant>();
+            CreateMap<RestaurantCategory, DTOs.UI.Categories.CategoryDto>()
+                .ForMember(d => d.Name, opt => opt.MapFrom(s => s.Category.Name))
+                .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Category.Id))
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.Category.CategoryImage.Url));
 
             //Menu
             CreateMap<Menu, MenuSelectDto>();

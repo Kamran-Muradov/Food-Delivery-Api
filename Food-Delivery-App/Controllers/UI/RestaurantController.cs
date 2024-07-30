@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Service.Services;
 using Service.Services.Interfaces;
 
 namespace Food_Delivery_App.Controllers.UI
@@ -16,6 +17,12 @@ namespace Food_Delivery_App.Controllers.UI
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _restaurantService.GetAllWithMainImageAsync());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Search([FromQuery] string searchText)
+        {
+            return Ok(await _restaurantService.SearchByNameAndCategory(searchText));
         }
     }
 }
