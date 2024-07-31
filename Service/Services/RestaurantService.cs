@@ -3,10 +3,12 @@ using CloudinaryDotNet.Actions;
 using Domain.Entities;
 using Repository.Repositories.Interfaces;
 using Service.DTOs.Admin.Restaurants;
+using Service.DTOs.UI.Restaurants;
 using Service.Helpers;
 using Service.Helpers.Constants;
 using Service.Helpers.Exceptions;
 using Service.Services.Interfaces;
+using RestaurantDto = Service.DTOs.Admin.Restaurants.RestaurantDto;
 
 namespace Service.Services
 {
@@ -111,16 +113,40 @@ namespace Service.Services
             return new PaginationResponse<RestaurantDto>(mappedDatas, totalPage, (int)page);
         }
 
-        public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllWithMainImageAsync()
+        public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllWithImagesAsync()
         {
             return _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllWithImagesAsync());
+        }
+
+        public async Task<PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>> GetLoadMoreAsync(RestaurantFilterDto model)
+        {
+            ArgumentNullException.ThrowIfNull(model);
+
+            List<Restaurant> restaurants;
+
+            if (model.CategoryIds is not null && model.CategoryIds.Any())
+            {
+                restaurants = (List<Restaurant>)await _restaurantRepository
+                    .GetAllWithExpressionAsync(m => m.RestaurantCategories.Any(rc => model.CategoryIds.Contains(rc.CategoryId)));
+            }
+            else
+            {
+                restaurants = (List<Restaurant>)await _restaurantRepository.GetAllAsync();
+            }
+
+            int totalPage = (int)Math.Ceiling((decimal)restaurants.Count / model.Take);
+
+            var mappedDatas = _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(
+                await _restaurantRepository.GetLoadMoreAsync(model.Page, model.Take, model.Sorting, model.CategoryIds));
+
+            return new PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>(mappedDatas, totalPage, model.Page);
         }
 
         public async Task<IEnumerable<RestaurantSelectDto>> GetAllForSelectAsync(int? excludeId = null)
         {
             var restaurants = await _restaurantRepository.GetAllWithExpressionAsync(r => r.Menus.All(m => m.Id != excludeId));
 
-            return _mapper.Map<IEnumerable<RestaurantSelectDto>>(restaurants);
+            return _mapper.Map<IEnumerable<RestaurantSelectDto>>(restaurants.OrderBy(m => m.Name));
         }
 
         public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> SearchByNameAndCategory(string searchText)

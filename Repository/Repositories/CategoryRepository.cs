@@ -24,6 +24,8 @@ namespace Repository.Repositories
         {
             return await _entities
                 .Include(m => m.CategoryImage)
+                .Include(m => m.RestaurantCategories)
+                .Include(m => m.MenuCategories)
                 .AsNoTracking()
                 .ToListAsync();
         }

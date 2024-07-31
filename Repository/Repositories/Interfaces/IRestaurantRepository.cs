@@ -5,6 +5,7 @@ namespace Repository.Repositories.Interfaces
     public interface IRestaurantRepository : IBaseRepository<Restaurant>
     {
         Task<IEnumerable<Restaurant>> GetPaginateDatasAsync(int page, int take);
+        Task<IEnumerable<Restaurant>> GetLoadMoreAsync(int page, int take, string sorting, List<int>? categoryIds);
         Task<IEnumerable<Restaurant>> GetAllWithImagesAsync();
         Task<Restaurant> GetByIdWithAllDatasAsync(int id);
         Task<Restaurant> GetByIdWithImagesAsync(int id);

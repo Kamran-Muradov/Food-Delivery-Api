@@ -17,7 +17,7 @@ namespace Service.Services
         private readonly IMenuIngredientRepository _menuIngredientRepository;
 
         public IngredientService(IIngredientRepository ingredientRepository,
-                                 IMapper mapper, 
+                                 IMapper mapper,
                                  IMenuIngredientRepository menuIngredientRepository)
         {
             _ingredientRepository = ingredientRepository;
@@ -70,9 +70,10 @@ namespace Service.Services
                 .GetAllWithExpressionAsync(m => m.MenuId == excludeId).Result
                 .Select(m => m.IngredientId);
 
-            var ingredients = _ingredientRepository.
-                GetAllAsync().Result.
-                Where(m => !ingredientIds.Contains(m.Id));
+            var ingredients = _ingredientRepository
+                .GetAllAsync().Result
+                .Where(m => !ingredientIds.Contains(m.Id))
+                .OrderBy(m => m.Name);
 
             return _mapper.Map<IEnumerable<IngredientSelectDto>>(ingredients);
         }

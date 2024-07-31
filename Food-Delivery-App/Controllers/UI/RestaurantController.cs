@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Service.DTOs.UI.Restaurants;
 using Service.Services;
 using Service.Services.Interfaces;
 
@@ -16,7 +17,13 @@ namespace Food_Delivery_App.Controllers.UI
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _restaurantService.GetAllWithMainImageAsync());
+            return Ok(await _restaurantService.GetAllWithImagesAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetLoadMore([FromBody] RestaurantFilterDto request)
+        {
+            return Ok(await _restaurantService.GetLoadMoreAsync(request));
         }
 
         [HttpGet]

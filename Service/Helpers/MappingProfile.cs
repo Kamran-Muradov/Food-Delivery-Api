@@ -30,7 +30,9 @@ namespace Service.Helpers
                 .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
                 .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
             CreateMap<Category, DTOs.UI.Categories.CategoryDto>()
-                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.CategoryImage.Url));
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.CategoryImage.Url))
+                .ForMember(d => d.RestaurantCount, opt => opt.MapFrom(s => s.RestaurantCategories.Count))
+                .ForMember(d => d.MenuCount, opt => opt.MapFrom(s => s.MenuCategories.Count));
             CreateMap<CategoryCreateDto, Category>();
             CreateMap<CategoryEditDto, Category>();
             CreateMap<CategoryImage, CategoryImageDto>();

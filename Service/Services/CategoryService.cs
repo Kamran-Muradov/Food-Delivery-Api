@@ -104,9 +104,10 @@ namespace Service.Services
                 .GetAllWithExpressionAsync(m => m.MenuId == excludeId).Result
                 .Select(m => m.CategoryId);
 
-            var categories = _categoryRepository.
-                GetAllAsync().Result.
-                Where(m => !categoryIds.Contains(m.Id));
+            var categories = _categoryRepository
+                .GetAllAsync().Result
+                .Where(m => !categoryIds.Contains(m.Id))
+                .OrderBy(m => m.Name);
 
             return _mapper.Map<IEnumerable<CategorySelectDto>>(categories);
         }

@@ -11,6 +11,7 @@ namespace Service.DTOs.UI.Restaurants
         public int MinDeliveryTime { get; set; }
         public int Rating { get; set; }
         public decimal MinimumOrder { get; set; }
+        public decimal DeliveryFee { get; set; }
         public IEnumerable<CategoryDto> Categories { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Repository.Data;
 using Repository.Repositories.Interfaces;
 
@@ -19,10 +20,40 @@ namespace Repository.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Restaurant>> GetLoadMoreAsync(int page, int take, string sorting, List<int>? categoryIds)
+        {
+            var query = _entities.AsQueryable();
+
+            if (categoryIds is not null && categoryIds.Any())
+            {
+                query = query.Where(m => m.RestaurantCategories.Any(rc => categoryIds.Contains(rc.CategoryId)));
+            }
+
+            query = sorting switch
+            {
+                "recent" => query.OrderByDescending(m => m.Id),
+                "deliveryTime" => query.OrderBy(m => m.MinDeliveryTime),
+                "deliveryFee" => query.OrderBy(m => m.DeliveryFee),
+                "rating" => query.OrderByDescending(m => m.Rating),
+                _ => query
+            };
+
+            return await query
+                 .Skip((page - 1) * take)
+                 .Take(take)
+                 .Include(m => m.RestaurantImages)
+                 .Include(m => m.RestaurantCategories)
+                 .ThenInclude(m => m.Category)
+                 .AsNoTracking()
+                 .ToListAsync();
+        }
+
         public async Task<IEnumerable<Restaurant>> GetAllWithImagesAsync()
         {
             return await _entities
                 .Include(m => m.RestaurantImages)
+                .Include(m => m.RestaurantCategories)
+                .ThenInclude(m => m.Category)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -65,7 +96,6 @@ namespace Repository.Repositories
                 .Include(m => m.RestaurantImages)
                 .Include(m => m.RestaurantCategories)
                 .ThenInclude(m => m.Category)
-                .Include(m => m.RestaurantImages)
                 .AsNoTracking()
                 .ToListAsync();
         }
