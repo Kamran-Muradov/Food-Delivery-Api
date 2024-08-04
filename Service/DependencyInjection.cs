@@ -7,6 +7,7 @@ using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
 using Service.DTOs.Admin.Restaurants;
+using Service.DTOs.Admin.Tags;
 using Service.Services;
 using Service.Services.Interfaces;
 
@@ -29,6 +30,11 @@ namespace Service
             services.AddScoped<IValidator<CategoryEditDto>, CategoryEditDtoValidator>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICategoryImageService, CategoryImageService>();
+
+            services.AddScoped<IValidator<TagCreateDto>, TagCreateDtoValidator>();
+            services.AddScoped<IValidator<TagEditDto>, TagEditDtoValidator>();
+            services.AddScoped<ITagService, TagService>();
+            services.AddScoped<ITagImageService, TagImageService>();
 
             services.AddScoped<IPhotoService, PhotoService>();
 

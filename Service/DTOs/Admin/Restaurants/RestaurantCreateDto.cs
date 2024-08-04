@@ -17,6 +17,7 @@ namespace Service.DTOs.Admin.Restaurants
         public string Address { get; set; }
         public string Website { get; set; }
         public List<IFormFile> Images { get; set; }
+        public List<int> TagIds { get; set; }
     }
 
     public class RestaurantCreateDtoValidator : AbstractValidator<RestaurantCreateDto>
@@ -97,6 +98,16 @@ namespace Service.DTOs.Admin.Restaurants
                     .Must(item => item.Length / 1024 < 500)
                     .WithMessage("Image size cannot exceed 500Kb"))
                 .When(m => m.Images is not null);
+
+            RuleFor(m => m.TagIds)
+                .NotEmpty()
+                .WithMessage("Tag id is required");
+
+            RuleFor(m => m.TagIds)
+                .ForEach(ingredientId => ingredientId
+                    .GreaterThan(0)
+                    .WithMessage("Ingredient id must be greater than 0"))
+                .When(m => m.TagIds is not null);
         }
     }
 }

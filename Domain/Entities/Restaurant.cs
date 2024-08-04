@@ -15,7 +15,7 @@ namespace Domain.Entities
         public int Rating { get; set; }
         public string Address { get; set; }
         public string? Website { get; set; }
-        public ICollection<RestaurantCategory> RestaurantCategories { get; set; }
+        public ICollection<RestaurantTag> RestaurantTags { get; set; }
         public ICollection<RestaurantImage> RestaurantImages { get; set; }
         public ICollection<Menu> Menus { get; set; }
     }

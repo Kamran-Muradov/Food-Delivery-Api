@@ -11,7 +11,7 @@ namespace Service.Services.Interfaces
         Task DeleteAsync(int? id);
         Task<PaginationResponse<MenuVariantDto>> GetPaginateAsync(int? page, int? take);
         Task<MenuVariantDetailDto> GetByIdAsync(int? id);
-
+        Task<Dictionary<string, IEnumerable<DTOs.UI.MenuVariants.MenuVariantDto>>> GetAllByMenuIdGroupedAsync(int? menuId);
         Task<bool> ExistAsync(int? menuId, int? variantTypeId, string option, int? excludeId = null);
     }
 }

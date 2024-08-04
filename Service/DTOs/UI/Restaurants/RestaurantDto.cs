@@ -1,5 +1,5 @@
 ﻿using Service.DTOs.Admin.Restaurants;
-using Service.DTOs.UI.Categories;
+using Service.DTOs.UI.Tags;
 
 namespace Service.DTOs.UI.Restaurants
 {
@@ -12,6 +12,6 @@ namespace Service.DTOs.UI.Restaurants
         public int Rating { get; set; }
         public decimal MinimumOrder { get; set; }
         public decimal DeliveryFee { get; set; }
-        public IEnumerable<CategoryDto> Categories { get; set; }
+        public IEnumerable<TagDto> Tags { get; set; }
     }
 }

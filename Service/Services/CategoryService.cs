@@ -17,19 +17,16 @@ namespace Service.Services
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly ICategoryImageRepository _categoryImageRepository;
-        private readonly IMenuCategoryRepository _menuCategoryRepository;
 
         public CategoryService(ICategoryRepository categoryRepository,
                                IMapper mapper,
                                IPhotoService photoService,
-                               ICategoryImageRepository categoryImageRepository,
-                               IMenuCategoryRepository menuCategoryRepository)
+                               ICategoryImageRepository categoryImageRepository)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
             _photoService = photoService;
             _categoryImageRepository = categoryImageRepository;
-            _menuCategoryRepository = menuCategoryRepository;
         }
 
         public async Task CreateAsync(CategoryCreateDto model)
@@ -100,16 +97,9 @@ namespace Service.Services
 
         public async Task<IEnumerable<CategorySelectDto>> GetAllForSelectAsync(int? excludeId = null)
         {
-            var categoryIds = _menuCategoryRepository
-                .GetAllWithExpressionAsync(m => m.MenuId == excludeId).Result
-                .Select(m => m.CategoryId);
+            var restaurants = await _categoryRepository.GetAllWithExpressionAsync(r => r.Menus.All(m => m.Id != excludeId));
 
-            var categories = _categoryRepository
-                .GetAllAsync().Result
-                .Where(m => !categoryIds.Contains(m.Id))
-                .OrderBy(m => m.Name);
-
-            return _mapper.Map<IEnumerable<CategorySelectDto>>(categories);
+            return _mapper.Map<IEnumerable<CategorySelectDto>>(restaurants.OrderBy(m => m.Name));
         }
 
         public async Task<PaginationResponse<DTOs.Admin.Categories.CategoryDto>> GetPaginateAsync(int? page, int? take)

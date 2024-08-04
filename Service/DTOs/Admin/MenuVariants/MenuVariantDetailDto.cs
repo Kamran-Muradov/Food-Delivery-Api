@@ -8,5 +8,6 @@
         public string UpdatedDate { get; set; }
         public string VariantType { get; set; }
         public string Menu { get; set; }
+        public bool IsSingleChoice { get; set; }
     }
 }

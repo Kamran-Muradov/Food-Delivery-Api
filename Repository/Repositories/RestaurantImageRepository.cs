@@ -10,7 +10,7 @@ namespace Repository.Repositories
         public RestaurantImageRepository(AppDbContext context) : base(context) { }
         public async Task<IEnumerable<RestaurantImage>> GetAllByRestaurantIdAsync(int restaurantId)
         {
-            return await _entities
+            return await Entities
                 .Where(m => m.RestaurantId == restaurantId)
                 .AsNoTracking()
                 .ToListAsync();

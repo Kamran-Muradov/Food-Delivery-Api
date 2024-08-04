@@ -8,6 +8,7 @@ namespace Service.DTOs.Admin.MenuVariants
         public int VariantTypeId { get; set; }
         public string Option { get; set; }
         public decimal? AdditionalPrice { get; set; }
+        public bool IsSingleChoice { get; set; }
     }
 
     public class MenuVariantCreateDtoValidator : AbstractValidator<MenuVariantCreateDto>

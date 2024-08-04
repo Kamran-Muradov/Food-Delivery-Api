@@ -74,6 +74,14 @@ namespace Service.Services
             return _mapper.Map<MenuVariantDetailDto>(await _menuVariantRepository.GetByIdWithAllDatasAsync((int)id));
         }
 
+        public async Task<Dictionary<string, IEnumerable<DTOs.UI.MenuVariants.MenuVariantDto>>> GetAllByMenuIdGroupedAsync(int? menuId)
+        {
+            ArgumentNullException.ThrowIfNull(menuId);
+
+            return _mapper.Map<Dictionary<string, IEnumerable<DTOs.UI.MenuVariants.MenuVariantDto>>>(
+                await _menuVariantRepository.GetAllByMenuIdGroupedAsync((int)menuId));
+        }
+
         public async Task<bool> ExistAsync(int? menuId, int? variantTypeId, string option, int? excludeId = null)
         {
             ArgumentNullException.ThrowIfNull(menuId);

@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Configurations
 {
-    public class RestaurantCategoryConfiguration : IEntityTypeConfiguration<RestaurantCategory>
+    public class RestaurantCategoryConfiguration : IEntityTypeConfiguration<RestaurantTag>
     {
-        public void Configure(EntityTypeBuilder<RestaurantCategory> builder)
+        public void Configure(EntityTypeBuilder<RestaurantTag> builder)
         {
             builder.Ignore(m => m.Id);
             builder.Ignore(m => m.UpdatedDate);
-            builder.HasKey(m => new { m.CategoryId, m.RestaurantId });
+            builder.HasKey(m => new { m.TagId, m.RestaurantId });
         }
     }
 }

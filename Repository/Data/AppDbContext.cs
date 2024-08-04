@@ -11,17 +11,18 @@ namespace Repository.Data
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
-        public DbSet<RestaurantCategory> RestaurantCategories { get; set; }
+        public DbSet<RestaurantTag> RestaurantTags { get; set; }
         public DbSet<RestaurantImage> RestaurantImages { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<MenuIngredient> MenuIngredients { get; set; }
-        public DbSet<MenuCategory> MenuCategories { get; set; }
         public DbSet<MenuImage> MenuImages { get; set; }
         public DbSet<Setting> Settings { get; set; }
         public DbSet<CategoryImage> CategoryImages { get; set; }
         public DbSet<MenuVariant> MenuVariants { get; set; }
         public DbSet<VariantType> VariantTypes { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<TagImage> TagImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,25 +32,31 @@ namespace Repository.Data
                 new VariantType
                 {
                     Id = 1,
-                    Name = "Size",
+                    Name = "Size choice",
                     CreatedDate = DateTime.Now
                 },
                 new VariantType
                 {
                     Id = 2,
-                    Name = "Sauce",
+                    Name = "Sauce choice",
                     CreatedDate = DateTime.Now
                 },
                 new VariantType
                 {
                     Id = 3,
-                    Name = "Drink",
+                    Name = "Drink choice",
                     CreatedDate = DateTime.Now
                 },
                 new VariantType
                 {
                     Id = 4,
-                    Name = "Crust",
+                    Name = "Crust choice",
+                    CreatedDate = DateTime.Now
+                },
+                new VariantType
+                {
+                    Id = 5,
+                    Name = "Additional ingredients",
                     CreatedDate = DateTime.Now
                 }
             );

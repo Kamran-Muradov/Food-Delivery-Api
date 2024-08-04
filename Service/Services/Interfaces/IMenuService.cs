@@ -11,6 +11,7 @@ namespace Service.Services.Interfaces
         Task<PaginationResponse<MenuDto>> GetPaginateAsync(int? page, int? take);
         Task<IEnumerable<MenuSelectDto>> GetAllForSelectAsync(int? excludeId = null);
         Task<MenuDetailDto> GetByIdDetailAsync(int? id);
+        Task<DTOs.UI.Menus.MenuDetailDto> GetByIdAsync(int? id);
         Task<IEnumerable<MenuDto>> SearchByNameAndCategory(string searchText);
     }
 }

@@ -8,6 +8,7 @@ using Service.Helpers;
 using Service.Helpers.Constants;
 using Service.Helpers.Exceptions;
 using Service.Services.Interfaces;
+using RestaurantDetailDto = Service.DTOs.Admin.Restaurants.RestaurantDetailDto;
 using RestaurantDto = Service.DTOs.Admin.Restaurants.RestaurantDto;
 
 namespace Service.Services
@@ -18,16 +19,19 @@ namespace Service.Services
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly IRestaurantImageRepository _restaurantImageRepository;
+        private readonly IRestaurantTagRepository _restaurantTagRepository;
 
         public RestaurantService(IRestaurantRepository restaurantRepository,
                                  IMapper mapper,
                                  IPhotoService photoService,
-                                 IRestaurantImageRepository restaurantImageRepository)
+                                 IRestaurantImageRepository restaurantImageRepository, 
+                                 IRestaurantTagRepository restaurantTagRepository)
         {
             _restaurantRepository = restaurantRepository;
             _mapper = mapper;
             _photoService = photoService;
             _restaurantImageRepository = restaurantImageRepository;
+            _restaurantTagRepository = restaurantTagRepository;
         }
 
         public async Task CreateAsync(RestaurantCreateDto model)
@@ -53,6 +57,14 @@ namespace Service.Services
             restaurant.RestaurantImages = images;
             restaurant.RestaurantImages.FirstOrDefault().IsMain = true;
 
+            List<RestaurantTag> restaurantTags = model.TagIds.Select(tagId => new RestaurantTag
+            {
+                RestaurantId = restaurant.Id,
+                TagId = tagId
+            }).ToList();
+
+            restaurant.RestaurantTags = restaurantTags;
+
             await _restaurantRepository.CreateAsync(restaurant);
         }
 
@@ -62,7 +74,24 @@ namespace Service.Services
 
             ArgumentNullException.ThrowIfNull(model);
 
-            var restaurant = await _restaurantRepository.GetByIdAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
+            var restaurant = await _restaurantRepository.GetByIdWithImagesAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
+
+            var removedTags = restaurant.RestaurantTags
+                .Where(rt => !model.TagIds.Contains(rt.TagId));
+
+            foreach (var restaurantTag in removedTags)
+            {
+                await _restaurantTagRepository.DeleteAsync(restaurantTag);
+            }
+
+            foreach (var tagId in model.TagIds.Where(tagId => restaurant.RestaurantTags.All(m => m.TagId != tagId)))
+            {
+                await _restaurantTagRepository.CreateAsync(new RestaurantTag
+                {
+                    RestaurantId = (int)id,
+                    TagId = tagId
+                });
+            }
 
             if (model.Images is not null)
             {
@@ -124,10 +153,10 @@ namespace Service.Services
 
             List<Restaurant> restaurants;
 
-            if (model.CategoryIds is not null && model.CategoryIds.Any())
+            if (model.TagIds is not null && model.TagIds.Any())
             {
                 restaurants = (List<Restaurant>)await _restaurantRepository
-                    .GetAllWithExpressionAsync(m => m.RestaurantCategories.Any(rc => model.CategoryIds.Contains(rc.CategoryId)));
+                    .GetAllWithExpressionAsync(m => m.RestaurantTags.Any(rc => model.TagIds.Contains(rc.TagId)));
             }
             else
             {
@@ -137,7 +166,7 @@ namespace Service.Services
             int totalPage = (int)Math.Ceiling((decimal)restaurants.Count / model.Take);
 
             var mappedDatas = _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(
-                await _restaurantRepository.GetLoadMoreAsync(model.Page, model.Take, model.Sorting, model.CategoryIds));
+                await _restaurantRepository.GetLoadMoreAsync(model.Page, model.Take, model.Sorting, model.TagIds));
 
             return new PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>(mappedDatas, totalPage, model.Page);
         }
@@ -160,6 +189,18 @@ namespace Service.Services
             ArgumentNullException.ThrowIfNull(id);
 
             return _mapper.Map<RestaurantDetailDto>(await _restaurantRepository.GetByIdWithAllDatasAsync((int)id));
+        }
+
+        public async Task<DTOs.UI.Restaurants.RestaurantDetailDto> GetByIdAsync(int? id)
+        {
+            ArgumentNullException.ThrowIfNull(id);
+
+            var datas = await _restaurantRepository.GetByIdWithAllDatasAsync((int)id);
+            var mapped =
+                _mapper.Map<DTOs.UI.Restaurants.RestaurantDetailDto>(
+                    await _restaurantRepository.GetByIdWithAllDatasAsync((int)id));
+
+            return _mapper.Map<DTOs.UI.Restaurants.RestaurantDetailDto>(await _restaurantRepository.GetByIdWithAllDatasAsync((int)id));
         }
 
         public async Task SetMainImageAsync(MainAndDeleteImageDto model)

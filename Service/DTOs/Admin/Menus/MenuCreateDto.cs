@@ -6,12 +6,12 @@ namespace Service.DTOs.Admin.Menus
     public class MenuCreateDto
     {
         public string Name { get; set; }
-        public string Description { get; set; }
         public decimal Price { get; set; }
         public int RestaurantId { get; set; }
         public IFormFile Image { get; set; }
         public List<int> IngredientIds { get; set; }
-        public List<int> CategoryIds { get; set; }
+        public int CategoryId { get; set; }
+
     }
 
     public class MenuCreateDtoValidator : AbstractValidator<MenuCreateDto>
@@ -24,12 +24,6 @@ namespace Service.DTOs.Admin.Menus
                 .MaximumLength(50)
                 .WithMessage("Name cannot exceed 50 characters");
 
-            RuleFor(m => m.Description)
-                .NotEmpty()
-                .WithMessage("Description is required")
-                .MaximumLength(200)
-                .WithMessage("Description cannot exceed 200 characters");
-
             RuleFor(m => m.Price)
                 .NotEmpty()
                 .WithMessage("Price is required")
@@ -41,6 +35,13 @@ namespace Service.DTOs.Admin.Menus
                 .WithMessage("Restaurant id is required")
                 .GreaterThan(0)
                 .WithMessage("Restaurant id must be greater than 0");
+
+            
+            RuleFor(m => m.CategoryId)
+                .NotEmpty()
+                .WithMessage("Category id is required")
+                .GreaterThan(0)
+                .WithMessage("Category id must be greater than 0");
 
             RuleFor(m => m.Image)
                 .NotEmpty()
@@ -61,16 +62,6 @@ namespace Service.DTOs.Admin.Menus
                 .ForEach(ingredientId => ingredientId
                     .GreaterThan(0)
                     .WithMessage("Ingredient id must be greater than 0"))
-                .When(m => m.IngredientIds is not null);
-
-            RuleFor(m => m.CategoryIds)
-                .NotEmpty()
-                .WithMessage("Category id is required");
-
-            RuleFor(m => m.CategoryIds)
-                .ForEach(categoryId => categoryId
-                    .GreaterThan(0)
-                    .WithMessage("Category id must be greater than 0"))
                 .When(m => m.IngredientIds is not null);
         }
     }

@@ -17,6 +17,7 @@ namespace Service.DTOs.Admin.Restaurants
         public string Address { get; set; }
         public string Website { get; set; }
         public List<IFormFile>? Images { get; set; }
+        public List<int> TagIds { get; set; }
     }
 
     public class RestaurantEditDtoValidator : AbstractValidator<RestaurantEditDto>
@@ -34,6 +35,16 @@ namespace Service.DTOs.Admin.Restaurants
                 .WithMessage("Address is required")
                 .MaximumLength(50)
                 .WithMessage("Address cannot exceed 50 characters");
+
+            RuleFor(m => m.TagIds)
+                .NotEmpty()
+                .WithMessage("Tag id is required");
+
+            RuleFor(m => m.TagIds)
+                .ForEach(ingredientId => ingredientId
+                    .GreaterThan(0)
+                    .WithMessage("Ingredient id must be greater than 0"))
+                .When(m => m.TagIds is not null);
 
 
             RuleFor(m => m.Description)

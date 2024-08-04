@@ -6,6 +6,7 @@ namespace Domain.Entities
     {
         public string Option { get; set; }
         public decimal? AdditionalPrice { get; set; }
+        public bool IsSingleChoice { get; set; }
         public int MenuId { get; set; }
         public Menu Menu { get; set; }
         public int VariantTypeId { get; set; }

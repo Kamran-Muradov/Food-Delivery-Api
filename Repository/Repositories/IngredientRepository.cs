@@ -11,12 +11,12 @@ namespace Repository.Repositories
 
         public async Task<Ingredient> GetByNameAsync(string name)
         {
-            return await _entities.AsNoTracking().FirstOrDefaultAsync(m => m.Name == name);
+            return await Entities.AsNoTracking().FirstOrDefaultAsync(m => m.Name == name);
         }
 
         public async Task<IEnumerable<Ingredient>> GetPaginateDatasAsync(int page, int take)
         {
-            return await _entities
+            return await Entities
                 .OrderByDescending(m => m.Id)
                 .Skip((page - 1) * take)
                 .Take(take)
@@ -26,7 +26,7 @@ namespace Repository.Repositories
 
         public async Task<bool> ExistAsync(string name, int? excludeId = null)
         {
-            return await _entities
+            return await Entities
                 .Where(m => m.Id != excludeId)
                 .AnyAsync(m => m.Name == name);
         }

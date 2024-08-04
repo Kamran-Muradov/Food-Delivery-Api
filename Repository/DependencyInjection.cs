@@ -15,12 +15,13 @@ namespace Repository
             services.AddScoped<IRestaurantImageRepository, RestaurantImageRepository>();
             services.AddScoped<IMenuRepository, MenuRepository>();
             services.AddScoped<IMenuImageRepository, MenuImageRepository>();
-            services.AddScoped<IRestaurantCategoryRepository, RestaurantCategoryRepository>();
-            services.AddScoped<IMenuCategoryRepository, MenuCategoryRepository>();
+            services.AddScoped<IRestaurantTagRepository, RestaurantTagRepository>();
             services.AddScoped<ICategoryImageRepository, CategoryImageRepository>();
             services.AddScoped<IMenuIngredientRepository, MenuIngredientRepository>();
             services.AddScoped<IMenuVariantRepository, MenuVariantRepository>();
             services.AddScoped<IVariantTypeRepository, VariantTypeRepository>();
+            services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<ITagImageRepository, TagImageRepository>();
 
             return services;
         }

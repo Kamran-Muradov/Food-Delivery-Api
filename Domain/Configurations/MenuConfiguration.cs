@@ -12,10 +12,6 @@ namespace Domain.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
-            builder.Property(m => m.Description)
-                .IsRequired()
-                .HasMaxLength(200);
-
             builder.Property(m => m.Price)
                 .IsRequired();
 

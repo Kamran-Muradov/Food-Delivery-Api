@@ -11,7 +11,7 @@ namespace Repository.Repositories
 
         public async Task<IEnumerable<Category>> GetPaginateDatasAsync(int page, int take)
         {
-            return await _entities
+            return await Entities
                 .OrderByDescending(m => m.Id)
                 .Skip((page - 1) * take)
                 .Take(take)
@@ -22,17 +22,16 @@ namespace Repository.Repositories
 
         public async Task<IEnumerable<Category>> GetAllWithImageAsync()
         {
-            return await _entities
+            return await Entities
                 .Include(m => m.CategoryImage)
-                .Include(m => m.RestaurantCategories)
-                .Include(m => m.MenuCategories)
+                .Include(m => m.Menus)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
         public async Task<Category> GetByIdWithImageAsync(int id)
         {
-            return await _entities
+            return await Entities
                 .Where(m => m.Id == id)
                 .Include(m => m.CategoryImage)
                 .AsNoTracking()
@@ -41,12 +40,12 @@ namespace Repository.Repositories
 
         public async Task<Category> GetByNameAsync(string name)
         {
-            return await _entities.AsNoTracking().FirstOrDefaultAsync(m => m.Name == name);
+            return await Entities.AsNoTracking().FirstOrDefaultAsync(m => m.Name == name);
         }
 
         public async Task<bool> ExistAsync(string name, int? excludeId = null)
         {
-            return await _entities
+            return await Entities
                 .Where(m => m.Id != excludeId)
                 .AnyAsync(m => m.Name == name);
         }

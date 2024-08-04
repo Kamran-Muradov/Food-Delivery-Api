@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Repository.Data;
 using Repository.Repositories.Interfaces;
 
@@ -11,7 +10,7 @@ namespace Repository.Repositories
         public RestaurantRepository(AppDbContext context) : base(context) { }
         public async Task<IEnumerable<Restaurant>> GetPaginateDatasAsync(int page, int take)
         {
-            return await _entities
+            return await Entities
                 .OrderByDescending(m => m.Id)
                 .Skip((page - 1) * take)
                 .Take(take)
@@ -22,11 +21,11 @@ namespace Repository.Repositories
 
         public async Task<IEnumerable<Restaurant>> GetLoadMoreAsync(int page, int take, string sorting, List<int>? categoryIds)
         {
-            var query = _entities.AsQueryable();
+            var query = Entities.AsQueryable();
 
             if (categoryIds is not null && categoryIds.Any())
             {
-                query = query.Where(m => m.RestaurantCategories.Any(rc => categoryIds.Contains(rc.CategoryId)));
+                query = query.Where(m => m.RestaurantTags.Any(rc => categoryIds.Contains(rc.TagId)));
             }
 
             query = sorting switch
@@ -42,60 +41,58 @@ namespace Repository.Repositories
                  .Skip((page - 1) * take)
                  .Take(take)
                  .Include(m => m.RestaurantImages)
-                 .Include(m => m.RestaurantCategories)
-                 .ThenInclude(m => m.Category)
+                 .Include(m => m.RestaurantTags)
+                 .ThenInclude(m => m.Tag)
                  .AsNoTracking()
                  .ToListAsync();
         }
 
         public async Task<IEnumerable<Restaurant>> GetAllWithImagesAsync()
         {
-            return await _entities
+            return await Entities
                 .Include(m => m.RestaurantImages)
-                .Include(m => m.RestaurantCategories)
-                .ThenInclude(m => m.Category)
+                .Include(m => m.RestaurantTags)
+                .ThenInclude(m => m.Tag)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<Restaurant> GetByIdWithAllDatasAsync(int id)
+        public async Task<Restaurant?> GetByIdWithAllDatasAsync(int id)
         {
-            return await _entities
-                .Where(m => m.Id == id)
-                .Include(m => m.RestaurantCategories)
+            return await Entities
+                .Where(r => r.Id == id)
+                .Include(r => r.RestaurantTags)
+                .ThenInclude(rc => rc.Tag)
+                .Include(r => r.RestaurantImages)
+                .Include(r => r.Menus)
+                .ThenInclude(m => m.MenuImage)
+                .Include(r => r.Menus)
+                .ThenInclude(m => m.MenuIngredients)
+                .ThenInclude(mi => mi.Ingredient)
+                .Include(r => r.Menus)
                 .ThenInclude(m => m.Category)
-                .Include(m => m.RestaurantImages)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
         public async Task<Restaurant> GetByIdWithImagesAsync(int id)
         {
-            return await _entities
+            return await Entities
                 .Where(m => m.Id == id)
                 .Include(m => m.RestaurantImages)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<Restaurant> GetByIdWithMenusAsync(int id)
-        {
-            return await _entities
-                .Where(m => m.Id == id)
-                .Include(m => m.Menus)
-                .ThenInclude(m => m.MenuCategories)
+                .Include(m => m.RestaurantTags)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Restaurant>> SearchByNameAndCategory(string searchText)
         {
-            return await _entities
-                .Where(m => m.Name.Contains(searchText) || m.RestaurantCategories.Any(mc => mc.Category.Name.Contains(searchText)))
+            return await Entities
+                .Where(m => m.Name.Contains(searchText) || m.RestaurantTags.Any(mc => mc.Tag.Name.Contains(searchText)))
                 .OrderByDescending(m => m.Rating)
                 .Include(m => m.RestaurantImages)
-                .Include(m => m.RestaurantCategories)
-                .ThenInclude(m => m.Category)
+                .Include(m => m.RestaurantTags)
+                .ThenInclude(m => m.Tag)
                 .AsNoTracking()
                 .ToListAsync();
         }

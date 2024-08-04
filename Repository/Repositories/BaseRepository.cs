@@ -8,51 +8,51 @@ namespace Repository.Repositories
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
-        protected readonly AppDbContext _context;
-        protected readonly DbSet<T> _entities;
+        protected readonly AppDbContext Context;
+        protected readonly DbSet<T> Entities;
 
         public BaseRepository(AppDbContext context)
         {
-            _context = context;
-            _entities = _context.Set<T>();
+            Context = context;
+            Entities = Context.Set<T>();
         }
         
         public async Task CreateAsync(T entity)
         {
-            await _entities.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await Entities.AddAsync(entity);
+            await Context.SaveChangesAsync();
         }
 
         public async Task EditAsync(T entity)
         {
-            _entities.Update(entity);
-            await _context.SaveChangesAsync();
+            Context.Entry(entity).State = EntityState.Modified;
+            await Context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(T entity)
         {
-            _entities.Remove(entity);
-            await _context.SaveChangesAsync();
+            Entities.Remove(entity);
+            await Context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _entities.AsNoTracking().ToListAsync();
+            return await Entities.AsNoTracking().ToListAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllWithExpressionAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _entities.AsNoTracking().Where(predicate).ToListAsync();
+            return await Entities.AsNoTracking().Where(predicate).ToListAsync();
         }
 
         public async Task<T> GetFirstWithExpressionAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _entities.AsNoTracking().Where(predicate).FirstOrDefaultAsync();
+            return await Entities.AsNoTracking().Where(predicate).FirstOrDefaultAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _entities.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+            return await Entities.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
         }
     }
 }

@@ -6,6 +6,7 @@ namespace Repository.Repositories.Interfaces
     {
         Task<IEnumerable<MenuVariant>> GetPaginateDatasAsync(int page, int take);
         Task<MenuVariant> GetByIdWithAllDatasAsync(int id);
+        Task<Dictionary<string, IEnumerable<MenuVariant>>> GetAllByMenuIdGroupedAsync(int menuId);
         Task<bool> ExistAsync(int menuId, int variantTypeId, string option, int? excludeId = null);
     }
 }

@@ -10,7 +10,7 @@ namespace Repository.Repositories
         public MenuImageRepository(AppDbContext context) : base(context) { }
         public async Task<MenuImage> GetByMenuId(int menuId)
         {
-            return await _entities
+            return await Entities
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.MenuId == menuId);
         }
