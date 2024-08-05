@@ -11,6 +11,7 @@ using Service.Helpers;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json.Serialization;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +87,13 @@ builder.Services.AddAuthorization(o =>
 });
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+
+builder.Services.AddRouting(options =>
+{
+    options.LowercaseUrls = true;
+
+});
 
 var app = builder.Build();
 
@@ -101,6 +109,8 @@ app.UseCors(
         .AllowAnyMethod()
         .AllowAnyHeader()
 );
+
+app.UseRouting();
 
 //app.UseMiddleware<ExceptionHandlingMiddleware>();
 

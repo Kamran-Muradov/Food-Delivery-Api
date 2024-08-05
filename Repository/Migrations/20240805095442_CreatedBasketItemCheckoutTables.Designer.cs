@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -11,9 +12,10 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240805095442_CreatedBasketItemCheckoutTables")]
+    partial class CreatedBasketItemCheckoutTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,38 +127,6 @@ namespace Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("BasketItems");
-                });
-
-            modelBuilder.Entity("Domain.Entities.BasketVariant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("BasketItemId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Option")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BasketItemId");
-
-                    b.ToTable("BasketVariants");
                 });
 
             modelBuilder.Entity("Domain.Entities.Category", b =>
@@ -628,31 +598,31 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 5, 19, 32, 2, 386, DateTimeKind.Local).AddTicks(9565),
+                            CreatedDate = new DateTime(2024, 8, 5, 13, 54, 42, 761, DateTimeKind.Local).AddTicks(4543),
                             Name = "Size choice"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 5, 19, 32, 2, 386, DateTimeKind.Local).AddTicks(9566),
+                            CreatedDate = new DateTime(2024, 8, 5, 13, 54, 42, 761, DateTimeKind.Local).AddTicks(4545),
                             Name = "Sauce choice"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 5, 19, 32, 2, 386, DateTimeKind.Local).AddTicks(9567),
+                            CreatedDate = new DateTime(2024, 8, 5, 13, 54, 42, 761, DateTimeKind.Local).AddTicks(4546),
                             Name = "Drink choice"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 5, 19, 32, 2, 386, DateTimeKind.Local).AddTicks(9568),
+                            CreatedDate = new DateTime(2024, 8, 5, 13, 54, 42, 761, DateTimeKind.Local).AddTicks(4547),
                             Name = "Crust choice"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 5, 19, 32, 2, 386, DateTimeKind.Local).AddTicks(9569),
+                            CreatedDate = new DateTime(2024, 8, 5, 13, 54, 42, 761, DateTimeKind.Local).AddTicks(4548),
                             Name = "Additional ingredients"
                         });
                 });
@@ -807,17 +777,6 @@ namespace Repository.Migrations
                     b.Navigation("Menu");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.BasketVariant", b =>
-                {
-                    b.HasOne("Domain.Entities.BasketItem", "BasketItem")
-                        .WithMany("BasketVariants")
-                        .HasForeignKey("BasketItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BasketItem");
                 });
 
             modelBuilder.Entity("Domain.Entities.CategoryImage", b =>
@@ -1015,11 +974,6 @@ namespace Repository.Migrations
                     b.Navigation("BasketItems");
 
                     b.Navigation("Checkouts");
-                });
-
-            modelBuilder.Entity("Domain.Entities.BasketItem", b =>
-                {
-                    b.Navigation("BasketVariants");
                 });
 
             modelBuilder.Entity("Domain.Entities.Category", b =>

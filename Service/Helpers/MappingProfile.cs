@@ -8,6 +8,8 @@ using Service.DTOs.Admin.MenuVariants;
 using Service.DTOs.Admin.Restaurants;
 using Service.DTOs.Admin.Tags;
 using Service.DTOs.Admin.VariantTypes;
+using Service.DTOs.UI.BasketItems;
+using Service.DTOs.UI.Checkouts;
 using Service.DTOs.UI.Restaurants;
 using CategoryDto = Service.DTOs.Admin.Categories.CategoryDto;
 using RestaurantDetailDto = Service.DTOs.Admin.Restaurants.RestaurantDetailDto;
@@ -92,8 +94,10 @@ namespace Service.Helpers
             CreateMap<MenuImage, MenuImageDto>();
             CreateMap<Menu, DTOs.UI.Menus.MenuDetailDto>()
                 .ForMember(d => d.Image, opt => opt.MapFrom(s => s.MenuImage.Url))
+                .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Restaurant.Name))
                 .ForMember(d => d.Ingredients, opt => opt.MapFrom(s => s.MenuIngredients.Select(m => m.Ingredient.Name)))
-                .ForMember(d => d.MenuVariants, opt => opt.MapFrom(s => s.MenuVariants.GroupBy(mv => mv.VariantType.Name).ToDictionary(g => g.Key, g => g.AsEnumerable())));
+                .ForMember(d => d.MenuVariants,
+                    opt => opt.MapFrom(s => s.MenuVariants.GroupBy(mv => mv.VariantType.Name).ToDictionary(g => g.Key, g => g.AsEnumerable())));
 
             //MenuVariant
             CreateMap<MenuVariant, MenuVariantDto>()
@@ -117,6 +121,20 @@ namespace Service.Helpers
 
             //VariantType
             CreateMap<VariantType, VariantTypeSelectDto>();
+
+            //BasketItem
+            CreateMap<BasketItem, BasketItemDto>()
+                .ForMember(d => d.BasketVariants,
+                    opt => opt.MapFrom(s => s.BasketVariants.GroupBy(bv => bv.Type).ToDictionary(g => g.Key, g => g.Select(m => m.Option).ToList())))
+                .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Menu.Restaurant.Name))
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.Menu.MenuImage.Url));
+            CreateMap<BasketItemCreateDto, BasketItem>()
+                .ForMember(d => d.BasketVariants, opt => opt.Ignore());
+            CreateMap<BasketCountDto, BasketItem>();
+
+            //Checkout
+            CreateMap<Checkout, CheckoutDto>();
+            CreateMap<CheckoutCreateDto, Checkout>();
         }
     }
 }

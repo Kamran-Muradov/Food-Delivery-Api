@@ -35,6 +35,12 @@ namespace Repository.Repositories
             await Context.SaveChangesAsync();
         }
 
+        public async Task DeleteRangeAsync(List<T> entities)
+        {
+            Entities.RemoveRange(entities);
+            await Context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await Entities.AsNoTracking().ToListAsync();

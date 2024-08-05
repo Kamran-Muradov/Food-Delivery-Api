@@ -22,6 +22,9 @@ namespace Repository
             services.AddScoped<IVariantTypeRepository, VariantTypeRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<ITagImageRepository, TagImageRepository>();
+            services.AddScoped<IBasketItemRepository, BasketItemRepository>();
+            services.AddScoped<ICheckoutRepository, CheckoutRepository>();
+            services.AddScoped<IBasketVariantRepository, BasketVariantRepository>();
 
             return services;
         }

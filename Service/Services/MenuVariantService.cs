@@ -49,9 +49,9 @@ namespace Service.Services
         {
             ArgumentNullException.ThrowIfNull(id);
 
-            var ingredient = await _menuVariantRepository.GetByIdAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
+            var menuVariant = await _menuVariantRepository.GetByIdAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
 
-            await _menuVariantRepository.DeleteAsync(ingredient);
+            await _menuVariantRepository.DeleteAsync(menuVariant);
         }
 
         public async Task<PaginationResponse<MenuVariantDto>> GetPaginateAsync(int? page, int? take)

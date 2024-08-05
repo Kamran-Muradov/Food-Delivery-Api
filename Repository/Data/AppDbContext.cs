@@ -23,6 +23,9 @@ namespace Repository.Data
         public DbSet<VariantType> VariantTypes { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<TagImage> TagImages { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
+        public DbSet<Checkout> Checkouts { get; set; }
+        public DbSet<BasketVariant> BasketVariants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -133,7 +133,7 @@ namespace Service.Services
 
             List<string> userRoles = (List<string>)await _userManager.GetRolesAsync(user);
 
-            string token = GenerateJwtToken(user.UserName, userRoles);
+            string token = GenerateJwtToken(user.UserName, user.Id, userRoles);
 
             return new LoginResponse
             {
@@ -219,13 +219,13 @@ namespace Service.Services
             }
         }
 
-        private string GenerateJwtToken(string username, List<string> roles)
+        private string GenerateJwtToken(string username, string userId, List<string> roles)
         {
             var claims = new List<Claim>
             {
                 new(JwtRegisteredClaimNames.Sub, username),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new(ClaimTypes.NameIdentifier, username),
+                new(ClaimTypes.NameIdentifier, userId),
                 new(ClaimTypes.Name, username)
             };
 

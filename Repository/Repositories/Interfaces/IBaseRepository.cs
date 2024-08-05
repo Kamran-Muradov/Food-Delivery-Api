@@ -8,6 +8,7 @@ namespace Repository.Repositories.Interfaces
         Task CreateAsync(T entity);
         Task EditAsync(T entity);
         Task DeleteAsync(T entity);
+        Task DeleteRangeAsync(List<T> entities);
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> GetAllWithExpressionAsync(Expression<Func<T, bool>> predicate);
         Task<T> GetFirstWithExpressionAsync(Expression<Func<T, bool>> predicate);

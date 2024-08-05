@@ -7,13 +7,10 @@ namespace Food_Delivery_App.Controllers.UI
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
-        private readonly IWebHostEnvironment _env;
 
-        public AccountController(IAccountService accountService,
-                                 IWebHostEnvironment env)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
-            _env = env;
         }
 
         [HttpPost]
@@ -22,8 +19,6 @@ namespace Food_Delivery_App.Controllers.UI
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var response = await _accountService.SignUpAsync(request);
-
-            //if (!response.Success) return BadRequest(response);
 
             return Ok(response);
         }

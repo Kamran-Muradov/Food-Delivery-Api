@@ -8,6 +8,8 @@ using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
 using Service.DTOs.Admin.Restaurants;
 using Service.DTOs.Admin.Tags;
+using Service.DTOs.UI.BasketItems;
+using Service.DTOs.UI.Checkouts;
 using Service.Services;
 using Service.Services.Interfaces;
 
@@ -59,6 +61,12 @@ namespace Service
             services.AddScoped<IMenuVariantService, MenuVariantService>();
             services.AddScoped<IVariantTypeService, VariantTypeService>();
 
+            services.AddScoped<IValidator<BasketItemCreateDto>, BasketItemCreateDtoValidator>();
+            services.AddScoped<IValidator<BasketCountDto>, BasketItemEditDtoValidator>();
+            services.AddScoped<IBasketItemService, BasketItemService>();
+
+            services.AddScoped<IValidator<CheckoutCreateDto>, CheckoutCreateDtoValidator>();
+            services.AddScoped<ICheckoutService, CheckoutService>();
 
             return services;
         }
