@@ -67,6 +67,7 @@ namespace Service
 
             services.AddScoped<IValidator<CheckoutCreateDto>, CheckoutCreateDtoValidator>();
             services.AddScoped<ICheckoutService, CheckoutService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             return services;
         }

@@ -127,6 +127,7 @@ namespace Service.Helpers
                 .ForMember(d => d.BasketVariants,
                     opt => opt.MapFrom(s => s.BasketVariants.GroupBy(bv => bv.Type).ToDictionary(g => g.Key, g => g.Select(m => m.Option).ToList())))
                 .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Menu.Restaurant.Name))
+                .ForMember(d => d.Name, opt => opt.MapFrom(s => s.Menu.Name))
                 .ForMember(d => d.Image, opt => opt.MapFrom(s => s.Menu.MenuImage.Url));
             CreateMap<BasketItemCreateDto, BasketItem>()
                 .ForMember(d => d.BasketVariants, opt => opt.Ignore());

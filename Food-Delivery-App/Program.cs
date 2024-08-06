@@ -88,11 +88,11 @@ builder.Services.AddAuthorization(o =>
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 builder.Services.AddRouting(options =>
 {
     options.LowercaseUrls = true;
-
 });
 
 var app = builder.Build();

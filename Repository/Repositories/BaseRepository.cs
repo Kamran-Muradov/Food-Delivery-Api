@@ -23,6 +23,12 @@ namespace Repository.Repositories
             await Context.SaveChangesAsync();
         }
 
+        public async Task CreateRangeAsync(List<T> entities)
+        {
+            await Entities.AddRangeAsync(entities);
+            await Context.SaveChangesAsync();
+        }
+
         public async Task EditAsync(T entity)
         {
             Context.Entry(entity).State = EntityState.Modified;
