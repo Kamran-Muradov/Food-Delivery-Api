@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Configurations;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace Repository.Data
         public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<Checkout> Checkouts { get; set; }
         public DbSet<BasketVariant> BasketVariants { get; set; }
+        public DbSet<CheckoutMenu> CheckoutMenus { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

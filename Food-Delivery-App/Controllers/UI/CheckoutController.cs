@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Service.DTOs.UI.Checkouts;
 using Service.Helpers.Constants;
 using Service.Services.Interfaces;
 
 namespace Food_Delivery_App.Controllers.UI
 {
+    [Authorize]
     public class CheckoutController : BaseController
     {
         private readonly ICheckoutService _checkoutService;
@@ -22,10 +24,17 @@ namespace Food_Delivery_App.Controllers.UI
             return CreatedAtAction(nameof(Create), new { response = ResponseMessages.CreateSuccess });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpPost]
+        public async Task<IActionResult> CreateByUserId([FromQuery] string userId)
         {
-            return Ok(await _checkoutService.GetAllAsync());
+            await _checkoutService.CreateByUserIdAsync(userId);
+            return CreatedAtAction(nameof(Create), new { response = ResponseMessages.CreateSuccess });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllByUserId([FromQuery] string userId)
+        {
+            return Ok(await _checkoutService.GetAllByUserIdAsync(userId));
         }
     }
 }

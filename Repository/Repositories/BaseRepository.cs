@@ -37,6 +37,7 @@ namespace Repository.Repositories
 
         public async Task DeleteAsync(T entity)
         {
+            Context.Entry(entity).State = EntityState.Detached;
             Entities.Remove(entity);
             await Context.SaveChangesAsync();
         }

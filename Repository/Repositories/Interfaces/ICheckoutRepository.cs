@@ -4,6 +4,6 @@ namespace Repository.Repositories.Interfaces
 {
     public interface ICheckoutRepository : IBaseRepository<Checkout>
     {
-        Task<IEnumerable<Checkout>> GetAllWithMenusAsync();
+        Task<IEnumerable<Checkout>> GetAllByUserIdAsync(string userId);
     }
 }

@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Service.DTOs.Account;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Service.DTOs.UI.Account;
 using Service.Services.Interfaces;
 
 namespace Food_Delivery_App.Controllers.UI
@@ -30,6 +31,12 @@ namespace Food_Delivery_App.Controllers.UI
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetUserById([FromQuery] string userId)
+        {
+            return Ok(await _accountService.GetByUserIdAsync(userId));
+        }
+
+        [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             await _accountService.ConfirmEmailAsync(userId, token);
@@ -48,6 +55,20 @@ namespace Food_Delivery_App.Controllers.UI
         {
             await _accountService.ResetPasswordAsync(request);
             return Ok();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> EditUser([FromQuery] string userId, [FromBody] UserEditDto request)
+        {
+            return Ok(await _accountService.EditUserAsync(userId, request));
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> EditPassword([FromQuery] string userId, [FromBody] PasswordEditDto request)
+        {
+            return Ok(await _accountService.EditPasswordAsync(userId, request));
         }
     }
 }

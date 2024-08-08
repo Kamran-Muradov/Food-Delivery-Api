@@ -5,7 +5,7 @@ namespace Service.Services.Interfaces
     public interface ICheckoutService
     {
         Task CreateAsync(CheckoutCreateDto model);
-        Task CreateRangeByUserIdAsync(string userId);
-        Task<IEnumerable<CheckoutDto>> GetAllAsync();
+        Task CreateByUserIdAsync(string userId);
+        Task<IEnumerable<CheckoutDto>> GetAllByUserIdAsync(string userId);
     }
 }

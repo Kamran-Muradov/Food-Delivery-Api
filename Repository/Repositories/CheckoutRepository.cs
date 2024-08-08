@@ -11,11 +11,10 @@ namespace Repository.Repositories
         {
         }
 
-        public async Task<IEnumerable<Checkout>> GetAllWithMenusAsync()
+        public async Task<IEnumerable<Checkout>> GetAllByUserIdAsync(string userId)
         {
             return await Entities
-                .Include(c => c.Menu)
-                .Include(c => c.User)
+                .Where(c => c.UserId == userId)
                 .AsNoTracking()
                 .ToListAsync();
         }

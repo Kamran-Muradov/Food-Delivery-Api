@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Service.DTOs.Account;
+using Service.DTOs.UI.Account;
 using Service.Helpers;
 using Service.Helpers.Account;
 using Service.Helpers.Constants;
@@ -148,6 +148,12 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<UserDto>>(await _userManager.Users.ToListAsync());
         }
 
+        public async Task<UserDto> GetByUserIdAsync(string userId)
+        {
+            ArgumentNullException.ThrowIfNull(userId);
+            return _mapper.Map<UserDto>(await _userManager.FindByIdAsync(userId));
+        }
+
         public async Task<UserDto> GetUserByUserNameAsync(string userName)
         {
             ArgumentNullException.ThrowIfNull(userName);
@@ -206,6 +212,70 @@ namespace Service.Services
             }
 
             await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+        }
+
+        public async Task<EditResponse> EditUserAsync(string userId, UserEditDto model)
+        {
+            ArgumentNullException.ThrowIfNull(model);
+            ArgumentNullException.ThrowIfNull(userId);
+
+            var user = await _userManager.FindByIdAsync(userId) ?? throw new NotFoundException(ResponseMessages.NotFound);
+
+            var result = await _userManager.UpdateAsync(_mapper.Map(model, user));
+
+            if (!result.Succeeded)
+            {
+                return new EditResponse
+                {
+                    Success = false,
+                    Errors = result.Errors.Select(e => e.Description)
+                };
+            }
+
+            List<string> userRoles = (List<string>)await _userManager.GetRolesAsync(user);
+
+            string token = GenerateJwtToken(user.UserName, user.Id, userRoles);
+
+            return new EditResponse
+            {
+                Success = true,
+                Token = token
+            };
+        }
+
+        public async Task<EditResponse> EditPasswordAsync(string userId, PasswordEditDto model)
+        {
+            ArgumentNullException.ThrowIfNull(model);
+
+            var user = await _userManager.FindByIdAsync(userId) ?? throw new NotFoundException(ResponseMessages.NotFound);
+
+            bool isSamePassword = await _userManager.CheckPasswordAsync(user, model.NewPassword);
+
+            if (isSamePassword)
+            {
+                throw new BadRequestException(ResponseMessages.SamePassword);
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return new EditResponse
+                {
+                    Success = false,
+                    Errors = result.Errors.Select(e => e.Description)
+                };
+            }
+
+            List<string> userRoles = (List<string>)await _userManager.GetRolesAsync(user);
+
+            string token = GenerateJwtToken(user.UserName, user.Id, userRoles);
+
+            return new EditResponse
+            {
+                Success = true,
+                Token = token
+            };
         }
 
         public async Task CreateRoleAsync()

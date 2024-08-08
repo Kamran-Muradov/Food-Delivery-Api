@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Service.DTOs.Account;
 using Service.DTOs.Admin.Categories;
 using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
@@ -8,9 +7,9 @@ using Service.DTOs.Admin.MenuVariants;
 using Service.DTOs.Admin.Restaurants;
 using Service.DTOs.Admin.Tags;
 using Service.DTOs.Admin.VariantTypes;
+using Service.DTOs.UI.Account;
 using Service.DTOs.UI.BasketItems;
 using Service.DTOs.UI.Checkouts;
-using Service.DTOs.UI.Restaurants;
 using CategoryDto = Service.DTOs.Admin.Categories.CategoryDto;
 using RestaurantDetailDto = Service.DTOs.Admin.Restaurants.RestaurantDetailDto;
 using RestaurantDto = Service.DTOs.Admin.Restaurants.RestaurantDto;
@@ -134,8 +133,12 @@ namespace Service.Helpers
             CreateMap<BasketCountDto, BasketItem>();
 
             //Checkout
-            CreateMap<Checkout, CheckoutDto>();
+            CreateMap<Checkout, CheckoutDto>()
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")));
             CreateMap<CheckoutCreateDto, Checkout>();
+
+            //User
+            CreateMap<UserEditDto, AppUser>();
         }
     }
 }

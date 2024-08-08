@@ -42,6 +42,7 @@ namespace Repository.Repositories
             return await Entities
                 .Where(bi => bi.UserId == userId && bi.MenuId == menuId)
                 .Include(bi => bi.BasketVariants)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
     }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Service.DTOs.Account
+namespace Service.DTOs.UI.Account
 {
     public class ForgotPasswordDto
     {

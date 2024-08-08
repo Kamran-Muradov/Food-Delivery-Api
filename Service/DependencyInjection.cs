@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
-using Service.DTOs.Account;
 using Service.DTOs.Admin.Categories;
 using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
 using Service.DTOs.Admin.Restaurants;
 using Service.DTOs.Admin.Tags;
+using Service.DTOs.UI.Account;
 using Service.DTOs.UI.BasketItems;
 using Service.DTOs.UI.Checkouts;
 using Service.Services;
