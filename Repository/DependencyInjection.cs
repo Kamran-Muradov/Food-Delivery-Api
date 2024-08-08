@@ -25,6 +25,8 @@ namespace Repository
             services.AddScoped<IBasketItemRepository, BasketItemRepository>();
             services.AddScoped<ICheckoutRepository, CheckoutRepository>();
             services.AddScoped<IBasketVariantRepository, BasketVariantRepository>();
+            services.AddScoped<ISliderRepository, SliderRepository>();
+            services.AddScoped<ISliderImageRepository, SliderImageRepository>();
 
             return services;
         }

@@ -55,7 +55,6 @@ namespace Service.Services
         public async Task EditAsync(int? id, CategoryEditDto model)
         {
             ArgumentNullException.ThrowIfNull(id);
-
             ArgumentNullException.ThrowIfNull(model);
 
             var category = await _categoryRepository.GetByIdWithImageAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
@@ -123,7 +122,6 @@ namespace Service.Services
         public async Task<CategoryDto> GetByIdAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);
-
             return _mapper.Map<CategoryDto>(await _categoryRepository.GetByIdAsync((int)id));
         }
 

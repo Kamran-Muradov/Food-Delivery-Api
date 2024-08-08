@@ -5,6 +5,7 @@ using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
 using Service.DTOs.Admin.Restaurants;
+using Service.DTOs.Admin.Sliders;
 using Service.DTOs.Admin.Tags;
 using Service.DTOs.Admin.VariantTypes;
 using Service.DTOs.UI.Account;
@@ -139,6 +140,19 @@ namespace Service.Helpers
 
             //User
             CreateMap<UserEditDto, AppUser>();
+
+            //Slider
+            CreateMap<Slider, SliderDto>()
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.SliderImage.Url))
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
+                .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
+            CreateMap<Slider,SliderDetailDto>()
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.SliderImage.Url))
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
+                .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
+            CreateMap<SliderCreateDto, Slider>();
+            CreateMap<SliderEditDto, Slider>();
+            CreateMap<SliderImage, SliderImageDto>();
         }
     }
 }

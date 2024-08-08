@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -11,9 +12,10 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240808190534_CreatedSliderSLiderImageTables")]
+    partial class CreatedSliderSLiderImageTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -712,31 +714,31 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 8, 23, 12, 1, 764, DateTimeKind.Local).AddTicks(4087),
+                            CreatedDate = new DateTime(2024, 8, 8, 23, 5, 33, 998, DateTimeKind.Local).AddTicks(7735),
                             Name = "Size choice"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 8, 23, 12, 1, 764, DateTimeKind.Local).AddTicks(4089),
+                            CreatedDate = new DateTime(2024, 8, 8, 23, 5, 33, 998, DateTimeKind.Local).AddTicks(7737),
                             Name = "Sauce choice"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 8, 23, 12, 1, 764, DateTimeKind.Local).AddTicks(4091),
+                            CreatedDate = new DateTime(2024, 8, 8, 23, 5, 33, 998, DateTimeKind.Local).AddTicks(7739),
                             Name = "Drink choice"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 8, 23, 12, 1, 764, DateTimeKind.Local).AddTicks(4092),
+                            CreatedDate = new DateTime(2024, 8, 8, 23, 5, 33, 998, DateTimeKind.Local).AddTicks(7740),
                             Name = "Crust choice"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 8, 23, 12, 1, 764, DateTimeKind.Local).AddTicks(4093),
+                            CreatedDate = new DateTime(2024, 8, 8, 23, 5, 33, 998, DateTimeKind.Local).AddTicks(7741),
                             Name = "Additional ingredients"
                         });
                 });

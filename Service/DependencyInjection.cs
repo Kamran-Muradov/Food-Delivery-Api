@@ -6,6 +6,7 @@ using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
 using Service.DTOs.Admin.Restaurants;
+using Service.DTOs.Admin.Sliders;
 using Service.DTOs.Admin.Tags;
 using Service.DTOs.UI.Account;
 using Service.DTOs.UI.BasketItems;
@@ -68,6 +69,11 @@ namespace Service
             services.AddScoped<IValidator<CheckoutCreateDto>, CheckoutCreateDtoValidator>();
             services.AddScoped<ICheckoutService, CheckoutService>();
             services.AddScoped<IPaymentService, PaymentService>();
+
+            services.AddScoped<IValidator<SliderCreateDto>, SliderCreateDtoValidator>();
+            services.AddScoped<IValidator<SliderEditDto>, SliderEditDtoValidator>();
+            services.AddScoped<ISliderService, SliderService>();
+            services.AddScoped<ISliderImageService, SliderImageService>();
 
             return services;
         }
