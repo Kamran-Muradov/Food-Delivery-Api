@@ -153,6 +153,8 @@ namespace Service.Helpers
             CreateMap<SliderCreateDto, Slider>();
             CreateMap<SliderEditDto, Slider>();
             CreateMap<SliderImage, SliderImageDto>();
+            CreateMap<Slider, DTOs.UI.Sliders.SliderDto>()
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.SliderImage.Url));
         }
     }
 }

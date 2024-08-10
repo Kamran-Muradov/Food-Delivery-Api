@@ -25,8 +25,8 @@ namespace Service.DTOs.Admin.Sliders
             RuleFor(s => s.Image)
                 .Must(i => i.ContentType.Contains("image/"))
                 .WithMessage("File must be image type")
-                .Must(i => i.Length / 1024 < 500)
-                .WithMessage("Image size cannot exceed 500Kb")
+                .Must(i => i.Length / 1024 < 1024)
+                .WithMessage("Image size cannot exceed 1MB")
                 .When(s => s.Image is not null);
         }
     }

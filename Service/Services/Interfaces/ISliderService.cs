@@ -9,6 +9,7 @@ namespace Service.Services.Interfaces
         Task EditAsync(int? id, SliderEditDto model);
         Task DeleteAsync(int? id);
         Task<PaginationResponse<SliderDto>> GetPaginateAsync(int? page, int? take);
+        Task<IEnumerable<DTOs.UI.Sliders.SliderDto>> GetAllAsync();
         Task<SliderDetailDto> GetByIdAsync(int? id);
     }
 }

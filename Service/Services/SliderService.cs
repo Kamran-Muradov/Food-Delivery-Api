@@ -100,6 +100,11 @@ namespace Service.Services
             return new PaginationResponse<SliderDto>(mappedDatas, totalPage, (int)page);
         }
 
+        public async Task<IEnumerable<DTOs.UI.Sliders.SliderDto>> GetAllAsync()
+        {
+            return _mapper.Map<IEnumerable<DTOs.UI.Sliders.SliderDto>>(await _sliderRepository.GetAllWithImagesAsync());
+        }
+
         public async Task<SliderDetailDto> GetByIdAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);

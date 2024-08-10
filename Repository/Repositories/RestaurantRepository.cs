@@ -47,6 +47,17 @@ namespace Repository.Repositories
                  .ToListAsync();
         }
 
+        public async Task<IEnumerable<Restaurant>> GetAllByTagIdAsync(int tagId)
+        {
+            return await Entities
+                .Where(r => r.RestaurantTags.Any(rt => rt.TagId == tagId))
+                .Include(m => m.RestaurantImages)
+                .Include(m => m.RestaurantTags)
+                .ThenInclude(m => m.Tag)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Restaurant>> GetAllWithImagesAsync()
         {
             return await Entities

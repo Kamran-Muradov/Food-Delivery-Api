@@ -147,6 +147,12 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllWithImagesAsync());
         }
 
+        public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllByTagIdAsync(int? tagId)
+        {
+            ArgumentNullException.ThrowIfNull(tagId);
+            return _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllByTagIdAsync((int)tagId));
+        }
+
         public async Task<PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>> GetLoadMoreAsync(RestaurantFilterDto model)
         {
             ArgumentNullException.ThrowIfNull(model);

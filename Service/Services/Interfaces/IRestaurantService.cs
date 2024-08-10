@@ -13,6 +13,7 @@ namespace Service.Services.Interfaces
         Task DeleteAsync(int? id);
         Task<PaginationResponse<RestaurantDto>> GetPaginateAsync(int? page, int? take);
         Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllWithImagesAsync();
+        Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllByTagIdAsync(int? tagId);
         Task<PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>> GetLoadMoreAsync(RestaurantFilterDto model);
         Task<IEnumerable<RestaurantSelectDto>> GetAllForSelectAsync(int? excludeId = null);
         Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> SearchByNameAndCategory(string searchText);

@@ -20,6 +20,12 @@ namespace Food_Delivery_App.Controllers.UI
             return Ok(await _restaurantService.GetAllWithImagesAsync());
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllByTagId([FromQuery] int tagId)
+        {
+            return Ok(await _restaurantService.GetAllByTagIdAsync(tagId));
+        }
+
         [HttpPost]
         public async Task<IActionResult> GetLoadMore([FromBody] RestaurantFilterDto request)
         {
