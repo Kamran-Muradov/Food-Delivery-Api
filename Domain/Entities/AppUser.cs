@@ -7,5 +7,6 @@ namespace Domain.Entities
         public string FullName { get; set; }
         public ICollection<BasketItem> BasketItems { get; set; }
         public ICollection<Checkout> Checkouts { get; set; }
+        public UserImage UserImage { get; set; }
     }
 }

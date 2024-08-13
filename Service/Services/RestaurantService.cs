@@ -21,18 +21,21 @@ namespace Service.Services
         private readonly IPhotoService _photoService;
         private readonly IRestaurantImageRepository _restaurantImageRepository;
         private readonly IRestaurantTagRepository _restaurantTagRepository;
+        private readonly IReviewRepository _reviewRepository;
 
         public RestaurantService(IRestaurantRepository restaurantRepository,
                                  IMapper mapper,
                                  IPhotoService photoService,
-                                 IRestaurantImageRepository restaurantImageRepository, 
-                                 IRestaurantTagRepository restaurantTagRepository)
+                                 IRestaurantImageRepository restaurantImageRepository,
+                                 IRestaurantTagRepository restaurantTagRepository,
+                                 IReviewRepository reviewRepository)
         {
             _restaurantRepository = restaurantRepository;
             _mapper = mapper;
             _photoService = photoService;
             _restaurantImageRepository = restaurantImageRepository;
             _restaurantTagRepository = restaurantTagRepository;
+            _reviewRepository = reviewRepository;
         }
 
         public async Task CreateAsync(RestaurantCreateDto model)
@@ -145,19 +148,54 @@ namespace Service.Services
 
         public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllWithImagesAsync()
         {
-            return _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllWithImagesAsync());
+            var restaurants =
+                _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllWithImagesAsync()).ToList();
+
+            foreach (var restaurant in restaurants)
+            {
+                restaurant.ReviewCount = _reviewRepository
+                    .GetAllWithExpressionAsync(r => r.Checkout.RestaurantId == restaurant.Id)
+                    .Result
+                    .Count();
+            }
+
+            return restaurants;
         }
 
         public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllByTagIdAsync(int? tagId)
         {
             ArgumentNullException.ThrowIfNull(tagId);
-            return _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllByTagIdAsync((int)tagId));
+
+            var restaurants =
+                _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllByTagIdAsync((int)tagId)).ToList();
+
+            foreach (var restaurant in restaurants)
+            {
+                restaurant.ReviewCount = _reviewRepository
+                    .GetAllWithExpressionAsync(r => r.Checkout.RestaurantId == restaurant.Id)
+                    .Result
+                    .Count();
+            }
+
+            return restaurants;
         }
 
         public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllByBrandNameAsync(string brandName)
         {
             ArgumentNullException.ThrowIfNull(brandName);
-            return _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllByBrandNameAsync(brandName));
+
+            var restaurants =
+                _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllByBrandNameAsync(brandName)).ToList();
+
+            foreach (var restaurant in restaurants)
+            {
+                restaurant.ReviewCount = _reviewRepository
+                    .GetAllWithExpressionAsync(r => r.Checkout.RestaurantId == restaurant.Id)
+                    .Result
+                    .Count();
+            }
+
+            return restaurants;
         }
 
         public async Task<PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>> GetLoadMoreAsync(RestaurantFilterDto model)
@@ -181,6 +219,14 @@ namespace Service.Services
             var mappedDatas = _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(
                 await _restaurantRepository.GetLoadMoreAsync(model.Page, model.Take, model.Sorting, model.TagIds));
 
+            foreach (var restaurant in mappedDatas)
+            {
+                restaurant.ReviewCount = _reviewRepository
+                    .GetAllWithExpressionAsync(r => r.Checkout.RestaurantId == restaurant.Id)
+                    .Result
+                    .Count();
+            }
+
             return new PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>(mappedDatas, totalPage, model.Page);
         }
 
@@ -194,7 +240,19 @@ namespace Service.Services
         public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> SearchByNameAndCategory(string searchText)
         {
             ArgumentNullException.ThrowIfNull(searchText);
-            return _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.SearchByNameAndCategory(searchText));
+
+            var restaurants =
+                _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.SearchByNameAndCategory(searchText)).ToList();
+
+            foreach (var restaurant in restaurants)
+            {
+                restaurant.ReviewCount = _reviewRepository
+                    .GetAllWithExpressionAsync(r => r.Checkout.RestaurantId == restaurant.Id)
+                    .Result
+                    .Count();
+            }
+
+            return restaurants;
         }
 
         public async Task<RestaurantDetailDto> GetByIdDetailAsync(int? id)
@@ -208,12 +266,14 @@ namespace Service.Services
         {
             ArgumentNullException.ThrowIfNull(id);
 
-            var datas = await _restaurantRepository.GetByIdWithAllDatasAsync((int)id);
-            var mapped =
-                _mapper.Map<DTOs.UI.Restaurants.RestaurantDetailDto>(
-                    await _restaurantRepository.GetByIdWithAllDatasAsync((int)id));
+            var restaurant = _mapper.Map<DTOs.UI.Restaurants.RestaurantDetailDto>(await _restaurantRepository.GetByIdWithAllDatasAsync((int)id));
 
-            return _mapper.Map<DTOs.UI.Restaurants.RestaurantDetailDto>(await _restaurantRepository.GetByIdWithAllDatasAsync((int)id));
+            restaurant.ReviewCount = _reviewRepository
+                .GetAllWithExpressionAsync(r => r.Checkout.RestaurantId == restaurant.Id)
+                .Result
+                .Count();
+
+            return restaurant;
         }
 
         public async Task SetMainImageAsync(MainAndDeleteImageDto model)

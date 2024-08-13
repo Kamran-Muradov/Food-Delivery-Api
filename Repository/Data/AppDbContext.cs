@@ -39,6 +39,7 @@ namespace Repository.Data
         public DbSet<Brand> Brands { get; set; }
         public DbSet<BrandLogo> BrandLogos { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<UserImage> UserImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

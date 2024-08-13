@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository.Data;
 using Repository.Repositories.Interfaces;
@@ -34,7 +33,7 @@ namespace Repository.Repositories
                 "recent" => query.OrderByDescending(m => m.Id),
                 "deliveryTime" => query.OrderBy(m => m.MinDeliveryTime),
                 "deliveryFee" => query.OrderBy(m => m.DeliveryFee),
-                "rating" => query.OrderByDescending(m => m.Rating),
+                "rating" => query.OrderByDescending(m => m.AverageRating),
                 _ => query
             };
 
@@ -113,7 +112,7 @@ namespace Repository.Repositories
         {
             return await Entities
                 .Where(m => m.Name.Contains(searchText) || m.RestaurantTags.Any(mc => mc.Tag.Name.Contains(searchText)))
-                .OrderByDescending(m => m.Rating)
+                .OrderByDescending(m => m.AverageRating)
                 .Include(m => m.RestaurantImages)
                 .Include(m => m.RestaurantTags)
                 .ThenInclude(m => m.Tag)

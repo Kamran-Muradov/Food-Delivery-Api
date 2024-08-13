@@ -14,6 +14,9 @@ using Service.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Http;
+using Repository.Repositories.Interfaces;
 
 namespace Service.Services
 {
@@ -24,17 +27,23 @@ namespace Service.Services
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMapper _mapper;
         private readonly JwtSettings _jwtSettings;
+        private readonly IPhotoService _photoService;
+        private readonly IUserImageRepository _userImageRepository;
 
         public AccountService(UserManager<AppUser> userManager,
                               RoleManager<IdentityRole> roleManager,
                               SignInManager<AppUser> signInManager,
                               IMapper mapper,
-                              IOptions<JwtSettings> jwtSettings)
+                              IOptions<JwtSettings> jwtSettings,
+                              IPhotoService photoService,
+                              IUserImageRepository userImageRepository)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _mapper = mapper;
+            _photoService = photoService;
+            _userImageRepository = userImageRepository;
             _jwtSettings = jwtSettings.Value;
         }
 
@@ -106,8 +115,15 @@ namespace Service.Services
         {
             ArgumentNullException.ThrowIfNull(model);
 
-            var user = await _userManager.FindByEmailAsync(model.EmailOrUserName) ??
-                       await _userManager.FindByNameAsync(model.EmailOrUserName);
+            var user = await _userManager.Users
+                .Where(u => u.Email == model.EmailOrUserName)
+                .Include(u => u.UserImage)
+                .FirstOrDefaultAsync() ??
+                       await _userManager.Users
+                .Where(u => u.UserName == model.EmailOrUserName)
+                .Include(u => u.UserImage)
+                .FirstOrDefaultAsync();
+
 
             if (user is null)
             {
@@ -139,9 +155,37 @@ namespace Service.Services
             {
                 Success = true,
                 Error = null,
-                Token = token
+                Token = token,
+                ProfilePicture = user.UserImage.Url
             };
         }
+
+        public async Task<UserImageDto> EditProfilePictureAsync(string userId, UserImageEditDto model)
+        {
+            ArgumentNullException.ThrowIfNull(userId);
+            ArgumentNullException.ThrowIfNull(model);
+
+            var existingUserImage = await _userImageRepository.GetFirstWithExpressionAsync(ui => ui.UserId == userId);
+            if (existingUserImage.PublicId != "default-profile-pic")
+            {
+                await _photoService.DeletePhoto(existingUserImage.PublicId);
+            }
+
+            await _userImageRepository.DeleteAsync(existingUserImage);
+
+            var uploadResult = await _photoService.AddPhoto(model.ProfilePicture);
+
+            var newUserImage = new UserImage
+            {
+                Url = uploadResult.SecureUrl.ToString(),
+                PublicId = uploadResult.PublicId,
+                UserId = userId
+            };
+            await _userImageRepository.CreateAsync(newUserImage);
+
+            return new UserImageDto { Url = uploadResult.SecureUrl.ToString() };
+        }
+
 
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
@@ -151,7 +195,13 @@ namespace Service.Services
         public async Task<UserDto> GetByUserIdAsync(string userId)
         {
             ArgumentNullException.ThrowIfNull(userId);
-            return _mapper.Map<UserDto>(await _userManager.FindByIdAsync(userId));
+
+            var user = await _userManager.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.UserImage)
+                .FirstOrDefaultAsync();
+
+            return _mapper.Map<UserDto>(user);
         }
 
         public async Task<UserDto> GetUserByUserNameAsync(string userName)
@@ -171,7 +221,17 @@ namespace Service.Services
             ArgumentNullException.ThrowIfNull(token);
 
             var user = await _userManager.FindByIdAsync(userId) ?? throw new NotFoundException(ResponseMessages.NotFound);
-            await _userManager.ConfirmEmailAsync(user, token);
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            if (result.Succeeded)
+            {
+                await _userImageRepository.CreateAsync(new UserImage
+                {
+                    Url = "https://res.cloudinary.com/duta72kmn/image/upload/v1723573659/urglfp6i03xtotugts2s.png",
+                    PublicId = "default-profile-pic",
+                    UserId = user.Id
+                });
+            }
         }
 
         public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordDto model)

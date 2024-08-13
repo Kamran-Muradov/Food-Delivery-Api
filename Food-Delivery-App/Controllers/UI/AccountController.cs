@@ -70,5 +70,16 @@ namespace Food_Delivery_App.Controllers.UI
         {
             return Ok(await _accountService.EditPasswordAsync(userId, request));
         }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> EditProfilePicture([FromQuery] string userId,
+                                                            [FromForm] UserImageEditDto request)
+        {
+            if (request.ProfilePicture.Length / 1024 > 2048) return Conflict(new { Message = "File size cannot exceed 2Mb" });
+            if (!request.ProfilePicture.ContentType.Contains("image/")) return Conflict(new { Message = "File must be image type" });
+
+            return Ok(await _accountService.EditProfilePictureAsync(userId, request));
+        }
     }
 }

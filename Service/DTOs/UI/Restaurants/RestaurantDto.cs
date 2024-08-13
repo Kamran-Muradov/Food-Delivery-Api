@@ -10,6 +10,8 @@ namespace Service.DTOs.UI.Restaurants
         public IEnumerable<RestaurantImageDto> RestaurantImages { get; set; }
         public int MinDeliveryTime { get; set; }
         public int Rating { get; set; }
+        public double AverageRating { get; set; }
+        public int ReviewCount { get; set; }
         public decimal MinimumOrder { get; set; }
         public decimal DeliveryFee { get; set; }
         public IEnumerable<TagDto> Tags { get; set; }

@@ -30,6 +30,7 @@ namespace Repository
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IBrandLogoRepository, BrandLogoRepository>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<IUserImageRepository, UserImageRepository>();
 
             return services;
         }

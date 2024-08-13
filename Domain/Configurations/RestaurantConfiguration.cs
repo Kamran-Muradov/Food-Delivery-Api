@@ -39,9 +39,6 @@ namespace Domain.Configurations
             builder.Property(m => m.Address)
                 .IsRequired()
                 .HasMaxLength(50);
-
-            builder.Property(m => m.Rating)
-                .IsRequired();
         }
     }
 }

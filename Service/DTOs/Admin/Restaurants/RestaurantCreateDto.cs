@@ -13,7 +13,6 @@ namespace Service.DTOs.Admin.Restaurants
         public bool IsActive { get; set; }
         public decimal MinimumOrder { get; set; }
         public int MinDeliveryTime { get; set; }
-        public int Rating { get; set; }
         public string Address { get; set; }
         public string Website { get; set; }
         public List<IFormFile> Images { get; set; }
@@ -79,14 +78,6 @@ namespace Service.DTOs.Admin.Restaurants
                 .WithMessage("Minimum delivery time is required")
                 .GreaterThan(0)
                 .WithMessage("Minimum delivery time must be greater than 0");
-
-            RuleFor(m => m.Rating)
-                .NotEmpty()
-                .WithMessage("Rating is required")
-                .GreaterThan(0)
-                .WithMessage("Rating must be greater than 0")
-                .LessThan(6)
-                .WithMessage("Rating cannot exceed 5");
 
             RuleFor(m => m.Images)
                 .NotEmpty()

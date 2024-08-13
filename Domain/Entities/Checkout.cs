@@ -11,7 +11,7 @@ namespace Domain.Entities
         public int? RestaurantId { get; set; }
         public Restaurant Restaurant { get; set; }
         public Review Review { get; set; }
-        public string Status { get; set; } = "Delivered";
+        public string Status { get; set; } = "Pending";
         public Checkout()
         {
             CheckoutMenus = new List<CheckoutMenu>();

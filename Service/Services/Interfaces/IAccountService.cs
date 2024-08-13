@@ -1,4 +1,5 @@
-﻿using Service.DTOs.UI.Account;
+﻿using Microsoft.AspNetCore.Http;
+using Service.DTOs.UI.Account;
 using Service.Helpers.Account;
 
 namespace Service.Services.Interfaces
@@ -7,6 +8,7 @@ namespace Service.Services.Interfaces
     {
         Task<RegisterResponse> SignUpAsync(RegisterDto model);
         Task<LoginResponse> SignInAsync(LoginDto model);
+        Task<UserImageDto> EditProfilePictureAsync(string userId, UserImageEditDto model);
         Task<IEnumerable<UserDto>> GetAllUsersAsync();
         Task<UserDto> GetByUserIdAsync(string userId);
         Task<UserDto> GetUserByUserNameAsync(string userName);

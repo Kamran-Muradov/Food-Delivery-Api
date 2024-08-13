@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -11,9 +12,10 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240813110856_DeletedRatingColumnRestaurantTable")]
+    partial class DeletedRatingColumnRestaurantTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -909,46 +911,6 @@ namespace Repository.Migrations
                     b.ToTable("TagImages");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PublicId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("UserImages");
-                });
-
             modelBuilder.Entity("Domain.Entities.VariantType", b =>
                 {
                     b.Property<int>("Id")
@@ -982,31 +944,31 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 13, 20, 41, 47, 426, DateTimeKind.Local).AddTicks(6898),
+                            CreatedDate = new DateTime(2024, 8, 13, 15, 8, 56, 192, DateTimeKind.Local).AddTicks(5763),
                             Name = "Size choice"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 13, 20, 41, 47, 426, DateTimeKind.Local).AddTicks(6901),
+                            CreatedDate = new DateTime(2024, 8, 13, 15, 8, 56, 192, DateTimeKind.Local).AddTicks(5765),
                             Name = "Sauce choice"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 13, 20, 41, 47, 426, DateTimeKind.Local).AddTicks(6902),
+                            CreatedDate = new DateTime(2024, 8, 13, 15, 8, 56, 192, DateTimeKind.Local).AddTicks(5766),
                             Name = "Drink choice"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 13, 20, 41, 47, 426, DateTimeKind.Local).AddTicks(6903),
+                            CreatedDate = new DateTime(2024, 8, 13, 15, 8, 56, 192, DateTimeKind.Local).AddTicks(5766),
                             Name = "Crust choice"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 13, 20, 41, 47, 426, DateTimeKind.Local).AddTicks(6903),
+                            CreatedDate = new DateTime(2024, 8, 13, 15, 8, 56, 192, DateTimeKind.Local).AddTicks(5767),
                             Name = "Additional ingredients"
                         });
                 });
@@ -1370,17 +1332,6 @@ namespace Repository.Migrations
                     b.Navigation("Tag");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserImage", b =>
-                {
-                    b.HasOne("Domain.Entities.AppUser", "User")
-                        .WithOne("UserImage")
-                        .HasForeignKey("Domain.Entities.UserImage", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1437,9 +1388,6 @@ namespace Repository.Migrations
                     b.Navigation("BasketItems");
 
                     b.Navigation("Checkouts");
-
-                    b.Navigation("UserImage")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.BasketItem", b =>

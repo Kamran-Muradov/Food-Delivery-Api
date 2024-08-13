@@ -2,7 +2,6 @@
 using Domain.Entities;
 using Service.DTOs.Admin.Brands;
 using Service.DTOs.Admin.Categories;
-using Service.DTOs.Admin.Checkouts;
 using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
@@ -134,7 +133,9 @@ namespace Service.Helpers
 
             //Account
             CreateMap<RegisterDto, AppUser>();
-            CreateMap<AppUser, UserDto>();
+            CreateMap<AppUser, UserDto>()
+                .ForMember(d => d.ProfilePicture, opt => opt.MapFrom(s => s.UserImage.Url));
+            CreateMap<UserImage, UserImageDto>();
 
             //VariantType
             CreateMap<VariantType, VariantTypeSelectDto>();
