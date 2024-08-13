@@ -23,7 +23,7 @@ namespace Service.DTOs.Admin.Tags
                 .Must(m => m.ContentType.Contains("image/"))
                 .WithMessage("File must be image type")
                 .Must(item => item.Length / 1024 < 500)
-                .WithMessage("Image size cannot exceed 500Kb")
+                .WithMessage("Logo size cannot exceed 500Kb")
                 .When(m => m.Image is not null);
         }
     }

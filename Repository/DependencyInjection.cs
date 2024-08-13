@@ -27,6 +27,9 @@ namespace Repository
             services.AddScoped<IBasketVariantRepository, BasketVariantRepository>();
             services.AddScoped<ISliderRepository, SliderRepository>();
             services.AddScoped<ISliderImageRepository, SliderImageRepository>();
+            services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<IBrandLogoRepository, BrandLogoRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
 
             return services;
         }

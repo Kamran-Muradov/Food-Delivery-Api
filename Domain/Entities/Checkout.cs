@@ -8,8 +8,10 @@ namespace Domain.Entities
         public AppUser User { get; set; }
         public decimal TotalPrice { get; set; }
         public List<CheckoutMenu> CheckoutMenus { get; set; }
-        public string Status { get; set; } = "Pending";
-
+        public int? RestaurantId { get; set; }
+        public Restaurant Restaurant { get; set; }
+        public Review Review { get; set; }
+        public string Status { get; set; } = "Delivered";
         public Checkout()
         {
             CheckoutMenus = new List<CheckoutMenu>();

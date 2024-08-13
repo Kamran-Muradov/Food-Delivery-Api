@@ -8,6 +8,7 @@ using Service.Helpers;
 using Service.Helpers.Constants;
 using Service.Helpers.Exceptions;
 using Service.Services.Interfaces;
+using Stripe;
 using RestaurantDetailDto = Service.DTOs.Admin.Restaurants.RestaurantDetailDto;
 using RestaurantDto = Service.DTOs.Admin.Restaurants.RestaurantDto;
 
@@ -151,6 +152,12 @@ namespace Service.Services
         {
             ArgumentNullException.ThrowIfNull(tagId);
             return _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllByTagIdAsync((int)tagId));
+        }
+
+        public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllByBrandNameAsync(string brandName)
+        {
+            ArgumentNullException.ThrowIfNull(brandName);
+            return _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllByBrandNameAsync(brandName));
         }
 
         public async Task<PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>> GetLoadMoreAsync(RestaurantFilterDto model)

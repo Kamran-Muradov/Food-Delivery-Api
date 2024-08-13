@@ -18,6 +18,7 @@ namespace Service.DTOs.Admin.Restaurants
         public string Website { get; set; }
         public List<IFormFile> Images { get; set; }
         public List<int> TagIds { get; set; }
+        public int? BrandId { get; set; }
     }
 
     public class RestaurantCreateDtoValidator : AbstractValidator<RestaurantCreateDto>
@@ -89,14 +90,14 @@ namespace Service.DTOs.Admin.Restaurants
 
             RuleFor(m => m.Images)
                 .NotEmpty()
-                .WithMessage("Image is required");
+                .WithMessage("Logo is required");
 
             RuleFor(m => m.Images)
                 .ForEach(uploadImages => uploadImages
                     .Must(item => item.ContentType.Contains("image/"))
                     .WithMessage("File must be image type")
                     .Must(item => item.Length / 1024 < 500)
-                    .WithMessage("Image size cannot exceed 500Kb"))
+                    .WithMessage("Logo size cannot exceed 500Kb"))
                 .When(m => m.Images is not null);
 
             RuleFor(m => m.TagIds)

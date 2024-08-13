@@ -19,9 +19,20 @@ namespace Food_Delivery_App.Controllers.UI
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] BasketItemCreateDto request)
         {
+            var isDifferentRestaurant = await _basketItemService.IsDifferentRestaurantAsync(request.UserId, request.MenuId);
+
+            if (isDifferentRestaurant) return Conflict(new { Error = "There is basket items for this user for different restaurant.Please reset exist basket first" });
+
             await _basketItemService.CreateAsync(request);
 
             return CreatedAtAction(nameof(Create), new { response = ResponseMessages.CreateSuccess });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reset([FromBody] BasketItemCreateDto request)
+        {
+            await _basketItemService.ResetAsync(request);
+            return Ok();
         }
 
         [HttpGet]

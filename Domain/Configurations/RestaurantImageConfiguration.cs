@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Configurations
 {
-    public class RestaurantImageConfig : IEntityTypeConfiguration<RestaurantImage>
+    public class RestaurantImageConfiguration : IEntityTypeConfiguration<RestaurantImage>
     {
         public void Configure(EntityTypeBuilder<RestaurantImage> builder)
         {
@@ -16,6 +16,9 @@ namespace Domain.Configurations
 
             builder.Property(m => m.Url)
                 .IsRequired();
+
+            builder.Ignore(r => r.CreatedDate);
+            builder.Ignore(r => r.UpdatedDate);
         }
     }
 }

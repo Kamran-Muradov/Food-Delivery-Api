@@ -1,9 +1,16 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Microsoft.AspNetCore.SignalR;
 using Repository.Repositories.Interfaces;
+using Service.DTOs.Admin.Checkouts;
 using Service.DTOs.UI.BasketItems;
 using Service.DTOs.UI.Checkouts;
+using Service.Helpers;
+using Service.Helpers.Constants;
+using Service.Helpers.Exceptions;
+using Service.Helpers.SignalR;
 using Service.Services.Interfaces;
+using CheckoutDto = Service.DTOs.UI.Checkouts.CheckoutDto;
 
 namespace Service.Services
 {
@@ -12,14 +19,20 @@ namespace Service.Services
         private readonly ICheckoutRepository _checkoutRepository;
         private readonly IMapper _mapper;
         private readonly IBasketItemService _basketItemService;
+        private readonly IMenuRepository _menuRepository;
+        private readonly IHubContext<CheckoutHub> _hubContext;
 
         public CheckoutService(ICheckoutRepository checkoutRepository,
                                IMapper mapper,
-                               IBasketItemService basketItemService)
+                               IBasketItemService basketItemService, 
+                               IMenuRepository menuRepository, 
+                               IHubContext<CheckoutHub> hubContext)
         {
             _checkoutRepository = checkoutRepository;
             _mapper = mapper;
             _basketItemService = basketItemService;
+            _menuRepository = menuRepository;
+            _hubContext = hubContext;
         }
 
         public async Task CreateAsync(CheckoutCreateDto model)
@@ -28,16 +41,37 @@ namespace Service.Services
             await _checkoutRepository.CreateAsync(_mapper.Map<Checkout>(model));
         }
 
+        public async Task EditAsync(int? id, CheckoutEditDto model)
+        {
+           ArgumentNullException.ThrowIfNull(id);
+           ArgumentNullException.ThrowIfNull(model);
+
+           var checkout = await _checkoutRepository.GetByIdAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
+           checkout.Status = model.Status;
+           await _checkoutRepository.EditAsync(checkout);
+
+           //await _hubContext.Clients.All.SendAsync("ReceiveOrderStatusUpdate", id, model.Status);
+
+           
+           if (model.Status == "Delivered")
+           {
+               await _hubContext.Clients.Group(checkout.UserId).SendAsync("ReceiveOrderStatusUpdate", id, model.Status);
+           }
+        }
+
         public async Task CreateByUserIdAsync(string userId)
         {
             ArgumentNullException.ThrowIfNull(userId);
 
             var basketItems = (List<BasketItemDto>)await _basketItemService.GetAllByUserIdAsync(userId);
 
+            var menu = await _menuRepository.GetByIdAsync(basketItems.First().MenuId);
+
             Checkout checkout = new()
             {
                 UserId = userId,
-                TotalPrice = basketItems.Sum(bi => bi.Price)
+                TotalPrice = basketItems.Sum(bi => bi.Price),
+                RestaurantId = menu.RestaurantId
             };
 
             checkout.CheckoutMenus = basketItems.Select(bi => new CheckoutMenu
@@ -59,5 +93,17 @@ namespace Service.Services
             ArgumentNullException.ThrowIfNull(userId);
             return _mapper.Map<IEnumerable<CheckoutDto>>(await _checkoutRepository.GetAllByUserIdAsync(userId));
         }
+
+        public async Task<PaginationResponse<DTOs.Admin.Checkouts.CheckoutDto>> GetPaginateAsync(int? page, int? take)
+        {
+            ArgumentNullException.ThrowIfNull(page);
+            ArgumentNullException.ThrowIfNull(take);
+
+            var checkouts = await _checkoutRepository.GetAllAsync();
+            int totalPage = (int)Math.Ceiling((decimal)checkouts.Count() / (int)take);
+
+            var mappedDatas = _mapper.Map<IEnumerable<DTOs.Admin.Checkouts.CheckoutDto>>(await _checkoutRepository.GetPaginateDatasAsync((int)page, (int)take));
+
+            return new PaginationResponse<DTOs.Admin.Checkouts.CheckoutDto>(mappedDatas, totalPage, (int)page);        }
     }
 }

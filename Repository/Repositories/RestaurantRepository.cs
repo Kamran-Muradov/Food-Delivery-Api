@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository.Data;
 using Repository.Repositories.Interfaces;
@@ -47,6 +48,17 @@ namespace Repository.Repositories
                  .ToListAsync();
         }
 
+        public async Task<IEnumerable<Restaurant>> GetAllByBrandNameAsync(string brandName)
+        {
+            return await Entities
+                .Where(r => r.Brand.Name==brandName)
+                .Include(m => m.RestaurantImages)
+                .Include(m => m.RestaurantTags)
+                .ThenInclude(m => m.Tag)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Restaurant>> GetAllByTagIdAsync(int tagId)
         {
             return await Entities
@@ -82,6 +94,7 @@ namespace Repository.Repositories
                 .ThenInclude(mi => mi.Ingredient)
                 .Include(r => r.Menus)
                 .ThenInclude(m => m.Category)
+                .Include(r => r.Brand)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }

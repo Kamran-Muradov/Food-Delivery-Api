@@ -13,8 +13,11 @@
         public int Rating { get; set; }
         public string Address { get; set; }
         public string Website { get; set; }
+        public string? Brand { get; set; }
         public string CreatedDate { get; set; }
         public string UpdatedDate { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
         public IEnumerable<string> Tags { get; set; }
         public IEnumerable<RestaurantImageDto> RestaurantImages { get; set; }
     }

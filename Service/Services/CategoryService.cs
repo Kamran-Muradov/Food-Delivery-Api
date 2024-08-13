@@ -96,9 +96,8 @@ namespace Service.Services
 
         public async Task<IEnumerable<CategorySelectDto>> GetAllForSelectAsync(int? excludeId = null)
         {
-            var restaurants = await _categoryRepository.GetAllWithExpressionAsync(r => r.Menus.All(m => m.Id != excludeId));
-
-            return _mapper.Map<IEnumerable<CategorySelectDto>>(restaurants.OrderBy(m => m.Name));
+            var categories = await _categoryRepository.GetAllWithExpressionAsync(r => r.Menus.All(m => m.Id != excludeId));
+            return _mapper.Map<IEnumerable<CategorySelectDto>>(categories.OrderBy(m => m.Name));
         }
 
         public async Task<PaginationResponse<DTOs.Admin.Categories.CategoryDto>> GetPaginateAsync(int? page, int? take)
@@ -128,7 +127,6 @@ namespace Service.Services
         public async Task<bool> ExistAsync(string name, int? excludeId = null)
         {
             ArgumentNullException.ThrowIfNull(name);
-
             return await _categoryRepository.ExistAsync(name, excludeId);
         }
     }

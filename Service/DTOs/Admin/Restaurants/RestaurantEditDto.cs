@@ -18,6 +18,7 @@ namespace Service.DTOs.Admin.Restaurants
         public string Website { get; set; }
         public List<IFormFile>? Images { get; set; }
         public List<int> TagIds { get; set; }
+        public int? BrandId { get; set; }
     }
 
     public class RestaurantEditDtoValidator : AbstractValidator<RestaurantEditDto>
@@ -102,7 +103,7 @@ namespace Service.DTOs.Admin.Restaurants
                     .Must(item => item.ContentType.Contains("image/"))
                     .WithMessage("File must be image type")
                     .Must(item => item.Length / 1024 < 500)
-                    .WithMessage("Image size cannot exceed 500Kb"))
+                    .WithMessage("Logo size cannot exceed 500Kb"))
                 .When(m => m.Images is not null);
         }
     }

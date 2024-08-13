@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using Service.DTOs.Admin.Brands;
 using Service.DTOs.Admin.Categories;
 using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
@@ -11,6 +12,7 @@ using Service.DTOs.Admin.Tags;
 using Service.DTOs.UI.Account;
 using Service.DTOs.UI.BasketItems;
 using Service.DTOs.UI.Checkouts;
+using Service.DTOs.UI.Reviews;
 using Service.Services;
 using Service.Services.Interfaces;
 
@@ -34,10 +36,18 @@ namespace Service
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICategoryImageService, CategoryImageService>();
 
+            services.AddScoped<IValidator<BrandCreateDto>, BrandCreateDtoValidator>();
+            services.AddScoped<IValidator<BrandEditDto>, BrandEditDtoValidator>();
+            services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<IBrandLogoService, BrandLogoService>();
+
             services.AddScoped<IValidator<TagCreateDto>, TagCreateDtoValidator>();
             services.AddScoped<IValidator<TagEditDto>, TagEditDtoValidator>();
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<ITagImageService, TagImageService>();
+
+            services.AddScoped<IValidator<ReviewCreateDto>, ReviewCreateDtoValidator>();
+            services.AddScoped<IReviewService, ReviewService>();
 
             services.AddScoped<IPhotoService, PhotoService>();
 

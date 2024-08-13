@@ -6,5 +6,6 @@ namespace Domain.Entities
     {
         public string Name { get; set; }
         public BrandLogo BrandLogo { get; set; }
+        public ICollection<Restaurant> Restaurants { get; set; }
     }
 }

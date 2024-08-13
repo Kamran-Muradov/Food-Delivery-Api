@@ -14,7 +14,10 @@ namespace Domain.Entities
         public int MinDeliveryTime { get; set; }
         public int Rating { get; set; }
         public string Address { get; set; }
+        public double AverageRating { get; set; }
         public string? Website { get; set; }
+        public int? BrandId { get; set; }
+        public Brand Brand { get; set; }
         public ICollection<RestaurantTag> RestaurantTags { get; set; }
         public ICollection<RestaurantImage> RestaurantImages { get; set; }
         public ICollection<Menu> Menus { get; set; }

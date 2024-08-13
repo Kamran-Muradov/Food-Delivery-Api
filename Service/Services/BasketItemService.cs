@@ -13,14 +13,17 @@ namespace Service.Services
         private readonly IBasketItemRepository _basketItemRepository;
         private readonly IMapper _mapper;
         private readonly IBasketVariantRepository _basketVariantRepository;
+        private readonly IMenuRepository _menuRepository;
 
         public BasketItemService(IMapper mapper,
                                  IBasketItemRepository basketItemRepository,
-                                 IBasketVariantRepository basketVariantRepository)
+                                 IBasketVariantRepository basketVariantRepository, 
+                                 IMenuRepository menuRepository)
         {
             _mapper = mapper;
             _basketItemRepository = basketItemRepository;
             _basketVariantRepository = basketVariantRepository;
+            _menuRepository = menuRepository;
         }
 
         public async Task CreateAsync(BasketItemCreateDto model)
@@ -86,6 +89,32 @@ namespace Service.Services
         public async Task<IEnumerable<BasketItemDto>> GetAllByUserIdAsync(string userId)
         {
             return _mapper.Map<IEnumerable<BasketItemDto>>(await _basketItemRepository.GetAllByUserIdAsync(userId));
+        }
+
+        public async Task<bool> IsDifferentRestaurantAsync(string userId, int menuId)
+        {
+            var basketItems = await _basketItemRepository.GetAllByUserIdAsync(userId);
+
+            var menu = await _menuRepository.GetByIdAsync(menuId);
+
+            return basketItems.Any() && basketItems.First().Menu.RestaurantId != menu.RestaurantId;
+        }
+
+        public async Task ResetAsync(BasketItemCreateDto model)
+        {
+            var existBasketItems = await _basketItemRepository.GetAllByUserIdAsync(model.UserId);
+            await _basketItemRepository.DeleteRangeAsync(existBasketItems.ToList());
+
+            var basketItem = _mapper.Map<BasketItem>(model);
+
+            if (model.BasketVariants is not null)
+            {
+                basketItem.BasketVariants = model.BasketVariants
+                    .SelectMany(menuVariant => menuVariant.Value
+                        .Select(option => new BasketVariant { Type = menuVariant.Key, Option = option })).ToList();
+            }
+
+            await _basketItemRepository.CreateAsync(basketItem);
         }
     }
 }

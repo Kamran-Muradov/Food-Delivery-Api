@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Service.DTOs.Admin.Brands;
 using Service.DTOs.Admin.Categories;
+using Service.DTOs.Admin.Checkouts;
 using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
@@ -11,7 +13,9 @@ using Service.DTOs.Admin.VariantTypes;
 using Service.DTOs.UI.Account;
 using Service.DTOs.UI.BasketItems;
 using Service.DTOs.UI.Checkouts;
+using Service.DTOs.UI.Reviews;
 using CategoryDto = Service.DTOs.Admin.Categories.CategoryDto;
+using CheckoutDto = Service.DTOs.UI.Checkouts.CheckoutDto;
 using RestaurantDetailDto = Service.DTOs.Admin.Restaurants.RestaurantDetailDto;
 using RestaurantDto = Service.DTOs.Admin.Restaurants.RestaurantDto;
 
@@ -41,6 +45,18 @@ namespace Service.Helpers
             CreateMap<CategoryEditDto, Category>();
             CreateMap<CategoryImage, CategoryImageDto>();
 
+            //Brand
+            CreateMap<Brand, BrandSelectDto>();
+            CreateMap<Brand, BrandDto>()
+                .ForMember(d => d.Logo, opt => opt.MapFrom(s => s.BrandLogo.Url))
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
+                .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
+            CreateMap<Brand, DTOs.UI.Brands.BrandDto>()
+                .ForMember(d => d.Logo, opt => opt.MapFrom(s => s.BrandLogo.Url));
+            CreateMap<BrandCreateDto, Brand>();
+            CreateMap<BrandEditDto, Brand>();
+            CreateMap<BrandLogo, BrandLogoDto>();
+
             //Tag
             CreateMap<Tag, TagSelectDto>();
             CreateMap<Tag, TagDto>()
@@ -62,6 +78,7 @@ namespace Service.Helpers
             CreateMap<RestaurantImage, RestaurantImageDto>();
             CreateMap<Restaurant, RestaurantDetailDto>()
                 .ForMember(d => d.Tags, opt => opt.MapFrom(s => s.RestaurantTags.Select(m => m.Tag.Name)))
+                .ForMember(d => d.Brand, opt => opt.MapFrom(s => s.Brand != null ? s.Brand.Name : "N/A"))
                 .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
                 .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
             CreateMap<RestaurantCreateDto, Restaurant>();
@@ -135,7 +152,11 @@ namespace Service.Helpers
 
             //Checkout
             CreateMap<Checkout, CheckoutDto>()
-                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")));
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
+                .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Restaurant.Name));
+            CreateMap<Checkout, DTOs.Admin.Checkouts.CheckoutDto>()
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
+                .ForMember(d => d.UserName, opt => opt.MapFrom(s => s.User.UserName));
             CreateMap<CheckoutCreateDto, Checkout>();
 
             //User
@@ -146,7 +167,7 @@ namespace Service.Helpers
                 .ForMember(d => d.Image, opt => opt.MapFrom(s => s.SliderImage.Url))
                 .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
                 .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
-            CreateMap<Slider,SliderDetailDto>()
+            CreateMap<Slider, SliderDetailDto>()
                 .ForMember(d => d.Image, opt => opt.MapFrom(s => s.SliderImage.Url))
                 .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
                 .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
@@ -155,6 +176,10 @@ namespace Service.Helpers
             CreateMap<SliderImage, SliderImageDto>();
             CreateMap<Slider, DTOs.UI.Sliders.SliderDto>()
                 .ForMember(d => d.Image, opt => opt.MapFrom(s => s.SliderImage.Url));
+
+            //Review
+            CreateMap<ReviewCreateDto, Review>();
+            CreateMap<Review, ReviewDto>();
         }
     }
 }

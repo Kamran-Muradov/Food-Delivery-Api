@@ -1,13 +1,20 @@
-﻿using Domain.Common;
+﻿using System.Security.Claims;
+using Domain.Common;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace Repository.Data
 {
     public class AppDbContext : IdentityDbContext<AppUser>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public AppDbContext(IHttpContextAccessor httpContextAccessor,
+                            DbContextOptions<AppDbContext> options) : base(options)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
@@ -29,6 +36,9 @@ namespace Repository.Data
         public DbSet<CheckoutMenu> CheckoutMenus { get; set; }
         public DbSet<Slider> Sliders { get; set; }
         public DbSet<SliderImage> SliderImages { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<BrandLogo> BrandLogos { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -68,6 +78,39 @@ namespace Repository.Data
             );
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        public override int SaveChanges()
+        {
+            SetAuditFields();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            SetAuditFields();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void SetAuditFields()
+        {
+            var entries = ChangeTracker.Entries<BaseEntity>();
+            var currentUserName = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+
+            foreach (var entry in entries)
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedDate = DateTime.UtcNow;
+                        entry.Entity.CreatedBy = currentUserName;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.UpdatedDate = DateTime.UtcNow;
+                        entry.Entity.UpdatedBy = currentUserName;
+                        break;
+                }
+            }
         }
     }
 }

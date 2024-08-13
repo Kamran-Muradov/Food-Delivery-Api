@@ -1,5 +1,4 @@
 ﻿using Service.DTOs.Admin.Restaurants;
-using CategoryDto = Service.DTOs.UI.Categories.CategoryDto;
 using MenuDto = Service.DTOs.UI.Menus.MenuDto;
 
 namespace Service.DTOs.UI.Restaurants

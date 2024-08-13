@@ -1,5 +1,4 @@
-﻿using System.Security.AccessControl;
-using Service.DTOs.UI.MenuVariants;
+﻿using Service.DTOs.UI.MenuVariants;
 
 namespace Service.DTOs.UI.Menus
 {
@@ -10,6 +9,8 @@ namespace Service.DTOs.UI.Menus
         public decimal Price { get; set; }
         public IEnumerable<string> Ingredients { get; set; }
         public string Image { get; set; }
+        public int MenuId { get; set; }
+        public int RestaurantId { get; set; }
         public string Restaurant { get; set; }
         public Dictionary<string,IEnumerable<MenuVariantDto>> MenuVariants { get; set; }
     }

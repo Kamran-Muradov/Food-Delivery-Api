@@ -1,5 +1,4 @@
 using Domain.Entities;
-using Food_Delivery_App.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +7,11 @@ using Repository;
 using Repository.Data;
 using Service;
 using Service.Helpers;
+using Stripe;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json.Serialization;
-using Stripe;
+using Service.Helpers.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,9 +22,20 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     options.JsonSerializerOptions.WriteIndented = true;
 });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:7095")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
+});
 
 //builder.Services.AddCors(options =>
 //    options.AddPolicy("AllowAll", policyBuilder =>
@@ -34,6 +45,8 @@ builder.Services.AddSwaggerGen();
 //            .AllowAnyMethod()
 //));
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
@@ -41,6 +54,7 @@ builder.Services
     .AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
 
 builder.Services.Configure<IdentityOptions>(opt =>
 {
@@ -87,8 +101,11 @@ builder.Services.AddAuthorization(o =>
 });
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+
 StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+
+builder.Services.AddSignalR();
 
 builder.Services.AddRouting(options =>
 {
@@ -103,22 +120,29 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors(
-    options => options
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-);
+//app.UseCors(
+//    options => options
+//        .AllowAnyOrigin()
+//        .AllowAnyMethod()
+//        .AllowAnyHeader()
+//);
+
+app.UseCors("AllowSpecificOrigin");
 
 app.UseRouting();
-
-//app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<CheckoutHub>("/checkoutHub");
+});
+
+//app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.UseHttpsRedirection();
 
 app.MapControllers();
 
