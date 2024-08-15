@@ -40,6 +40,8 @@ namespace Repository.Data
         public DbSet<BrandLogo> BrandLogos { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<UserImage> UserImages { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<SocialMedia> SocialMedias { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -74,6 +76,51 @@ namespace Repository.Data
                 {
                     Id = 5,
                     Name = "Additional ingredients",
+                    CreatedDate = DateTime.Now
+                }
+            );
+
+            modelBuilder.Entity<Setting>().HasData(
+                new Setting
+                {
+                    Id = 1,
+                    Key = "Address",
+                    Value = "28 May"
+                },
+                new Setting
+                {
+                    Id = 2,
+                    Key = "Phone",
+                    Value = "+9945556622"
+                },
+                new Setting
+                {
+                    Id = 3,
+                    Key = "Email",
+                    Value = "company@gmail.com"
+                }
+            );
+
+            modelBuilder.Entity<SocialMedia>().HasData(
+                new SocialMedia
+                {
+                    Id = 1,
+                    Platform = "Linkedin",
+                    Url = "linkedin.com",
+                    CreatedDate = DateTime.Now
+                },
+                new SocialMedia
+                {
+                    Id = 2,
+                    Platform = "Instagram",
+                    Url = "instagram.com",
+                    CreatedDate = DateTime.Now
+                },
+                new SocialMedia
+                {
+                    Id = 3,
+                    Platform = "facebook",
+                    Url = "facebook.com",
                     CreatedDate = DateTime.Now
                 }
             );

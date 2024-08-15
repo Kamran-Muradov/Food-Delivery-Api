@@ -19,7 +19,7 @@ namespace Repository.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Restaurant>> GetLoadMoreAsync(int page, int take, string sorting, List<int>? categoryIds)
+        public async Task<IEnumerable<Restaurant>> GetAllFilteredAsync(int page, int take, string sorting, List<int>? categoryIds)
         {
             var query = Entities.AsQueryable();
 

@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Repository.Data;
 using Repository.Repositories.Interfaces;
 
@@ -8,6 +9,16 @@ namespace Repository.Repositories
     {
         public ReviewRepository(AppDbContext context) : base(context)
         {
+        }
+
+        public async Task<IEnumerable<Review>> GetALlWithUsersAsync()
+        {
+            return await Entities
+                .OrderByDescending(r => r.Id)
+                .Include(r => r.Checkout)
+                .ThenInclude(c => c.User)
+                .ThenInclude(c => c.UserImage)
+                .ToListAsync();
         }
     }
 }

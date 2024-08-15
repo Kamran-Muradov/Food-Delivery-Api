@@ -198,7 +198,7 @@ namespace Service.Services
             return restaurants;
         }
 
-        public async Task<PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>> GetLoadMoreAsync(RestaurantFilterDto model)
+        public async Task<PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>> GetAllFilteredAsync(RestaurantFilterDto model)
         {
             ArgumentNullException.ThrowIfNull(model);
 
@@ -217,7 +217,7 @@ namespace Service.Services
             int totalPage = (int)Math.Ceiling((decimal)restaurants.Count / model.Take);
 
             var mappedDatas = _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(
-                await _restaurantRepository.GetLoadMoreAsync(model.Page, model.Take, model.Sorting, model.TagIds));
+                await _restaurantRepository.GetAllFilteredAsync(model.Page, model.Take, model.Sorting, model.TagIds));
 
             foreach (var restaurant in mappedDatas)
             {

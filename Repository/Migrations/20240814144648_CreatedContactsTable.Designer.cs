@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -11,9 +12,10 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240814144648_CreatedContactsTable")]
+    partial class CreatedContactsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -395,6 +397,9 @@ namespace Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -416,6 +421,9 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
@@ -809,29 +817,6 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Settings");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9973),
-                            Key = "Address",
-                            Value = "28 May"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9974),
-                            Key = "Phone",
-                            Value = "+9945556622"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9975),
-                            Key = "Email",
-                            Value = "company@gmail.com"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Slider", b =>
@@ -900,64 +885,6 @@ namespace Repository.Migrations
                         .IsUnique();
 
                     b.ToTable("SliderImages");
-                });
-
-            modelBuilder.Entity("Domain.Entities.SocialMedia", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Platform")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SocialMedias");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9984),
-                            Platform = "Linkedin",
-                            Url = "linkedin.com"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9985),
-                            Platform = "Instagram",
-                            Url = "instagram.com"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9986),
-                            Platform = "facebook",
-                            Url = "facebook.com"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Tag", b =>
@@ -1101,31 +1028,31 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9873),
+                            CreatedDate = new DateTime(2024, 8, 14, 18, 46, 48, 206, DateTimeKind.Local).AddTicks(1104),
                             Name = "Size choice"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9874),
+                            CreatedDate = new DateTime(2024, 8, 14, 18, 46, 48, 206, DateTimeKind.Local).AddTicks(1105),
                             Name = "Sauce choice"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9875),
+                            CreatedDate = new DateTime(2024, 8, 14, 18, 46, 48, 206, DateTimeKind.Local).AddTicks(1106),
                             Name = "Drink choice"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9876),
+                            CreatedDate = new DateTime(2024, 8, 14, 18, 46, 48, 206, DateTimeKind.Local).AddTicks(1107),
                             Name = "Crust choice"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9877),
+                            CreatedDate = new DateTime(2024, 8, 14, 18, 46, 48, 206, DateTimeKind.Local).AddTicks(1108),
                             Name = "Additional ingredients"
                         });
                 });

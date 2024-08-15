@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -11,9 +12,10 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240815055736_CreatedSocialMediaTable")]
+    partial class CreatedSocialMediaTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -814,21 +816,21 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9973),
+                            CreatedDate = new DateTime(2024, 8, 15, 9, 57, 35, 667, DateTimeKind.Local).AddTicks(699),
                             Key = "Address",
                             Value = "28 May"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9974),
+                            CreatedDate = new DateTime(2024, 8, 15, 9, 57, 35, 667, DateTimeKind.Local).AddTicks(700),
                             Key = "Phone",
                             Value = "+9945556622"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9975),
+                            CreatedDate = new DateTime(2024, 8, 15, 9, 57, 35, 667, DateTimeKind.Local).AddTicks(702),
                             Key = "Email",
                             Value = "company@gmail.com"
                         });
@@ -934,27 +936,27 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SocialMedias");
+                    b.ToTable("SocialMedia");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9984),
+                            CreatedDate = new DateTime(2024, 8, 15, 9, 57, 35, 667, DateTimeKind.Local).AddTicks(712),
                             Platform = "Linkedin",
                             Url = "linkedin.com"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9985),
+                            CreatedDate = new DateTime(2024, 8, 15, 9, 57, 35, 667, DateTimeKind.Local).AddTicks(713),
                             Platform = "Instagram",
                             Url = "instagram.com"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9986),
+                            CreatedDate = new DateTime(2024, 8, 15, 9, 57, 35, 667, DateTimeKind.Local).AddTicks(714),
                             Platform = "facebook",
                             Url = "facebook.com"
                         });
@@ -1101,31 +1103,31 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9873),
+                            CreatedDate = new DateTime(2024, 8, 15, 9, 57, 35, 667, DateTimeKind.Local).AddTicks(590),
                             Name = "Size choice"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9874),
+                            CreatedDate = new DateTime(2024, 8, 15, 9, 57, 35, 667, DateTimeKind.Local).AddTicks(592),
                             Name = "Sauce choice"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9875),
+                            CreatedDate = new DateTime(2024, 8, 15, 9, 57, 35, 667, DateTimeKind.Local).AddTicks(593),
                             Name = "Drink choice"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9876),
+                            CreatedDate = new DateTime(2024, 8, 15, 9, 57, 35, 667, DateTimeKind.Local).AddTicks(594),
                             Name = "Crust choice"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 15, 11, 37, 9, 731, DateTimeKind.Local).AddTicks(9877),
+                            CreatedDate = new DateTime(2024, 8, 15, 9, 57, 35, 667, DateTimeKind.Local).AddTicks(595),
                             Name = "Additional ingredients"
                         });
                 });

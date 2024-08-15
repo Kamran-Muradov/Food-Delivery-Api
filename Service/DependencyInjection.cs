@@ -7,11 +7,14 @@ using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
 using Service.DTOs.Admin.Restaurants;
+using Service.DTOs.Admin.Settings;
 using Service.DTOs.Admin.Sliders;
+using Service.DTOs.Admin.SocialMedias;
 using Service.DTOs.Admin.Tags;
 using Service.DTOs.UI.Account;
 using Service.DTOs.UI.BasketItems;
 using Service.DTOs.UI.Checkouts;
+using Service.DTOs.UI.Contacts;
 using Service.DTOs.UI.Reviews;
 using Service.Services;
 using Service.Services.Interfaces;
@@ -36,10 +39,20 @@ namespace Service
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICategoryImageService, CategoryImageService>();
 
+            services.AddScoped<IValidator<SocialMediaCreateDto>, SocialMediaCreateDtoValidator>();
+            services.AddScoped<IValidator<SocialMediaEditDto>, SocialMediaEditDtoValidator>();
+            services.AddScoped<ISocialMediaService, SocialMediaService>();
+
+            services.AddScoped<IValidator<SettingEditDto>, SettingEditDtoValidator>();
+            services.AddScoped<ISettingService, SettingService>();
+
             services.AddScoped<IValidator<BrandCreateDto>, BrandCreateDtoValidator>();
             services.AddScoped<IValidator<BrandEditDto>, BrandEditDtoValidator>();
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<IBrandLogoService, BrandLogoService>();
+
+            services.AddScoped<IValidator<ContactCreateDto>, ContactCreateDtoValidator>();
+            services.AddScoped<IContactService, ContactService>();
 
             services.AddScoped<IValidator<TagCreateDto>, TagCreateDtoValidator>();
             services.AddScoped<IValidator<TagEditDto>, TagEditDtoValidator>();

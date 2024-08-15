@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Repository.Repositories.Interfaces;
 using Service.DTOs.UI.Account;
 using Service.Helpers;
 using Service.Helpers.Account;
@@ -14,9 +15,6 @@ using Service.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using CloudinaryDotNet.Actions;
-using Microsoft.AspNetCore.Http;
-using Repository.Repositories.Interfaces;
 
 namespace Service.Services
 {

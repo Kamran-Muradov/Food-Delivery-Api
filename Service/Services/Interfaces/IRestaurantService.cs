@@ -15,7 +15,7 @@ namespace Service.Services.Interfaces
         Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllWithImagesAsync();
         Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllByTagIdAsync(int? tagId);
         Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllByBrandNameAsync(string brandName);
-        Task<PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>> GetLoadMoreAsync(RestaurantFilterDto model);
+        Task<PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>> GetAllFilteredAsync(RestaurantFilterDto model);
         Task<IEnumerable<RestaurantSelectDto>> GetAllForSelectAsync(int? excludeId = null);
         Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> SearchByNameAndCategory(string searchText);
         Task<RestaurantDetailDto> GetByIdDetailAsync(int? id);

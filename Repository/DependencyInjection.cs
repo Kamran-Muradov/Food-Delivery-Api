@@ -31,6 +31,9 @@ namespace Repository
             services.AddScoped<IBrandLogoRepository, BrandLogoRepository>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<IUserImageRepository, UserImageRepository>();
+            services.AddScoped<IContactRepository, ContactRepository>();
+            services.AddScoped<ISettingRepository, SettingRepository>();
+            services.AddScoped<ISocialMediaRepository, SocialMediaRepository>();
 
             return services;
         }

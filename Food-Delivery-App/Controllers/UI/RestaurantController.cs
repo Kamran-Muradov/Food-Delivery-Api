@@ -33,9 +33,9 @@ namespace Food_Delivery_App.Controllers.UI
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetLoadMore([FromBody] RestaurantFilterDto request)
+        public async Task<IActionResult> GetAllFiltered([FromBody] RestaurantFilterDto request)
         {
-            return Ok(await _restaurantService.GetLoadMoreAsync(request));
+            return Ok(await _restaurantService.GetAllFilteredAsync(request));
         }
 
         [HttpGet]

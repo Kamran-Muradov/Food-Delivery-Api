@@ -2,16 +2,20 @@
 using Domain.Entities;
 using Service.DTOs.Admin.Brands;
 using Service.DTOs.Admin.Categories;
+using Service.DTOs.Admin.Contacts;
 using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
 using Service.DTOs.Admin.Restaurants;
+using Service.DTOs.Admin.Settings;
 using Service.DTOs.Admin.Sliders;
+using Service.DTOs.Admin.SocialMedias;
 using Service.DTOs.Admin.Tags;
 using Service.DTOs.Admin.VariantTypes;
 using Service.DTOs.UI.Account;
 using Service.DTOs.UI.BasketItems;
 using Service.DTOs.UI.Checkouts;
+using Service.DTOs.UI.Contacts;
 using Service.DTOs.UI.Reviews;
 using CategoryDto = Service.DTOs.Admin.Categories.CategoryDto;
 using CheckoutDto = Service.DTOs.UI.Checkouts.CheckoutDto;
@@ -44,6 +48,19 @@ namespace Service.Helpers
             CreateMap<CategoryEditDto, Category>();
             CreateMap<CategoryImage, CategoryImageDto>();
 
+            //Setting
+            CreateMap<Setting, SettingDto>()
+                .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
+            CreateMap<SettingEditDto, Setting>();
+
+            //SocialMedia
+            CreateMap<SocialMedia, SocialMediaDto>()
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
+                .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
+            CreateMap<SocialMedia, DTOs.UI.SocialMedias.SocialMediaDto>();
+            CreateMap<SocialMediaCreateDto, SocialMedia>();
+            CreateMap<SocialMediaEditDto, SocialMedia>();
+
             //Brand
             CreateMap<Brand, BrandSelectDto>();
             CreateMap<Brand, BrandDto>()
@@ -67,6 +84,11 @@ namespace Service.Helpers
             CreateMap<TagCreateDto, Tag>();
             CreateMap<TagEditDto, Tag>();
             CreateMap<TagImage, TagImageDto>();
+
+            CreateMap<Contact, ContactDto>();
+            CreateMap<Contact, ContactDetailDto>()
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")));
+            CreateMap<ContactCreateDto, Contact>();
 
             //Restaurant
             CreateMap<Restaurant, RestaurantSelectDto>();
@@ -180,7 +202,10 @@ namespace Service.Helpers
 
             //Review
             CreateMap<ReviewCreateDto, Review>();
-            CreateMap<Review, ReviewDto>();
+            CreateMap<Review, ReviewDto>()
+                .ForMember(d => d.UserName, opt => opt.MapFrom(s => s.Checkout.User.UserName))
+                .ForMember(d => d.UserImage, opt => opt.MapFrom(s => s.Checkout.User.UserImage.Url))
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MMM dd, yyyy")));
         }
     }
 }

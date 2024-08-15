@@ -45,5 +45,10 @@ namespace Service.Services
             restaurant.AverageRating = (restaurant.AverageRating * (reviewCount - 1) + model.Rating) / reviewCount;
             await _restaurantRepository.EditAsync(restaurant);
         }
+
+        public async Task<IEnumerable<ReviewDto>> GetAllAsync()
+        {
+            return _mapper.Map<IEnumerable<ReviewDto>>(await _reviewRepository.GetALlWithUsersAsync());
+        }
     }
 }
