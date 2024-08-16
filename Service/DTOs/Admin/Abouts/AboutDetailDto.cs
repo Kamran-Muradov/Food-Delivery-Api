@@ -1,6 +1,6 @@
-﻿namespace Service.DTOs.Admin.Sliders
+﻿namespace Service.DTOs.Admin.Abouts
 {
-    public class SliderDetailDto
+    public class AboutDetailDto
     {
         public string Title { get; set; }
         public string Description { get; set; }

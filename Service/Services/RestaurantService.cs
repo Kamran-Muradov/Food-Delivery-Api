@@ -4,6 +4,7 @@ using Domain.Entities;
 using Repository.Repositories.Interfaces;
 using Service.DTOs.Admin.Restaurants;
 using Service.DTOs.UI.Restaurants;
+using Service.DTOs.UI.Reviews;
 using Service.Helpers;
 using Service.Helpers.Constants;
 using Service.Helpers.Exceptions;
@@ -111,7 +112,8 @@ namespace Service.Services
                         RestaurantId = restaurant.Id
                     });
                 }
-                restaurant.RestaurantImages = images;
+
+                await _restaurantImageRepository.CreateRangeAsync(images);
             }
 
             restaurant.UpdatedDate = DateTime.Now;
@@ -267,11 +269,11 @@ namespace Service.Services
             ArgumentNullException.ThrowIfNull(id);
 
             var restaurant = _mapper.Map<DTOs.UI.Restaurants.RestaurantDetailDto>(await _restaurantRepository.GetByIdWithAllDatasAsync((int)id));
+            if (restaurant is null) throw new NotFoundException(ResponseMessages.NotFound);
 
-            restaurant.ReviewCount = _reviewRepository
-                .GetAllWithExpressionAsync(r => r.Checkout.RestaurantId == restaurant.Id)
-                .Result
-                .Count();
+            var restaurantReviews = _mapper.Map<IEnumerable<ReviewDto>>(await _reviewRepository.GetALlByRestaurantIdAsync((int)id));
+
+            restaurant.Reviews = restaurantReviews;
 
             return restaurant;
         }

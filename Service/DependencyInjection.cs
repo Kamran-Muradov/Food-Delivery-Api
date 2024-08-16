@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using Service.DTOs.Admin.Abouts;
 using Service.DTOs.Admin.Brands;
 using Service.DTOs.Admin.Categories;
 using Service.DTOs.Admin.Ingredients;
@@ -97,6 +98,11 @@ namespace Service
             services.AddScoped<IValidator<SliderEditDto>, SliderEditDtoValidator>();
             services.AddScoped<ISliderService, SliderService>();
             services.AddScoped<ISliderImageService, SliderImageService>();
+
+            services.AddScoped<IValidator<AboutCreateDto>, AboutCreateDtoValidator>();
+            services.AddScoped<IValidator<AboutEditDto>, AboutEditDtoValidator>();
+            services.AddScoped<IAboutService, AboutService>();
+            services.AddScoped<IAboutImageService, AboutImageService>();
 
             return services;
         }

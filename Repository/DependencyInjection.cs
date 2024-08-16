@@ -34,6 +34,8 @@ namespace Repository
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<ISettingRepository, SettingRepository>();
             services.AddScoped<ISocialMediaRepository, SocialMediaRepository>();
+            services.AddScoped<IAboutRepository, AboutRepository>();
+            services.AddScoped<IAboutImageRepository, AboutImageRepository>();
 
             return services;
         }

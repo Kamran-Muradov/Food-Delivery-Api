@@ -14,7 +14,7 @@ namespace Domain.Configurations
 
             builder.Property(m => m.Value)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(200);
         }
     }
 }

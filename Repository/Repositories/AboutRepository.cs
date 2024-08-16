@@ -5,37 +5,37 @@ using Repository.Repositories.Interfaces;
 
 namespace Repository.Repositories
 {
-    public class SliderRepository : BaseRepository<Slider>, ISliderRepository
+    public class AboutRepository : BaseRepository<About>, IAboutRepository
     {
-        public SliderRepository(AppDbContext context) : base(context)
+        public AboutRepository(AppDbContext context) : base(context)
         {
         }
 
-        public async Task<IEnumerable<Slider>> GetPaginateDatasAsync(int page, int take)
+        public async Task<IEnumerable<About>> GetPaginateDatasAsync(int page, int take)
         {
             return await Entities
                 .OrderByDescending(m => m.Id)
                 .Skip((page - 1) * take)
                 .Take(take)
-                .Include(m => m.SliderImage)
+                .Include(m => m.AboutImage)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Slider>> GetAllWithImagesAsync()
+        public async Task<IEnumerable<About>> GetAllWithImagesAsync()
         {
             return await Entities
                 .OrderByDescending(m => m.Id)
-                .Include(s => s.SliderImage)
+                .Include(s => s.AboutImage)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<Slider> GetByIdWithImageAsync(int id)
+        public async Task<About> GetByIdWithImageAsync(int id)
         {
             return await Entities
                 .Where(s => s.Id == id)
-                .Include(s => s.SliderImage)
+                .Include(s => s.AboutImage)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }

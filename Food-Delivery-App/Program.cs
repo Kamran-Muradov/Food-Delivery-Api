@@ -37,14 +37,6 @@ builder.Services.AddCors(options =>
         });
 });
 
-//builder.Services.AddCors(options =>
-//    options.AddPolicy("AllowAll", policyBuilder =>
-//        policyBuilder
-//            .AllowAnyOrigin()
-//            .AllowAnyHeader()
-//            .AllowAnyMethod()
-//));
-
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>

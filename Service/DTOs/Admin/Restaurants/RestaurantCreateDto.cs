@@ -87,8 +87,8 @@ namespace Service.DTOs.Admin.Restaurants
                 .ForEach(uploadImages => uploadImages
                     .Must(item => item.ContentType.Contains("image/"))
                     .WithMessage("File must be image type")
-                    .Must(item => item.Length / 1024 < 500)
-                    .WithMessage("Logo size cannot exceed 500Kb"))
+                    .Must(item => item.Length / 1024 < 2048)
+                    .WithMessage("Logo size cannot exceed 2Mb"))
                 .When(m => m.Images is not null);
 
             RuleFor(m => m.TagIds)

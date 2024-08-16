@@ -42,6 +42,8 @@ namespace Repository.Data
         public DbSet<UserImage> UserImages { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<SocialMedia> SocialMedias { get; set; }
+        public DbSet<About> Abouts { get; set; }
+        public DbSet<AboutImage> AboutImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -98,6 +100,12 @@ namespace Repository.Data
                     Id = 3,
                     Key = "Email",
                     Value = "company@gmail.com"
+                },
+                new Setting
+                {
+                    Id = 4,
+                    Key = "Logo",
+                    Value = "https://res.cloudinary.com/duta72kmn/image/upload/v1723783223/Pngtree_food_delivery_logo_design_5392527_mmnqhk.jpg"
                 }
             );
 

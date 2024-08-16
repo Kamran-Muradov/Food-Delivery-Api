@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Service.DTOs.Admin.Abouts;
 using Service.DTOs.Admin.Brands;
 using Service.DTOs.Admin.Categories;
 using Service.DTOs.Admin.Contacts;
@@ -193,12 +194,29 @@ namespace Service.Helpers
             CreateMap<Slider, SliderDetailDto>()
                 .ForMember(d => d.Image, opt => opt.MapFrom(s => s.SliderImage.Url))
                 .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
-                .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
+                .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"))
+                .ForMember(d => d.UpdatedBy, opt => opt.MapFrom(s => s.UpdatedBy ?? "N/A"));
             CreateMap<SliderCreateDto, Slider>();
             CreateMap<SliderEditDto, Slider>();
             CreateMap<SliderImage, SliderImageDto>();
             CreateMap<Slider, DTOs.UI.Sliders.SliderDto>()
                 .ForMember(d => d.Image, opt => opt.MapFrom(s => s.SliderImage.Url));
+
+            //About
+            CreateMap<About, AboutDto>()
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.AboutImage.Url))
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
+                .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
+            CreateMap<About, AboutDetailDto>()
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.AboutImage.Url))
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
+                .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"))
+                .ForMember(d => d.UpdatedBy, opt => opt.MapFrom(s => s.UpdatedBy ?? "N/A"));
+            CreateMap<AboutCreateDto, About>();
+            CreateMap<AboutEditDto, About>();
+            CreateMap<AboutImage, AboutImageDto>();
+            CreateMap<About, DTOs.UI.Abouts.AboutDto>()
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.AboutImage.Url));
 
             //Review
             CreateMap<ReviewCreateDto, Review>();

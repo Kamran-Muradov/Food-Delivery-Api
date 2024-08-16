@@ -13,7 +13,7 @@ namespace Service.DTOs.Admin.Settings
         {
             RuleFor(m => m.Value)
                 .NotEmpty()
-                .MaximumLength(100);
+                .MaximumLength(200);
         }
     }
 }
