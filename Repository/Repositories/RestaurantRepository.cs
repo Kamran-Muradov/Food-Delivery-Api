@@ -50,7 +50,7 @@ namespace Repository.Repositories
         public async Task<IEnumerable<Restaurant>> GetAllByBrandNameAsync(string brandName)
         {
             return await Entities
-                .Where(r => r.Brand.Name==brandName)
+                .Where(r => r.Brand.Name == brandName)
                 .Include(m => m.RestaurantImages)
                 .Include(m => m.RestaurantTags)
                 .ThenInclude(m => m.Tag)
@@ -94,6 +94,7 @@ namespace Repository.Repositories
                 .Include(r => r.Menus)
                 .ThenInclude(m => m.Category)
                 .Include(r => r.Brand)
+                .Include(r => r.City)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }

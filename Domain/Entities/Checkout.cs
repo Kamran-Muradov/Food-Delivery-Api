@@ -12,6 +12,7 @@ namespace Domain.Entities
         public Restaurant Restaurant { get; set; }
         public Review Review { get; set; }
         public string Status { get; set; } = "Pending";
+        public string? Comments { get; set; }
         public Checkout()
         {
             CheckoutMenus = new List<CheckoutMenu>();

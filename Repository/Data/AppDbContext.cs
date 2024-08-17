@@ -44,6 +44,10 @@ namespace Repository.Data
         public DbSet<SocialMedia> SocialMedias { get; set; }
         public DbSet<About> Abouts { get; set; }
         public DbSet<AboutImage> AboutImages { get; set; }
+        public DbSet<PromoCode> PromoCodes { get; set; }
+        public DbSet<UserPromoCode> UserPromoCodes { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<City> Cities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

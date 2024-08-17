@@ -9,7 +9,7 @@ namespace Domain.Entities
         public string Phone { get; set; }
         public string Email { get; set; }
         public decimal DeliveryFee { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
         public decimal MinimumOrder { get; set; }
         public int MinDeliveryTime { get; set; }
         public string Address { get; set; }
@@ -17,6 +17,8 @@ namespace Domain.Entities
         public string? Website { get; set; }
         public int? BrandId { get; set; }
         public Brand Brand { get; set; }
+        public int? CityId { get; set; }
+        public City City { get; set; }
         public ICollection<RestaurantTag> RestaurantTags { get; set; }
         public ICollection<RestaurantImage> RestaurantImages { get; set; }
         public ICollection<Menu> Menus { get; set; }

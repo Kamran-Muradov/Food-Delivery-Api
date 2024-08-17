@@ -38,7 +38,26 @@ namespace Service.Services
         public async Task CreateAsync(CheckoutCreateDto model)
         {
             ArgumentNullException.ThrowIfNull(model);
-            await _checkoutRepository.CreateAsync(_mapper.Map<Checkout>(model));
+
+            Checkout checkout = _mapper.Map<Checkout>(model);
+
+            var basketItems = (List<BasketItemDto>)await _basketItemService.GetAllByUserIdAsync(model.UserId);
+            var menu = await _menuRepository.GetByIdAsync(basketItems.First().MenuId);
+
+            checkout.RestaurantId = menu.RestaurantId;
+            checkout.TotalPrice = basketItems.Sum(bi => bi.Price);
+            checkout.CheckoutMenus = basketItems.Select(bi => new CheckoutMenu
+            {
+                CheckoutId = checkout.Id,
+                MenuId = bi.MenuId
+            }).ToList();
+
+            await _checkoutRepository.CreateAsync(checkout);
+
+            foreach (var basketItem in basketItems)
+            {
+                await _basketItemService.DeleteAsync(model.UserId, basketItem.MenuId);
+            }
         }
 
         public async Task EditAsync(int? id, CheckoutEditDto model)
@@ -49,8 +68,6 @@ namespace Service.Services
            var checkout = await _checkoutRepository.GetByIdAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
            checkout.Status = model.Status;
            await _checkoutRepository.EditAsync(checkout);
-
-           //await _hubContext.Clients.All.SendAsync("ReceiveOrderStatusUpdate", id, model.Status);
 
            
            if (model.Status == "Delivered")

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -11,9 +12,10 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240816210058_AddedCommentsColumnCheckoutTable")]
+    partial class AddedCommentsColumnCheckoutTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -451,41 +453,6 @@ namespace Repository.Migrations
                     b.ToTable("CheckoutMenus");
                 });
 
-            modelBuilder.Entity("Domain.Entities.City", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("Cities");
-                });
-
             modelBuilder.Entity("Domain.Entities.Contact", b =>
                 {
                     b.Property<int>("Id")
@@ -522,36 +489,6 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contacts");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Country", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Domain.Entities.Ingredient", b =>
@@ -793,9 +730,6 @@ namespace Repository.Migrations
                     b.Property<int?>("BrandId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -846,8 +780,6 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
-
-                    b.HasIndex("CityId");
 
                     b.ToTable("Restaurants");
                 });
@@ -986,28 +918,28 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 17, 8, 48, 0, 827, DateTimeKind.Local).AddTicks(4239),
+                            CreatedDate = new DateTime(2024, 8, 17, 1, 0, 57, 511, DateTimeKind.Local).AddTicks(6885),
                             Key = "Address",
                             Value = "28 May"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 17, 8, 48, 0, 827, DateTimeKind.Local).AddTicks(4241),
+                            CreatedDate = new DateTime(2024, 8, 17, 1, 0, 57, 511, DateTimeKind.Local).AddTicks(6886),
                             Key = "Phone",
                             Value = "+9945556622"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 17, 8, 48, 0, 827, DateTimeKind.Local).AddTicks(4242),
+                            CreatedDate = new DateTime(2024, 8, 17, 1, 0, 57, 511, DateTimeKind.Local).AddTicks(6887),
                             Key = "Email",
                             Value = "company@gmail.com"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 17, 8, 48, 0, 827, DateTimeKind.Local).AddTicks(4242),
+                            CreatedDate = new DateTime(2024, 8, 17, 1, 0, 57, 511, DateTimeKind.Local).AddTicks(6888),
                             Key = "Logo",
                             Value = "https://res.cloudinary.com/duta72kmn/image/upload/v1723783223/Pngtree_food_delivery_logo_design_5392527_mmnqhk.jpg"
                         });
@@ -1119,21 +1051,21 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 17, 8, 48, 0, 827, DateTimeKind.Local).AddTicks(4276),
+                            CreatedDate = new DateTime(2024, 8, 17, 1, 0, 57, 511, DateTimeKind.Local).AddTicks(6898),
                             Platform = "Linkedin",
                             Url = "linkedin.com"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 17, 8, 48, 0, 827, DateTimeKind.Local).AddTicks(4277),
+                            CreatedDate = new DateTime(2024, 8, 17, 1, 0, 57, 511, DateTimeKind.Local).AddTicks(6900),
                             Platform = "Instagram",
                             Url = "instagram.com"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 17, 8, 48, 0, 827, DateTimeKind.Local).AddTicks(4278),
+                            CreatedDate = new DateTime(2024, 8, 17, 1, 0, 57, 511, DateTimeKind.Local).AddTicks(6901),
                             Platform = "facebook",
                             Url = "facebook.com"
                         });
@@ -1307,31 +1239,31 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 17, 8, 48, 0, 827, DateTimeKind.Local).AddTicks(4136),
+                            CreatedDate = new DateTime(2024, 8, 17, 1, 0, 57, 511, DateTimeKind.Local).AddTicks(6780),
                             Name = "Size choice"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 17, 8, 48, 0, 827, DateTimeKind.Local).AddTicks(4137),
+                            CreatedDate = new DateTime(2024, 8, 17, 1, 0, 57, 511, DateTimeKind.Local).AddTicks(6781),
                             Name = "Sauce choice"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 17, 8, 48, 0, 827, DateTimeKind.Local).AddTicks(4138),
+                            CreatedDate = new DateTime(2024, 8, 17, 1, 0, 57, 511, DateTimeKind.Local).AddTicks(6783),
                             Name = "Drink choice"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 17, 8, 48, 0, 827, DateTimeKind.Local).AddTicks(4139),
+                            CreatedDate = new DateTime(2024, 8, 17, 1, 0, 57, 511, DateTimeKind.Local).AddTicks(6784),
                             Name = "Crust choice"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 17, 8, 48, 0, 827, DateTimeKind.Local).AddTicks(4140),
+                            CreatedDate = new DateTime(2024, 8, 17, 1, 0, 57, 511, DateTimeKind.Local).AddTicks(6784),
                             Name = "Additional ingredients"
                         });
                 });
@@ -1566,17 +1498,6 @@ namespace Repository.Migrations
                     b.Navigation("Menu");
                 });
 
-            modelBuilder.Entity("Domain.Entities.City", b =>
-                {
-                    b.HasOne("Domain.Entities.Country", "Country")
-                        .WithMany("Cities")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-                });
-
             modelBuilder.Entity("Domain.Entities.Menu", b =>
                 {
                     b.HasOne("Domain.Entities.Category", "Category")
@@ -1651,13 +1572,7 @@ namespace Repository.Migrations
                         .WithMany("Restaurants")
                         .HasForeignKey("BrandId");
 
-                    b.HasOne("Domain.Entities.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
-
                     b.Navigation("Brand");
-
-                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("Domain.Entities.RestaurantImage", b =>
@@ -1849,11 +1764,6 @@ namespace Repository.Migrations
 
                     b.Navigation("Review")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.Country", b =>
-                {
-                    b.Navigation("Cities");
                 });
 
             modelBuilder.Entity("Domain.Entities.Menu", b =>

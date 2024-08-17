@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Repository.Repositories;
 using Repository.Repositories.Interfaces;
 using Service.DTOs.Admin.Ingredients;
 using Service.Helpers;
@@ -94,14 +93,12 @@ namespace Service.Services
         public async Task<IngredientDto> GetByIdAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);
-
             return _mapper.Map<IngredientDto>(await _ingredientRepository.GetByIdAsync((int)id));
         }
 
         public async Task<bool> ExistAsync(string name, int? excludeId = null)
         {
             ArgumentNullException.ThrowIfNull(name);
-
             return await _ingredientRepository.ExistAsync(name, excludeId);
         }
     }

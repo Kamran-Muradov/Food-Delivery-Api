@@ -3,7 +3,9 @@ using Domain.Entities;
 using Service.DTOs.Admin.Abouts;
 using Service.DTOs.Admin.Brands;
 using Service.DTOs.Admin.Categories;
+using Service.DTOs.Admin.Cities;
 using Service.DTOs.Admin.Contacts;
+using Service.DTOs.Admin.Countries;
 using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
@@ -36,6 +38,23 @@ namespace Service.Helpers
                 .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
             CreateMap<IngredientCreateDto, Ingredient>();
             CreateMap<IngredientEditDto, Ingredient>();
+
+            //Country
+            CreateMap<Country, CountrySelectDto>();
+            CreateMap<Country, CountryDto>()
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
+                .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
+            CreateMap<CountryCreateDto, Country>();
+            CreateMap<CountryEditDto, Country>();
+
+            //City
+            CreateMap<City, CitySelectDto>();
+            CreateMap<City, CityDto>()
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
+                .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"))
+                .ForMember(d => d.Country, opt => opt.MapFrom(s => s.Country.Name));
+            CreateMap<CityCreateDto, City>();
+            CreateMap<CityEditDto, City>();
 
             //Category
             CreateMap<Category, CategorySelectDto>();
@@ -101,6 +120,7 @@ namespace Service.Helpers
             CreateMap<Restaurant, RestaurantDetailDto>()
                 .ForMember(d => d.Tags, opt => opt.MapFrom(s => s.RestaurantTags.Select(m => m.Tag.Name)))
                 .ForMember(d => d.Brand, opt => opt.MapFrom(s => s.Brand != null ? s.Brand.Name : "N/A"))
+                .ForMember(d => d.City, opt => opt.MapFrom(s => s.City.Name))
                 .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
                 .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
             CreateMap<RestaurantCreateDto, Restaurant>();

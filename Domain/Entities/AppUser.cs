@@ -8,5 +8,6 @@ namespace Domain.Entities
         public ICollection<BasketItem> BasketItems { get; set; }
         public ICollection<Checkout> Checkouts { get; set; }
         public UserImage UserImage { get; set; }
+        public ICollection<UserPromoCode> UserPromoCodes { get; set; }
     }
 }

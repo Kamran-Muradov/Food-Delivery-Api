@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Service.DTOs.Admin.Abouts;
 using Service.DTOs.Admin.Brands;
 using Service.DTOs.Admin.Categories;
+using Service.DTOs.Admin.Cities;
+using Service.DTOs.Admin.Countries;
 using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
@@ -34,6 +36,14 @@ namespace Service
             services.AddScoped<IValidator<IngredientCreateDto>, IngredientCreateDtoValidator>();
             services.AddScoped<IValidator<IngredientEditDto>, IngredientEditDtoValidator>();
             services.AddScoped<IIngredientService, IngredientService>();
+
+            services.AddScoped<IValidator<CountryCreateDto>, CountryCreateDtoValidator>();
+            services.AddScoped<IValidator<CountryEditDto>, CountryEditDtoValidator>();
+            services.AddScoped<ICountryService, CountryService>();
+
+            services.AddScoped<IValidator<CityCreateDto>, CityCreateDtoValidator>();
+            services.AddScoped<IValidator<CityEditDto>, CityEditDtoValidator>();
+            services.AddScoped<ICityService, CityService>();
 
             services.AddScoped<IValidator<CategoryCreateDto>, CategoryCreateDtoValidator>();
             services.AddScoped<IValidator<CategoryEditDto>, CategoryEditDtoValidator>();

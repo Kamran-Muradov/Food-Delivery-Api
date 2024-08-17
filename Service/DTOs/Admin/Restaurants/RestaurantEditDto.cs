@@ -10,7 +10,6 @@ namespace Service.DTOs.Admin.Restaurants
         public string Phone { get; set; }
         public string Email { get; set; }
         public decimal DeliveryFee { get; set; }
-        public bool IsActive { get; set; }
         public decimal MinimumOrder { get; set; }
         public int MinDeliveryTime { get; set; }
         public string Address { get; set; }
@@ -18,6 +17,7 @@ namespace Service.DTOs.Admin.Restaurants
         public List<IFormFile>? Images { get; set; }
         public List<int> TagIds { get; set; }
         public int? BrandId { get; set; }
+        public int CityId { get; set; }
     }
 
     public class RestaurantEditDtoValidator : AbstractValidator<RestaurantEditDto>
@@ -72,10 +72,6 @@ namespace Service.DTOs.Admin.Restaurants
                 .WithMessage("Delivery fee is required")
                 .GreaterThan(0)
                 .WithMessage("Delivery fee must be greater than 0"); ;
-
-            RuleFor(m => m.IsActive)
-                .NotEmpty()
-                .WithMessage("Status is required");
 
             RuleFor(m => m.MinimumOrder)
                 .NotEmpty()
