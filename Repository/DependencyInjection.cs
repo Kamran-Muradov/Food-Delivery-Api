@@ -38,6 +38,7 @@ namespace Repository
             services.AddScoped<IAboutImageRepository, AboutImageRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<IFavouriteRepository, FavouriteRepository>();
 
             return services;
         }

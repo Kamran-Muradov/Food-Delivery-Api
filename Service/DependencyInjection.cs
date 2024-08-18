@@ -18,6 +18,7 @@ using Service.DTOs.UI.Account;
 using Service.DTOs.UI.BasketItems;
 using Service.DTOs.UI.Checkouts;
 using Service.DTOs.UI.Contacts;
+using Service.DTOs.UI.Favourites;
 using Service.DTOs.UI.Reviews;
 using Service.Services;
 using Service.Services.Interfaces;
@@ -36,6 +37,9 @@ namespace Service
             services.AddScoped<IValidator<IngredientCreateDto>, IngredientCreateDtoValidator>();
             services.AddScoped<IValidator<IngredientEditDto>, IngredientEditDtoValidator>();
             services.AddScoped<IIngredientService, IngredientService>();
+
+            services.AddScoped<IValidator<FavouriteCreateDto>, FavouriteCreateDtoValidator>();
+            services.AddScoped<IFavouriteService, FavouriteService>();
 
             services.AddScoped<IValidator<CountryCreateDto>, CountryCreateDtoValidator>();
             services.AddScoped<IValidator<CountryEditDto>, CountryEditDtoValidator>();

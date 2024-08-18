@@ -11,6 +11,8 @@ using Stripe;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Service.Helpers.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -81,7 +83,8 @@ builder.Services
         {
             ValidIssuer = builder.Configuration["JWTSettings:Issuer"],
             ValidAudience = builder.Configuration["JWTSettings:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:Key"])),
+            IssuerSigningKey =
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:Key"])),
             ClockSkew = TimeSpan.Zero // remove delay of token when expire
         };
     });
@@ -112,12 +115,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-//app.UseCors(
-//    options => options
-//        .AllowAnyOrigin()
-//        .AllowAnyMethod()
-//        .AllowAnyHeader()
-//);
 
 app.UseCors("AllowSpecificOrigin");
 

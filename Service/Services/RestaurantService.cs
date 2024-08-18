@@ -9,7 +9,6 @@ using Service.Helpers;
 using Service.Helpers.Constants;
 using Service.Helpers.Exceptions;
 using Service.Services.Interfaces;
-using Stripe;
 using RestaurantDetailDto = Service.DTOs.Admin.Restaurants.RestaurantDetailDto;
 using RestaurantDto = Service.DTOs.Admin.Restaurants.RestaurantDto;
 

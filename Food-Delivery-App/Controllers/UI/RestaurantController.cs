@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Service.DTOs.UI.Restaurants;
-using Service.Services;
 using Service.Services.Interfaces;
 
 namespace Food_Delivery_App.Controllers.UI

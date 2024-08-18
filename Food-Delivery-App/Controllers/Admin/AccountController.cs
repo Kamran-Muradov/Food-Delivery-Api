@@ -18,7 +18,6 @@ namespace Food_Delivery_App.Controllers.Admin
             return Ok(await _accountService.GetAllUsersAsync());
         }
 
-
         [HttpGet]
         public async Task<IActionResult> GetUserByUserName([FromQuery] string userName)
         {

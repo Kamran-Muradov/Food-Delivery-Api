@@ -19,6 +19,7 @@ using Service.DTOs.UI.Account;
 using Service.DTOs.UI.BasketItems;
 using Service.DTOs.UI.Checkouts;
 using Service.DTOs.UI.Contacts;
+using Service.DTOs.UI.Favourites;
 using Service.DTOs.UI.Reviews;
 using CategoryDto = Service.DTOs.Admin.Categories.CategoryDto;
 using CheckoutDto = Service.DTOs.UI.Checkouts.CheckoutDto;
@@ -67,6 +68,10 @@ namespace Service.Helpers
             CreateMap<CategoryCreateDto, Category>();
             CreateMap<CategoryEditDto, Category>();
             CreateMap<CategoryImage, CategoryImageDto>();
+
+            //Favourite
+            CreateMap<Favourite, FavouriteDto>();
+            CreateMap<FavouriteCreateDto, Favourite>();
 
             //Setting
             CreateMap<Setting, SettingDto>()

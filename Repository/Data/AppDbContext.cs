@@ -48,6 +48,7 @@ namespace Repository.Data
         public DbSet<UserPromoCode> UserPromoCodes { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<Favourite> Favourites { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
