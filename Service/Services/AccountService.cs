@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Repository.Repositories.Interfaces;
-using Service.DTOs.UI.Account;
 using Service.Helpers;
 using Service.Helpers.Account;
 using Service.Helpers.Constants;
@@ -15,6 +14,7 @@ using Service.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Service.DTOs.Account;
 
 namespace Service.Services
 {
@@ -158,6 +158,63 @@ namespace Service.Services
             };
         }
 
+        public async Task EditUserRolesAsync(string userId, UserRoleEditDto model)
+        {
+            var user = await _userManager.FindByIdAsync(userId) ?? throw new NotFoundException(ResponseMessages.NotFound);
+            var existingRoles = await _userManager.GetRolesAsync(user);
+
+            // Roles to add
+            var rolesToAdd = model.Roles.Except(existingRoles).ToList();
+            // Roles to remove
+            var rolesToRemove = existingRoles.Except(model.Roles).ToList();
+
+            // Add roles
+            if (rolesToAdd.Any())
+            {
+                await _userManager.AddToRolesAsync(user, rolesToAdd);
+            }
+
+            // Remove roles
+            if (rolesToRemove.Any())
+            {
+                await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+            }
+        }
+
+        public async Task<IEnumerable<UserRoleDto>> GetUserRoles(string userId)
+        {
+            ArgumentNullException.ThrowIfNull(userId);
+
+            var roles = _roleManager.Roles.ToList();
+            var user = await _userManager.FindByIdAsync(userId) ?? throw new NotFoundException(ResponseMessages.NotFound);
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            return roles.Select(role => new UserRoleDto
+            {
+                RoleName = role.Name,
+                IsInUser = userRoles.Contains(role.Name)
+            }).ToList();
+        }
+
+        public async Task<UserDetailDto> GetUserDetailAsync(string userId)
+        {
+            ArgumentNullException.ThrowIfNull(userId);
+
+            var user = await _userManager.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.UserImage)
+                .FirstOrDefaultAsync();
+            if (user is null) throw new NotFoundException(ResponseMessages.NotFound);
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var userDetailDto = _mapper.Map<UserDetailDto>(user);
+
+            userDetailDto.Roles = userRoles;
+
+            return userDetailDto;
+        }
+
         public async Task<UserImageDto> EditProfilePictureAsync(string userId, UserImageEditDto model)
         {
             ArgumentNullException.ThrowIfNull(userId);
@@ -185,12 +242,20 @@ namespace Service.Services
         }
 
 
-        public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
+        public async Task<PaginationResponse<UserDto>> GetUsersPaginateAsync(int? page, int? take)
         {
-            return _mapper.Map<IEnumerable<UserDto>>(await _userManager.Users.ToListAsync());
+            var users = await _userManager.Users
+                .Include(u => u.UserImage)
+                .ToListAsync();
+            int totalPage = (int)Math.Ceiling((decimal)users.Count / (int)take);
+
+            var mappedDatas = _mapper.Map<IEnumerable<UserDto>>(users.Skip((int)((page - 1) * take)).Take((int)take));
+
+
+            return new PaginationResponse<UserDto>(mappedDatas, totalPage, (int)page);
         }
 
-        public async Task<UserDto> GetByUserIdAsync(string userId)
+        public async Task<UserDto> GetUserByIdAsync(string userId)
         {
             ArgumentNullException.ThrowIfNull(userId);
 

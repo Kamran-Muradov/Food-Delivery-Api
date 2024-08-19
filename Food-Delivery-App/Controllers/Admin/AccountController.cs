@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Service.DTOs.Account;
 using Service.Services.Interfaces;
 
 namespace Food_Delivery_App.Controllers.Admin
 {
+    [Authorize(Policy = "RequireSuperAdminRole")]
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
@@ -13,9 +16,9 @@ namespace Food_Delivery_App.Controllers.Admin
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetUsersPaginate([FromQuery] int page = 1, [FromQuery] int take = 5)
         {
-            return Ok(await _accountService.GetAllUsersAsync());
+            return Ok(await _accountService.GetUsersPaginateAsync(page, take));
         }
 
         [HttpGet]
@@ -29,6 +32,25 @@ namespace Food_Delivery_App.Controllers.Admin
         {
             await _accountService.CreateRoleAsync();
             return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddRoleToUser([FromQuery] string userId, [FromBody] UserRoleEditDto request)
+        {
+            await _accountService.EditUserRolesAsync(userId, request);
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRoles([FromQuery] string userId)
+        {
+            return Ok(await _accountService.GetUserRoles(userId));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserDetail([FromQuery] string userId)
+        {
+            return Ok(await _accountService.GetUserDetailAsync(userId));
         }
     }
 }

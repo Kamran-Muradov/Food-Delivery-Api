@@ -1,10 +1,6 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Service.DTOs.UI.Account;
+using Service.DTOs.Account;
 using Service.Services.Interfaces;
 
 namespace Food_Delivery_App.Controllers.UI
@@ -37,7 +33,7 @@ namespace Food_Delivery_App.Controllers.UI
         [HttpGet]
         public async Task<IActionResult> GetUserById([FromQuery] string userId)
         {
-            return Ok(await _accountService.GetByUserIdAsync(userId));
+            return Ok(await _accountService.GetUserByIdAsync(userId));
         }
 
         [HttpGet]

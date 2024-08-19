@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Service.DTOs.Account;
 using Service.DTOs.Admin.Abouts;
 using Service.DTOs.Admin.Brands;
 using Service.DTOs.Admin.Categories;
@@ -15,7 +16,6 @@ using Service.DTOs.Admin.Sliders;
 using Service.DTOs.Admin.SocialMedias;
 using Service.DTOs.Admin.Tags;
 using Service.DTOs.Admin.VariantTypes;
-using Service.DTOs.UI.Account;
 using Service.DTOs.UI.BasketItems;
 using Service.DTOs.UI.Checkouts;
 using Service.DTOs.UI.Contacts;
@@ -183,10 +183,17 @@ namespace Service.Helpers
             CreateMap<RegisterDto, AppUser>();
             CreateMap<AppUser, UserDto>()
                 .ForMember(d => d.ProfilePicture, opt => opt.MapFrom(s => s.UserImage.Url));
+            CreateMap<AppUser, UserDetailDto>()
+                .ForMember(d => d.ProfilePicture, opt => opt.MapFrom(s => s.UserImage.Url));
             CreateMap<UserImage, UserImageDto>();
 
             //VariantType
             CreateMap<VariantType, VariantTypeSelectDto>();
+            CreateMap<VariantType, VariantTypeDto>()
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
+                .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));
+            CreateMap<VariantTypeCreateDto, VariantType>();
+            CreateMap<VariantTypeEditDto, VariantType>();
 
             //BasketItem
             CreateMap<BasketItem, BasketItemDto>()

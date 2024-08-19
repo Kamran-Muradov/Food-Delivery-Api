@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using Service.DTOs.Account;
 using Service.DTOs.Admin.Abouts;
 using Service.DTOs.Admin.Brands;
 using Service.DTOs.Admin.Categories;
@@ -14,7 +15,7 @@ using Service.DTOs.Admin.Settings;
 using Service.DTOs.Admin.Sliders;
 using Service.DTOs.Admin.SocialMedias;
 using Service.DTOs.Admin.Tags;
-using Service.DTOs.UI.Account;
+using Service.DTOs.Admin.VariantTypes;
 using Service.DTOs.UI.BasketItems;
 using Service.DTOs.UI.Checkouts;
 using Service.DTOs.UI.Contacts;
@@ -98,6 +99,9 @@ namespace Service
             services.AddScoped<IValidator<MenuVariantCreateDto>, MenuVariantCreateDtoValidator>();
             services.AddScoped<IValidator<MenuVariantEditDto>, MenuVariantEditDtoValidator>();
             services.AddScoped<IMenuVariantService, MenuVariantService>();
+                
+            services.AddScoped<IValidator<VariantTypeCreateDto>, VariantTypeCreateDtoValidator>();
+            services.AddScoped<IValidator<VariantTypeEditDto>, VariantTypeEditDtoValidator>();
             services.AddScoped<IVariantTypeService, VariantTypeService>();
 
             services.AddScoped<IValidator<BasketItemCreateDto>, BasketItemCreateDtoValidator>();

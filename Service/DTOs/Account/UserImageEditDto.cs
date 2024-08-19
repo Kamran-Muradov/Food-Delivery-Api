@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Service.DTOs.UI.Account
+namespace Service.DTOs.Account
 {
     public class UserImageEditDto
     {
