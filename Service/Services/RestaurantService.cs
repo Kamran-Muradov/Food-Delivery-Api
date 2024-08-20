@@ -181,12 +181,12 @@ namespace Service.Services
             return restaurants;
         }
 
-        public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllByBrandNameAsync(string brandName)
+        public async Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllByBrandIdAsync(int brandId)
         {
-            ArgumentNullException.ThrowIfNull(brandName);
+            ArgumentNullException.ThrowIfNull(brandId);
 
             var restaurants =
-                _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllByBrandNameAsync(brandName)).ToList();
+                _mapper.Map<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>>(await _restaurantRepository.GetAllByBrandIdAsync(brandId)).ToList();
 
             foreach (var restaurant in restaurants)
             {

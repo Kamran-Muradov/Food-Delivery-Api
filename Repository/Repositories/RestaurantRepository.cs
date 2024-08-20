@@ -47,13 +47,14 @@ namespace Repository.Repositories
                  .ToListAsync();
         }
 
-        public async Task<IEnumerable<Restaurant>> GetAllByBrandNameAsync(string brandName)
+        public async Task<IEnumerable<Restaurant>> GetAllByBrandIdAsync(int brandId)
         {
             return await Entities
-                .Where(r => r.Brand.Name == brandName)
+                .Where(r => r.Brand.Id == brandId)
                 .Include(m => m.RestaurantImages)
                 .Include(m => m.RestaurantTags)
                 .ThenInclude(m => m.Tag)
+                .Include(r => r.Brand)
                 .AsNoTracking()
                 .ToListAsync();
         }

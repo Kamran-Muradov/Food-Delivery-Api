@@ -120,6 +120,7 @@ namespace Service.Helpers
             CreateMap<Restaurant, RestaurantDto>()
                 .ForMember(d => d.MainImage, opt => opt.MapFrom(s => s.RestaurantImages.FirstOrDefault(m => m.IsMain).Url));
             CreateMap<Restaurant, DTOs.UI.Restaurants.RestaurantDto>()
+                .ForMember(d => d.Brand, opt => opt.MapFrom(s => s.Brand.Name))
                 .ForMember(d => d.Tags, opt => opt.MapFrom(s => s.RestaurantTags.Select(m => m.Tag)));
             CreateMap<RestaurantImage, RestaurantImageDto>();
             CreateMap<Restaurant, RestaurantDetailDto>()

@@ -26,9 +26,9 @@ namespace Food_Delivery_App.Controllers.UI
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllByBrandName([FromQuery] string brandName)
+        public async Task<IActionResult> GetAllByBrandId([FromQuery] int brandId)
         {
-            return Ok(await _restaurantService.GetAllByBrandNameAsync(brandName));
+            return Ok(await _restaurantService.GetAllByBrandIdAsync(brandId));
         }
 
         [HttpPost]

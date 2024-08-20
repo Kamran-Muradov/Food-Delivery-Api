@@ -221,24 +221,37 @@ namespace Service.Services
             ArgumentNullException.ThrowIfNull(model);
 
             var existingUserImage = await _userImageRepository.GetFirstWithExpressionAsync(ui => ui.UserId == userId);
-            if (existingUserImage.PublicId != "default-profile-pic")
+            if (existingUserImage.PublicId != DefaultProfilePic.PublicId)
             {
                 await _photoService.DeletePhoto(existingUserImage.PublicId);
             }
 
-            await _userImageRepository.DeleteAsync(existingUserImage);
-
             var uploadResult = await _photoService.AddPhoto(model.ProfilePicture);
 
-            var newUserImage = new UserImage
-            {
-                Url = uploadResult.SecureUrl.ToString(),
-                PublicId = uploadResult.PublicId,
-                UserId = userId
-            };
-            await _userImageRepository.CreateAsync(newUserImage);
+            existingUserImage.Url = uploadResult.SecureUrl.ToString();
+            existingUserImage.PublicId = uploadResult.PublicId;
+
+            await _userImageRepository.EditAsync(existingUserImage);
 
             return new UserImageDto { Url = uploadResult.SecureUrl.ToString() };
+        }
+
+        public async Task<UserImageDto> DeleteProfilePictureAsync(string userId)
+        {
+            ArgumentNullException.ThrowIfNull(userId);
+
+            var existingUserImage = await _userImageRepository.GetFirstWithExpressionAsync(ui => ui.UserId == userId);
+            if (existingUserImage.PublicId != DefaultProfilePic.PublicId)
+            {
+                await _photoService.DeletePhoto(existingUserImage.PublicId);
+            }
+
+            existingUserImage.Url = DefaultProfilePic.Url;
+            existingUserImage.PublicId = DefaultProfilePic.PublicId;
+
+            await _userImageRepository.EditAsync(existingUserImage);
+
+            return new UserImageDto { Url = DefaultProfilePic.Url };
         }
 
 
@@ -290,8 +303,8 @@ namespace Service.Services
             {
                 await _userImageRepository.CreateAsync(new UserImage
                 {
-                    Url = "https://res.cloudinary.com/duta72kmn/image/upload/v1723573659/urglfp6i03xtotugts2s.png",
-                    PublicId = "default-profile-pic",
+                    Url = DefaultProfilePic.Url,
+                    PublicId = DefaultProfilePic.PublicId,
                     UserId = user.Id
                 });
             }
@@ -327,12 +340,12 @@ namespace Service.Services
 
             var user = await _userManager.FindByIdAsync(model.UserId) ?? throw new NotFoundException(ResponseMessages.NotFound);
 
-            bool isSamePassword = await _userManager.CheckPasswordAsync(user, model.NewPassword);
+            //bool isSamePassword = await _userManager.CheckPasswordAsync(user, model.NewPassword);
 
-            if (isSamePassword)
-            {
-                throw new BadRequestException(ResponseMessages.SamePassword);
-            }
+            //if (isSamePassword)
+            //{
+            //    throw new BadRequestException(ResponseMessages.SamePassword);
+            //}
 
             await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
         }
@@ -372,12 +385,12 @@ namespace Service.Services
 
             var user = await _userManager.FindByIdAsync(userId) ?? throw new NotFoundException(ResponseMessages.NotFound);
 
-            bool isSamePassword = await _userManager.CheckPasswordAsync(user, model.NewPassword);
+            //bool isSamePassword = await _userManager.CheckPasswordAsync(user, model.NewPassword);
 
-            if (isSamePassword)
-            {
-                throw new BadRequestException(ResponseMessages.SamePassword);
-            }
+            //if (isSamePassword)
+            //{
+            //    throw new BadRequestException(ResponseMessages.SamePassword);
+            //}
 
             var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 

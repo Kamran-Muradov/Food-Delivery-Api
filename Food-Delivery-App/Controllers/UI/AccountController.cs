@@ -81,5 +81,12 @@ namespace Food_Delivery_App.Controllers.UI
 
             return Ok(await _accountService.EditProfilePictureAsync(userId, request));
         }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteProfilePicture([FromQuery] string userId)
+        {
+            return Ok(await _accountService.DeleteProfilePictureAsync(userId));
+        }
     }
 }

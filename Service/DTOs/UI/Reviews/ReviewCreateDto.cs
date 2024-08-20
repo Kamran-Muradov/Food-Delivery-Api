@@ -18,7 +18,7 @@ namespace Service.DTOs.UI.Reviews
                 .GreaterThan(0);
 
             RuleFor(m => m.Rating)
-                .NotEmpty()
+                .NotNull()
                 .GreaterThanOrEqualTo(0)
                 .LessThanOrEqualTo(5);
         }

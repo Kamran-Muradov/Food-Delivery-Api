@@ -12,6 +12,7 @@ namespace Service.Services.Interfaces
         Task<IEnumerable<UserRoleDto>> GetUserRoles(string userId);
         Task<UserDetailDto> GetUserDetailAsync(string userId);
         Task<UserImageDto> EditProfilePictureAsync(string userId, UserImageEditDto model);
+        Task<UserImageDto> DeleteProfilePictureAsync(string userId);
         Task<PaginationResponse<UserDto>> GetUsersPaginateAsync(int? page, int? take);
         Task<UserDto> GetUserByIdAsync(string userId);
         Task<UserDto> GetUserByUserNameAsync(string userName);

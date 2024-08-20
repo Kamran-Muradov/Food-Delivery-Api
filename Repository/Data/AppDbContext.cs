@@ -138,6 +138,16 @@ namespace Repository.Data
                 }
             );
 
+            modelBuilder.Entity<PromoCode>().HasData(
+               new PromoCode
+               {
+                   Id = 1,
+                   Discount = 20,
+                   ExpiryDate = new DateTime(2024, 9, 17),
+                   CreatedBy = "kamran_superadmin"
+               }
+            );
+
             base.OnModelCreating(modelBuilder);
         }
 
