@@ -25,7 +25,7 @@ namespace Service.Services
 
         public async Task<PaymentResponse> CreateCheckoutSessionAsync(PaymentDto model)
         {
-            var currency = "usd";
+            const string currency = "usd";
             var successUrl = model.SuccessUrl;
             var cancelUrl = model.CancelUrl;
             var basketItems = await _basketItemService.GetAllByUserIdAsync(model.UserId);
@@ -47,19 +47,34 @@ namespace Service.Services
                 {
                     PriceData = new SessionLineItemPriceDataOptions
                     {
-                        UnitAmount = (long?)(item.Price / item.Count) * 100,
+                        UnitAmountDecimal = item.DiscountPrice != null ? item.DiscountPrice / item.Count * 100 : item.Price / item.Count * 100,
                         Currency = currency,
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
                             Name = item.Name,
                             Images = new List<string> { item.Image }
-                        },
+                        }
                     },
-                    Quantity = item.Count,
+                    Quantity = item.Count
                 };
 
                 options.LineItems.Add(sessionListItem);
             }
+
+            var deliveryFeeItem = new SessionLineItemOptions
+            {
+                PriceData = new SessionLineItemPriceDataOptions
+                {
+                    UnitAmountDecimal = basketItems.First().DeliveryFee * 100,
+                    Currency = currency,
+                    ProductData = new SessionLineItemPriceDataProductDataOptions
+                    {
+                        Name = "Delivery Fee"
+                    }
+                },
+                Quantity = 1
+            };
+            options.LineItems.Add(deliveryFeeItem);
 
             var service = new SessionService();
             var session = await service.CreateAsync(options);
@@ -71,8 +86,6 @@ namespace Service.Services
         {
             var service = new SessionService();
             var session = service.Get(sessionId);
-
-            string url = session.SuccessUrl;
 
             return session.Status == "complete";
         }

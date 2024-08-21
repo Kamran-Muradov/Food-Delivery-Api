@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Domain.Entities;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Service.DTOs.Account;
 using Service.Services.Interfaces;
@@ -8,10 +12,43 @@ namespace Food_Delivery_App.Controllers.UI
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, SignInManager<AppUser> signInManager)
         {
             _accountService = accountService;
+            _signInManager = signInManager;
+        }
+
+        [HttpGet]
+        [Route("/api/account/signin-google")]
+        public IActionResult SignInGoogle()
+        {
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", Url.Action("ExternalLoginCallback"));
+            return Challenge(properties, "Google");
+        }
+
+        [HttpGet]
+        [Route("/api/account/externalLoginCallback")]
+        public async Task<IActionResult> ExternalLoginCallback()
+        {
+            var result = await HttpContext.AuthenticateAsync("Google");
+
+            // Process the external login result
+            if (result.Succeeded)
+            {
+                var claimsIdentity = new ClaimsIdentity();
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, result.Principal.Identity.Name));
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Principal.FindFirstValue(ClaimTypes.NameIdentifier)));
+
+                // Create a new JWT token or sign in the user
+                //var token = GenerateJwtToken(claimsIdentity);
+
+                //return Ok(new { Token = token });
+                return Ok();
+            }
+
+            return BadRequest("External login failed.");
         }
 
         [HttpPost]

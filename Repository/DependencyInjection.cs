@@ -39,6 +39,8 @@ namespace Repository
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IFavouriteRepository, FavouriteRepository>();
+            services.AddScoped<IPromoCodeRepository, PromoCodeRepository>();
+            services.AddScoped<IUserPromoCodeRepository, UserPromoCodeRepository>();
 
             return services;
         }

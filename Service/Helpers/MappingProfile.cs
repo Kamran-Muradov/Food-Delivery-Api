@@ -10,6 +10,7 @@ using Service.DTOs.Admin.Countries;
 using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
+using Service.DTOs.Admin.PromoCodes;
 using Service.DTOs.Admin.Restaurants;
 using Service.DTOs.Admin.Settings;
 using Service.DTOs.Admin.Sliders;
@@ -72,6 +73,13 @@ namespace Service.Helpers
             //Favourite
             CreateMap<Favourite, FavouriteDto>();
             CreateMap<FavouriteCreateDto, Favourite>();
+
+            //PromoCode
+            CreateMap<PromoCode, PromoCodeDto>()
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")));
+            CreateMap<PromoCodeCreateDto, PromoCode>();
+            CreateMap<PromoCodeEditDto, PromoCode>();
+            CreateMap<PromoCode, DTOs.UI.PromoCodes.PromoCodeDto>();
 
             //Setting
             CreateMap<Setting, SettingDto>()
@@ -160,6 +168,7 @@ namespace Service.Helpers
             CreateMap<Menu, DTOs.UI.Menus.MenuDetailDto>()
                 .ForMember(d => d.Image, opt => opt.MapFrom(s => s.MenuImage.Url))
                 .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Restaurant.Name))
+                .ForMember(d => d.DeliveryFee, opt => opt.MapFrom(s => s.Restaurant.DeliveryFee))
                 .ForMember(d => d.Ingredients, opt => opt.MapFrom(s => s.MenuIngredients.Select(m => m.Ingredient.Name)))
                 .ForMember(d => d.MenuVariants,
                     opt => opt.MapFrom(s => s.MenuVariants.GroupBy(mv => mv.VariantType.Name).ToDictionary(g => g.Key, g => g.AsEnumerable())));
@@ -201,6 +210,7 @@ namespace Service.Helpers
                 .ForMember(d => d.BasketVariants,
                     opt => opt.MapFrom(s => s.BasketVariants.GroupBy(bv => bv.Type).ToDictionary(g => g.Key, g => g.Select(m => m.Option).ToList())))
                 .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Menu.Restaurant.Name))
+                .ForMember(d => d.DeliveryFee, opt => opt.MapFrom(s => s.Menu.Restaurant.DeliveryFee))
                 .ForMember(d => d.Name, opt => opt.MapFrom(s => s.Menu.Name))
                 .ForMember(d => d.Image, opt => opt.MapFrom(s => s.Menu.MenuImage.Url));
             CreateMap<BasketItemCreateDto, BasketItem>()

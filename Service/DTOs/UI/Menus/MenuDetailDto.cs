@@ -9,6 +9,7 @@ namespace Service.DTOs.UI.Menus
         public decimal Price { get; set; }
         public IEnumerable<string> Ingredients { get; set; }
         public string Image { get; set; }
+        public decimal DeliveryFee { get; set; }
         public int MenuId { get; set; }
         public int RestaurantId { get; set; }
         public string Restaurant { get; set; }

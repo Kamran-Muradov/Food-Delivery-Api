@@ -14,27 +14,37 @@ namespace Service.Services
         private readonly IMapper _mapper;
         private readonly IBasketVariantRepository _basketVariantRepository;
         private readonly IMenuRepository _menuRepository;
+        private readonly IUserPromoCodeRepository _userPromoCodeRepository;
 
         public BasketItemService(IMapper mapper,
                                  IBasketItemRepository basketItemRepository,
-                                 IBasketVariantRepository basketVariantRepository, 
-                                 IMenuRepository menuRepository)
+                                 IBasketVariantRepository basketVariantRepository,
+                                 IMenuRepository menuRepository,
+                                 IUserPromoCodeRepository userPromoCodeRepository)
         {
             _mapper = mapper;
             _basketItemRepository = basketItemRepository;
             _basketVariantRepository = basketVariantRepository;
             _menuRepository = menuRepository;
+            _userPromoCodeRepository = userPromoCodeRepository;
         }
 
         public async Task CreateAsync(BasketItemCreateDto model)
         {
             ArgumentNullException.ThrowIfNull(model);
 
+            var activeUserPromoCode = await _userPromoCodeRepository.GetActiveByUserIdAsync(model.UserId);
+
             var existBasketItem = await _basketItemRepository.GetByUserIdAndMenuId(model.UserId, model.MenuId);
 
             if (existBasketItem == null)
             {
                 var basketItem = _mapper.Map<BasketItem>(model);
+
+                if (activeUserPromoCode is not null)
+                {
+                    basketItem.DiscountPrice = basketItem.Price - basketItem.Price * (decimal)activeUserPromoCode.PromoCode.Discount / 100;
+                }
 
                 if (model.BasketVariants is not null)
                 {
@@ -49,6 +59,11 @@ namespace Service.Services
             {
                 await _basketVariantRepository.DeleteRangeAsync(existBasketItem.BasketVariants);
                 _mapper.Map(model, existBasketItem);
+
+                if (activeUserPromoCode is not null)
+                {
+                    existBasketItem.DiscountPrice = existBasketItem.Price - existBasketItem.Price * (decimal)activeUserPromoCode.PromoCode.Discount / 100;
+                }
 
                 if (model.BasketVariants is not null)
                 {
@@ -68,9 +83,11 @@ namespace Service.Services
             var basketItem = await _basketItemRepository.GetByUserIdAndMenuId(model.UserId, model.MenuId) ?? throw new NotFoundException(ResponseMessages.NotFound);
 
             var singlePrice = basketItem.Price / basketItem.Count;
+            var singleDiscountPrice = basketItem.DiscountPrice / basketItem.Count;
 
             basketItem.Count = model.Count;
             basketItem.Price = singlePrice * model.Count;
+            basketItem.DiscountPrice = singleDiscountPrice * model.Count;
 
             basketItem.UpdatedDate = DateTime.Now;
             await _basketItemRepository.EditAsync(basketItem);
@@ -81,14 +98,36 @@ namespace Service.Services
             ArgumentNullException.ThrowIfNull(userId);
             ArgumentNullException.ThrowIfNull(menuId);
 
-            var basketItem = await _basketItemRepository.GetByUserIdAndMenuId(userId, (int)menuId) ?? throw new NotFoundException(ResponseMessages.NotFound);
+            var basketItems = _basketItemRepository.GetAllWithExpressionAsync(bi => bi.UserId == userId).Result.ToList();
 
-            await _basketItemRepository.DeleteAsync(basketItem);
+            var deletedBasketItem = basketItems.FirstOrDefault(bi => bi.MenuId == menuId) ?? throw new NotFoundException(ResponseMessages.NotFound);
+
+            await _basketItemRepository.DeleteAsync(deletedBasketItem);
+
+            if (basketItems.Count == 1)
+            {
+                var activeUserPromoCode = await _userPromoCodeRepository.GetActiveByUserIdAsync(userId);
+                if (activeUserPromoCode != null)
+                {
+                    await _userPromoCodeRepository.DeleteAsync(activeUserPromoCode);
+                }
+            }
         }
 
         public async Task<IEnumerable<BasketItemDto>> GetAllByUserIdAsync(string userId)
         {
-            return _mapper.Map<IEnumerable<BasketItemDto>>(await _basketItemRepository.GetAllByUserIdAsync(userId));
+            var basketItems = _mapper.Map<IEnumerable<BasketItemDto>>(await _basketItemRepository.GetAllByUserIdAsync(userId));
+            var activeUserPromoCode = await _userPromoCodeRepository.GetActiveByUserIdAsync(userId);
+
+            if (activeUserPromoCode is not null)
+            {
+                foreach (var basketItem in basketItems)
+                {
+                    basketItem.AppliedPromoCode = activeUserPromoCode.PromoCode.Code;
+                }
+            }
+
+            return basketItems;
         }
 
         public async Task<bool> IsDifferentRestaurantAsync(string userId, int menuId)
@@ -115,6 +154,12 @@ namespace Service.Services
             }
 
             await _basketItemRepository.CreateAsync(basketItem);
+
+            var activeUserPromoCode = await _userPromoCodeRepository.GetActiveByUserIdAsync(model.UserId);
+            if (activeUserPromoCode != null)
+            {
+                await _userPromoCodeRepository.DeleteAsync(activeUserPromoCode);
+            }
         }
     }
 }

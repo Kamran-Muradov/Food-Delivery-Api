@@ -8,6 +8,6 @@ namespace Domain.Entities
         public AppUser User { get; set; }
         public int PromoCodeId { get; set; }
         public PromoCode PromoCode { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsUsed { get; set; } = false;
     }
 }

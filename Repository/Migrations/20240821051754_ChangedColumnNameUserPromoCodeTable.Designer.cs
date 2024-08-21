@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -11,9 +12,10 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240821051754_ChangedColumnNameUserPromoCodeTable")]
+    partial class ChangedColumnNameUserPromoCodeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -805,6 +807,18 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PromoCodes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "f51046",
+                            CreatedBy = "kamran_superadmin",
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2460),
+                            Discount = 20.0,
+                            ExpiryDate = new DateTime(2024, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsActive = true
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Restaurant", b =>
@@ -1019,28 +1033,28 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 21, 9, 37, 56, 964, DateTimeKind.Local).AddTicks(1435),
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2385),
                             Key = "Address",
                             Value = "28 May"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 21, 9, 37, 56, 964, DateTimeKind.Local).AddTicks(1437),
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2386),
                             Key = "Phone",
                             Value = "+9945556622"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 21, 9, 37, 56, 964, DateTimeKind.Local).AddTicks(1439),
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2388),
                             Key = "Email",
                             Value = "company@gmail.com"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 21, 9, 37, 56, 964, DateTimeKind.Local).AddTicks(1440),
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2388),
                             Key = "Logo",
                             Value = "https://res.cloudinary.com/duta72kmn/image/upload/v1723783223/Pngtree_food_delivery_logo_design_5392527_mmnqhk.jpg"
                         });
@@ -1152,21 +1166,21 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 21, 9, 37, 56, 964, DateTimeKind.Local).AddTicks(1449),
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2398),
                             Platform = "Linkedin",
                             Url = "linkedin.com"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 21, 9, 37, 56, 964, DateTimeKind.Local).AddTicks(1450),
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2399),
                             Platform = "Instagram",
                             Url = "instagram.com"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 21, 9, 37, 56, 964, DateTimeKind.Local).AddTicks(1451),
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2400),
                             Platform = "facebook",
                             Url = "facebook.com"
                         });
@@ -1282,18 +1296,27 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserPromoCode", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("PromoCodeId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<bool>("IsUsed")
                         .HasColumnType("bit");
 
-                    b.HasKey("UserId", "PromoCodeId");
+                    b.Property<int>("PromoCodeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("PromoCodeId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserPromoCodes");
                 });
@@ -1331,31 +1354,31 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 21, 9, 37, 56, 964, DateTimeKind.Local).AddTicks(1344),
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2290),
                             Name = "Size choice"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 21, 9, 37, 56, 964, DateTimeKind.Local).AddTicks(1345),
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2291),
                             Name = "Sauce choice"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 21, 9, 37, 56, 964, DateTimeKind.Local).AddTicks(1347),
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2292),
                             Name = "Drink choice"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 21, 9, 37, 56, 964, DateTimeKind.Local).AddTicks(1348),
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2293),
                             Name = "Crust choice"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 21, 9, 37, 56, 964, DateTimeKind.Local).AddTicks(1348),
+                            CreatedDate = new DateTime(2024, 8, 21, 9, 17, 54, 99, DateTimeKind.Local).AddTicks(2294),
                             Name = "Additional ingredients"
                         });
                 });

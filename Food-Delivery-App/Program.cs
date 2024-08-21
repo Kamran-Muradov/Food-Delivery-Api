@@ -72,8 +72,8 @@ builder.Services
     .AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        //options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
     })
     .AddJwtBearer(cfg =>
     {
@@ -87,6 +87,12 @@ builder.Services
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:Key"])),
             ClockSkew = TimeSpan.Zero // remove delay of token when expire
         };
+    })
+    .AddGoogle(options =>
+    {
+        options.ClientId = "440316947319-h5fmurj0s5pluptmusbdsqhmc8n38khr.apps.googleusercontent.com";
+        options.ClientSecret = "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";
+        options.CallbackPath = "/api/account/externalLoginCallback";
     });
 
 builder.Services.AddAuthorization(o =>

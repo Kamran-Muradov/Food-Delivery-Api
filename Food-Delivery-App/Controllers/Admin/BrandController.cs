@@ -29,12 +29,6 @@ namespace Food_Delivery_App.Controllers.Admin
             return CreatedAtAction(nameof(Create), new { response = ResponseMessages.CreateSuccess });
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetAll()
-        //{
-        //    return Ok(await _categoryService.GetAllAsync());
-        //}
-
         [HttpGet]
         public async Task<IActionResult> GetPaginateDatas([FromQuery] int page = 1, [FromQuery] int take = 5)
         {

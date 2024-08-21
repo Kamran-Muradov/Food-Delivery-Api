@@ -10,6 +10,7 @@ using Service.DTOs.Admin.Countries;
 using Service.DTOs.Admin.Ingredients;
 using Service.DTOs.Admin.Menus;
 using Service.DTOs.Admin.MenuVariants;
+using Service.DTOs.Admin.PromoCodes;
 using Service.DTOs.Admin.Restaurants;
 using Service.DTOs.Admin.Settings;
 using Service.DTOs.Admin.Sliders;
@@ -121,6 +122,10 @@ namespace Service
             services.AddScoped<IValidator<AboutEditDto>, AboutEditDtoValidator>();
             services.AddScoped<IAboutService, AboutService>();
             services.AddScoped<IAboutImageService, AboutImageService>();
+
+            services.AddScoped<IValidator<PromoCodeCreateDto>, PromoCodeCreateDtoValidator>();
+            services.AddScoped<IValidator<PromoCodeEditDto>, PromoCodeEditDtoValidator>();
+            services.AddScoped<IPromoCodeService, PromoCodeService>();
 
             return services;
         }

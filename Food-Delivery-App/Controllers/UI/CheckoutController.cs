@@ -20,14 +20,7 @@ namespace Food_Delivery_App.Controllers.UI
         public async Task<IActionResult> Create([FromBody] CheckoutCreateDto request)
         {
             await _checkoutService.CreateAsync(request);
-            return CreatedAtAction(nameof(Create), new { response = ResponseMessages.CreateSuccess });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateByUserId([FromQuery] string userId)
-        {
-            await _checkoutService.CreateByUserIdAsync(userId);
-            return CreatedAtAction(nameof(Create), new { response = ResponseMessages.CreateSuccess });
+            return Ok();
         }
 
         [HttpGet]

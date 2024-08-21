@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Configurations
 {
-    public class RestaurantCategoryConfiguration : IEntityTypeConfiguration<RestaurantTag>
+    public class RestaurantTagConfiguration : IEntityTypeConfiguration<RestaurantTag>
     {
         public void Configure(EntityTypeBuilder<RestaurantTag> builder)
         {

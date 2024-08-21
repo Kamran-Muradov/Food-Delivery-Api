@@ -9,10 +9,12 @@ namespace Domain.Configurations
         public void Configure(EntityTypeBuilder<UserPromoCode> builder)
         {
             builder
+                .Ignore(upc => upc.Id)
                 .Ignore(upc => upc.CreatedDate)
                 .Ignore(upc => upc.CreatedBy)
                 .Ignore(upc => upc.UpdatedDate)
-                .Ignore(upc => upc.UpdatedBy);
+                .Ignore(upc => upc.UpdatedBy)
+                .HasKey(upc => new { upc.UserId, upc.PromoCodeId });
         }
     }
 }
