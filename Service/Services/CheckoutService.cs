@@ -3,7 +3,6 @@ using Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 using Repository.Repositories.Interfaces;
 using Service.DTOs.Admin.Checkouts;
-using Service.DTOs.UI.BasketItems;
 using Service.DTOs.UI.Checkouts;
 using Service.Helpers;
 using Service.Helpers.Constants;

@@ -277,6 +277,8 @@ namespace Service.Services
                 .Include(u => u.UserImage)
                 .FirstOrDefaultAsync();
 
+            if (user == null) throw new NotFoundException(ResponseMessages.NotFound);
+
             return _mapper.Map<UserDto>(user);
         }
 

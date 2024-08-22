@@ -88,7 +88,10 @@ namespace Service.Services
         public async Task<CityDto> GetByIdAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);
-            return _mapper.Map<CityDto>(await _cityRepository.GetByIdWithCountryAsync((int)id));
+            var city = await _cityRepository.GetByIdWithCountryAsync((int)id) ??
+                                       throw new NotFoundException(ResponseMessages.NotFound);
+
+            return _mapper.Map<CityDto>(city);
         }
 
         public async Task<bool> ExistAsync(string name, int? excludeId = null)

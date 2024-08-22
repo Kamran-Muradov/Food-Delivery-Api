@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Repository.Repositories;
 using Repository.Repositories.Interfaces;
 using Service.DTOs.Admin.Contacts;
 using Service.DTOs.UI.Contacts;
@@ -54,7 +53,9 @@ namespace Service.Services
         public async Task<ContactDetailDto> GetByIdAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);
-            return _mapper.Map<ContactDetailDto>(await _contactRepository.GetByIdAsync((int)id));
+            var contact = await _contactRepository.GetByIdAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
+
+            return _mapper.Map<ContactDetailDto>(contact);
         }
     }
 }

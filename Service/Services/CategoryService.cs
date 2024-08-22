@@ -121,7 +121,9 @@ namespace Service.Services
         public async Task<CategoryDto> GetByIdAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);
-            return _mapper.Map<CategoryDto>(await _categoryRepository.GetByIdAsync((int)id));
+            var category = await _categoryRepository.GetByIdAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
+
+            return _mapper.Map<CategoryDto>(category);
         }
 
         public async Task<bool> ExistAsync(string name, int? excludeId = null)

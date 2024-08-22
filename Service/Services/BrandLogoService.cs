@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Repository.Repositories.Interfaces;
 using Service.DTOs.Admin.Brands;
+using Service.Helpers.Constants;
+using Service.Helpers.Exceptions;
 using Service.Services.Interfaces;
 
 namespace Service.Services
@@ -20,6 +22,9 @@ namespace Service.Services
         public async Task<BrandLogoDto> GetByBrandIdAsync(int? brandId)
         {
             ArgumentNullException.ThrowIfNull(brandId);
-            return _mapper.Map<BrandLogoDto>(await _brandLogoRepository.GetByBrandIdAsync((int)brandId));        }
+            var brandLogo = await _brandLogoRepository.GetByBrandIdAsync((int)brandId) ??
+                            throw new NotFoundException(ResponseMessages.NotFound);
+
+            return _mapper.Map<BrandLogoDto>(brandLogo);        }
     }
 }

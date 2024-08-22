@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Food_Delivery_App.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -7,13 +8,11 @@ using Repository;
 using Repository.Data;
 using Service;
 using Service.Helpers;
+using Service.Helpers.SignalR;
 using Stripe;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
-using Service.Helpers.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,8 +71,8 @@ builder.Services
     .AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        //options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     })
     .AddJwtBearer(cfg =>
     {
@@ -87,12 +86,6 @@ builder.Services
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:Key"])),
             ClockSkew = TimeSpan.Zero // remove delay of token when expire
         };
-    })
-    .AddGoogle(options =>
-    {
-        options.ClientId = "440316947319-h5fmurj0s5pluptmusbdsqhmc8n38khr.apps.googleusercontent.com";
-        options.ClientSecret = "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";
-        options.CallbackPath = "/api/account/externalLoginCallback";
     });
 
 builder.Services.AddAuthorization(o =>
@@ -121,6 +114,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+//app.UseMiddleware<NoContentMiddleware>();
+//app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseCors("AllowSpecificOrigin");
 
@@ -135,7 +130,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<CheckoutHub>("/checkoutHub");
 });
 
-//app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

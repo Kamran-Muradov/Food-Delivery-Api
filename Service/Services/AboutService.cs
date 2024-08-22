@@ -94,7 +94,7 @@ namespace Service.Services
 
             var sliders = await _aboutRepository.GetAllAsync();
             int totalPage = (int)Math.Ceiling((decimal)sliders.Count() / (int)take);
-
+            
             var mappedDatas = _mapper.Map<IEnumerable<AboutDto>>(await _aboutRepository.GetPaginateDatasAsync((int)page, (int)take));
 
             return new PaginationResponse<AboutDto>(mappedDatas, totalPage, (int)page);

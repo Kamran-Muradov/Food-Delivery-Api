@@ -120,7 +120,11 @@ namespace Service.Services
         public async Task<BrandDto> GetByIdAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);
-            return _mapper.Map<BrandDto>(await _brandRepository.GetByIdWithLogoAsync((int)id));
+
+            var brand = await _brandRepository.GetByIdWithLogoAsync((int)id) ??
+                        throw new NotFoundException(ResponseMessages.NotFound);
+
+            return _mapper.Map<BrandDto>(brand);
         }
 
         public async Task<bool> ExistAsync(string name, int? excludeId = null)

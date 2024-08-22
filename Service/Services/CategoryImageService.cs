@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Repository.Repositories.Interfaces;
 using Service.DTOs.Admin.Categories;
+using Service.Helpers.Constants;
+using Service.Helpers.Exceptions;
 using Service.Services.Interfaces;
 
 namespace Service.Services
@@ -10,7 +12,7 @@ namespace Service.Services
         private readonly ICategoryImageRepository _categoryImageRepository;
         private readonly IMapper _mapper;
 
-        public CategoryImageService(ICategoryImageRepository categoryImageRepository, 
+        public CategoryImageService(ICategoryImageRepository categoryImageRepository,
                                     IMapper mapper)
         {
             _categoryImageRepository = categoryImageRepository;
@@ -20,7 +22,10 @@ namespace Service.Services
         public async Task<CategoryImageDto> GetByCategoryIdAsync(int? categoryId)
         {
             ArgumentNullException.ThrowIfNull(categoryId);
-            return _mapper.Map<CategoryImageDto>(await _categoryImageRepository.GetByCategoryIdAsync((int)categoryId));
+            var categoryImage = await _categoryImageRepository.GetByCategoryIdAsync((int)categoryId) ??
+                                throw new NotFoundException(ResponseMessages.NotFound);
+
+            return _mapper.Map<CategoryImageDto>(categoryImage);
         }
     }
 }

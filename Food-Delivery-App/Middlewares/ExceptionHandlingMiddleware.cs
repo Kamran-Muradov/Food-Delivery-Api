@@ -4,13 +4,14 @@ using System.Text.Json;
 
 namespace Food_Delivery_App.Middlewares
 {
-   public class ExceptionHandlingMiddleware
+
+    public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next, 
-                                           ILogger<ExceptionHandlingMiddleware> logger)
+        public ExceptionHandlingMiddleware(RequestDelegate next,
+            ILogger<ExceptionHandlingMiddleware> logger)
         {
             _next = next;
             _logger = logger;
@@ -28,7 +29,6 @@ namespace Food_Delivery_App.Middlewares
             }
         }
 
-
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
@@ -38,7 +38,6 @@ namespace Food_Delivery_App.Middlewares
             {
                 Success = false
             };
-
             switch (exception)
             {
                 case ApplicationException ex:
@@ -52,32 +51,20 @@ namespace Food_Delivery_App.Middlewares
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.Message = ex.Message;
                     break;
-
                 case NotFoundException ex:
                     response.StatusCode = (int)HttpStatusCode.NotFound;
                     errorResponse.Message = ex.Message;
                     break;
-
                 case BadRequestException ex:
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.Message = ex.Message;
                     break;
-
-                //case UnauthorizedException ex:
-                //    response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                //    errorResponse.Message = ex.Message;
-                //    break;
-
-                //case ForbiddenException ex:
-                //    response.StatusCode = (int)HttpStatusCode.Forbidden;
-                //    errorResponse.Message = ex.Message;
-                //    break;
-
                 default:
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     errorResponse.Message = "Internal server error!";
                     break;
             }
+
             _logger.LogError(exception.Message);
             var result = JsonSerializer.Serialize(errorResponse);
             await context.Response.WriteAsync(result);
