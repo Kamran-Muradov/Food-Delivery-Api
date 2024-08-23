@@ -4,7 +4,7 @@ namespace Repository.Repositories.Interfaces
 {
     public interface IRestaurantRepository : IBaseRepository<Restaurant>
     {
-        Task<IEnumerable<Restaurant>> GetPaginateDatasAsync(int page, int take);
+        Task<IEnumerable<Restaurant>> GetPaginateDatasAsync(int page, int take, string? searchText);
         Task<IEnumerable<Restaurant>> GetAllFilteredAsync(int page, int take, string sorting, List<int>? categoryIds);
         Task<IEnumerable<Restaurant>> GetAllByBrandIdAsync(int brandId);
         Task<IEnumerable<Restaurant>> GetAllByTagIdAsync(int tagId);

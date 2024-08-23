@@ -100,15 +100,25 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<CategorySelectDto>>(categories.OrderBy(m => m.Name));
         }
 
-        public async Task<PaginationResponse<DTOs.Admin.Categories.CategoryDto>> GetPaginateAsync(int? page, int? take)
+        public async Task<PaginationResponse<DTOs.Admin.Categories.CategoryDto>> GetPaginateAsync(int? page, int? take, string? searchText)
         {
             ArgumentNullException.ThrowIfNull(page);
             ArgumentNullException.ThrowIfNull(take);
 
-            var categories = await _categoryRepository.GetAllAsync();
+            IEnumerable<Category> categories;
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                categories = await _categoryRepository.GetAllAsync();
+            }
+            else
+            {
+                categories = await _categoryRepository.GetAllWithExpressionAsync(m => m.Name.Contains(searchText));
+            }
+
             int totalPage = (int)Math.Ceiling((decimal)categories.Count() / (int)take);
 
-            var mappedDatas = _mapper.Map<IEnumerable<DTOs.Admin.Categories.CategoryDto>>(await _categoryRepository.GetPaginateDatasAsync((int)page, (int)take));
+            var mappedDatas = _mapper.Map<IEnumerable<DTOs.Admin.Categories.CategoryDto>>(await _categoryRepository.GetPaginateDatasAsync((int)page, (int)take, searchText));
 
             return new PaginationResponse<DTOs.Admin.Categories.CategoryDto>(mappedDatas, totalPage, (int)page);
         }

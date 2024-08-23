@@ -11,7 +11,8 @@ namespace Service.Services.Interfaces
         Task DeleteAsync(int? id);
         Task<IEnumerable<CategoryDto>> GetAllAsync();
         Task<IEnumerable<CategorySelectDto>> GetAllForSelectAsync(int? excludeId = null);
-        Task<PaginationResponse<DTOs.Admin.Categories.CategoryDto>> GetPaginateAsync(int? page, int? take);
+        Task<PaginationResponse<DTOs.Admin.Categories.CategoryDto>> GetPaginateAsync(int? page, int? take,
+            string? searchText);
         Task<CategoryDto> GetByIdAsync(int? id);
         Task<bool> ExistAsync(string name, int? excludeId = null);
     }

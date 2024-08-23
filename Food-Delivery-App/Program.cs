@@ -114,8 +114,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-//app.UseMiddleware<NoContentMiddleware>();
-//app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 
 app.UseCors("AllowSpecificOrigin");
 
@@ -125,10 +124,14 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseMiddleware<NoContentMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapHub<CheckoutHub>("/checkoutHub");
 });
+
 
 
 app.UseHttpsRedirection();

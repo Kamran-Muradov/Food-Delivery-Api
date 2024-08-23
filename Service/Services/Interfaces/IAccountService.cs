@@ -13,7 +13,7 @@ namespace Service.Services.Interfaces
         Task<UserDetailDto> GetUserDetailAsync(string userId);
         Task<UserImageDto> EditProfilePictureAsync(string userId, UserImageEditDto model);
         Task<UserImageDto> DeleteProfilePictureAsync(string userId);
-        Task<PaginationResponse<UserDto>> GetUsersPaginateAsync(int? page, int? take);
+        Task<PaginationResponse<UserDto>> GetUsersPaginateAsync(int? page, int? take, string? searchText);
         Task<UserDto> GetUserByIdAsync(string userId);
         Task<UserDto> GetUserByUserNameAsync(string userName);
         Task ConfirmEmailAsync(string userId, string token);

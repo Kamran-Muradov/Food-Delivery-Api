@@ -77,15 +77,25 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<IngredientSelectDto>>(ingredients);
         }
 
-        public async Task<PaginationResponse<IngredientDto>> GetPaginateAsync(int? page, int? take)
+        public async Task<PaginationResponse<IngredientDto>> GetPaginateAsync(int? page, int? take, string? searchText)
         {
             ArgumentNullException.ThrowIfNull(page);
             ArgumentNullException.ThrowIfNull(take);
 
-            var categories = await _ingredientRepository.GetAllAsync();
-            int totalPage = (int)Math.Ceiling((decimal)categories.Count() / (int)take);
+            IEnumerable<Ingredient> ingredients;
 
-            var mappedDatas = _mapper.Map<IEnumerable<IngredientDto>>(await _ingredientRepository.GetPaginateDatasAsync((int)page, (int)take));
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                ingredients = await _ingredientRepository.GetAllAsync();
+            }
+            else
+            {
+                ingredients = await _ingredientRepository.GetAllWithExpressionAsync(m => m.Name.Contains(searchText));
+            }
+
+            int totalPage = (int)Math.Ceiling((decimal)ingredients.Count() / (int)take);
+
+            var mappedDatas = _mapper.Map<IEnumerable<IngredientDto>>(await _ingredientRepository.GetPaginateDatasAsync((int)page, (int)take, searchText));
 
             return new PaginationResponse<IngredientDto>(mappedDatas, totalPage, (int)page);
         }

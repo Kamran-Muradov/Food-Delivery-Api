@@ -8,16 +8,24 @@ namespace Repository.Repositories
     public class MenuRepository : BaseRepository<Menu>, IMenuRepository
     {
         public MenuRepository(AppDbContext context) : base(context) { }
-        public async Task<IEnumerable<Menu>> GetPaginateDatasAsync(int page, int take)
+        public async Task<IEnumerable<Menu>> GetPaginateDatasAsync(int page, int take, string? searchText)
         {
-            return await Entities
+            var query = Entities.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                query = query.Where(m => m.Name.Contains(searchText));
+            }
+
+            query = query
                 .OrderByDescending(m => m.Id)
                 .Skip((page - 1) * take)
                 .Take(take)
                 .Include(m => m.MenuImage)
                 .Include(m => m.Restaurant)
-                .AsNoTracking()
-                .ToListAsync();
+                .AsNoTracking();
+
+            return await query.ToListAsync();
         }
 
         public async Task<Menu> GetByIdWithAllDatasAsync(int id)

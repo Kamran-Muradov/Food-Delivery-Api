@@ -10,7 +10,7 @@ namespace Service.Services.Interfaces
         Task DeleteAsync(int? id);
         Task<IEnumerable<IngredientDto>> GetAllAsync();
         Task<IEnumerable<IngredientSelectDto>> GetAllForSelectAsync(int? excludeId = null);
-        Task<PaginationResponse<IngredientDto>> GetPaginateAsync(int? page, int? take);
+        Task<PaginationResponse<IngredientDto>> GetPaginateAsync(int? page, int? take, string? searchText);
         Task<IngredientDto> GetByIdAsync(int? id);
         Task<bool> ExistAsync(string name, int? excludeId = null);
     }

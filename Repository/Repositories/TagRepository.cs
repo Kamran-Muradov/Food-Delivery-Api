@@ -11,9 +11,16 @@ namespace Repository.Repositories
         {
         }
 
-        public async Task<IEnumerable<Tag>> GetPaginateDatasAsync(int page, int take)
+        public async Task<IEnumerable<Tag>> GetPaginateDatasAsync(int page, int take, string? searchText)
         {
-            return await Entities
+            var query = Entities.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                query = query.Where(m => m.Name.Contains(searchText));
+            }
+
+            return await query
                 .OrderByDescending(m => m.Id)
                 .Skip((page - 1) * take)
                 .Take(take)

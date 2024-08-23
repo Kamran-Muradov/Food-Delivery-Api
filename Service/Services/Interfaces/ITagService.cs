@@ -11,7 +11,7 @@ namespace Service.Services.Interfaces
         Task DeleteAsync(int? id);
         Task<IEnumerable<TagDto>> GetAllAsync();
         Task<IEnumerable<TagSelectDto>> GetAllForSelectAsync(int? excludeId = null);
-        Task<PaginationResponse<DTOs.Admin.Tags.TagDto>> GetPaginateAsync(int? page, int? take);
+        Task<PaginationResponse<DTOs.Admin.Tags.TagDto>> GetPaginateAsync(int? page, int? take, string? searchText);
         Task<TagDto> GetByIdAsync(int? id);
         Task<bool> ExistAsync(string name, int? excludeId = null);
     }

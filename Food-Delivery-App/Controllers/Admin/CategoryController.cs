@@ -36,9 +36,9 @@ namespace Food_Delivery_App.Controllers.Admin
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPaginateDatas([FromQuery] int page = 1, [FromQuery] int take = 5)
+        public async Task<IActionResult> GetPaginateDatas([FromQuery] int page = 1, [FromQuery] int take = 5, [FromQuery] string? searchText = null)
         {
-            return Ok(await _categoryService.GetPaginateAsync(page, take));
+            return Ok(await _categoryService.GetPaginateAsync(page, take, searchText));
         }
 
         [HttpGet]

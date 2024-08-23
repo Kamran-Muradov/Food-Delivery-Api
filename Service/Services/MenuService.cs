@@ -117,15 +117,25 @@ namespace Service.Services
             await _menuRepository.DeleteAsync(menu);
         }
 
-        public async Task<PaginationResponse<MenuDto>> GetPaginateAsync(int? page, int? take)
+        public async Task<PaginationResponse<MenuDto>> GetPaginateAsync(int? page, int? take, string? searchText)
         {
             ArgumentNullException.ThrowIfNull(page);
             ArgumentNullException.ThrowIfNull(take);
 
-            var restaurants = await _menuRepository.GetAllAsync();
-            int totalPage = (int)Math.Ceiling((decimal)restaurants.Count() / (int)take);
+            IEnumerable<Menu> menus;
 
-            var mappedDatas = _mapper.Map<IEnumerable<MenuDto>>(await _menuRepository.GetPaginateDatasAsync((int)page, (int)take));
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                menus = await _menuRepository.GetAllAsync();
+            }
+            else
+            {
+                menus = await _menuRepository.GetAllWithExpressionAsync(m => m.Name.Contains(searchText));
+            }
+
+            int totalPage = (int)Math.Ceiling((decimal)menus.Count() / (int)take);
+
+            var mappedDatas = _mapper.Map<IEnumerable<MenuDto>>(await _menuRepository.GetPaginateDatasAsync((int)page, (int)take, searchText));
 
             return new PaginationResponse<MenuDto>(mappedDatas, totalPage, (int)page);
         }

@@ -255,11 +255,24 @@ namespace Service.Services
         }
 
 
-        public async Task<PaginationResponse<UserDto>> GetUsersPaginateAsync(int? page, int? take)
+        public async Task<PaginationResponse<UserDto>> GetUsersPaginateAsync(int? page, int? take, string? searchText)
         {
-            var users = await _userManager.Users
-                .Include(u => u.UserImage)
-                .ToListAsync();
+            List<AppUser> users;
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                users = await _userManager.Users
+                   .Include(u => u.UserImage)
+                   .ToListAsync();
+            }
+            else
+            {
+                users = await _userManager.Users
+                    .Where(u => u.UserName.Contains(searchText) || u.Email.Contains(searchText))
+                    .Include(u => u.UserImage)
+                    .ToListAsync();
+            }
+          
             int totalPage = (int)Math.Ceiling((decimal)users.Count / (int)take);
 
             var mappedDatas = _mapper.Map<IEnumerable<UserDto>>(users.Skip((int)((page - 1) * take)).Take((int)take));

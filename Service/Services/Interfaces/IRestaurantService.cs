@@ -11,7 +11,7 @@ namespace Service.Services.Interfaces
         Task CreateAsync(RestaurantCreateDto model);
         Task EditAsync(int? id, RestaurantEditDto model);
         Task DeleteAsync(int? id);
-        Task<PaginationResponse<RestaurantDto>> GetPaginateAsync(int? page, int? take);
+        Task<PaginationResponse<RestaurantDto>> GetPaginateAsync(int? page, int? take, string? searchText);
         Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllWithImagesAsync();
         Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllByTagIdAsync(int? tagId);
         Task<IEnumerable<DTOs.UI.Restaurants.RestaurantDto>> GetAllByBrandIdAsync(int brandId);

@@ -134,15 +134,25 @@ namespace Service.Services
             }
         }
 
-        public async Task<PaginationResponse<RestaurantDto>> GetPaginateAsync(int? page, int? take)
+        public async Task<PaginationResponse<RestaurantDto>> GetPaginateAsync(int? page, int? take, string? searchText)
         {
             ArgumentNullException.ThrowIfNull(page);
             ArgumentNullException.ThrowIfNull(take);
 
-            var restaurants = await _restaurantRepository.GetAllAsync();
+            IEnumerable<Restaurant> restaurants;
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                restaurants = await _restaurantRepository.GetAllAsync();
+            }
+            else
+            {
+                restaurants = await _restaurantRepository.GetAllWithExpressionAsync(m => m.Name.Contains(searchText));
+            }
+
             int totalPage = (int)Math.Ceiling((decimal)restaurants.Count() / (int)take);
 
-            var mappedDatas = _mapper.Map<IEnumerable<RestaurantDto>>(await _restaurantRepository.GetPaginateDatasAsync((int)page, (int)take));
+            var mappedDatas = _mapper.Map<IEnumerable<RestaurantDto>>(await _restaurantRepository.GetPaginateDatasAsync((int)page, (int)take, searchText));
 
             return new PaginationResponse<RestaurantDto>(mappedDatas, totalPage, (int)page);
         }

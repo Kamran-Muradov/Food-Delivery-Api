@@ -21,7 +21,7 @@ namespace Service.Services
         public TagService(ITagRepository tagRepository,
                                IMapper mapper,
                                IPhotoService photoService,
-                               ITagImageRepository tagImageRepository, 
+                               ITagImageRepository tagImageRepository,
                                IRestaurantTagRepository restaurantTagRepository)
         {
             _tagRepository = tagRepository;
@@ -111,15 +111,25 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<TagSelectDto>>(tags);
         }
 
-        public async Task<PaginationResponse<TagDto>> GetPaginateAsync(int? page, int? take)
+        public async Task<PaginationResponse<TagDto>> GetPaginateAsync(int? page, int? take, string? searchText)
         {
             ArgumentNullException.ThrowIfNull(page);
             ArgumentNullException.ThrowIfNull(take);
 
-            var tags = await _tagRepository.GetAllAsync();
+            IEnumerable<Tag> tags;
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                tags = await _tagRepository.GetAllAsync();
+            }
+            else
+            {
+                tags = await _tagRepository.GetAllWithExpressionAsync(m => m.Name.Contains(searchText));
+            }
+
             int totalPage = (int)Math.Ceiling((decimal)tags.Count() / (int)take);
 
-            var mappedDatas = _mapper.Map<IEnumerable<TagDto>>(await _tagRepository.GetPaginateDatasAsync((int)page, (int)take));
+            var mappedDatas = _mapper.Map<IEnumerable<TagDto>>(await _tagRepository.GetPaginateDatasAsync((int)page, (int)take, searchText));
 
             return new PaginationResponse<TagDto>(mappedDatas, totalPage, (int)page);
         }
