@@ -79,6 +79,8 @@ namespace Service.Services
         public async Task DeleteAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);
+            var allSliders = await _sliderRepository.GetAllAsync();
+            if (allSliders.Count() <= 3) throw new BadRequestException("Slider count cannot be less than 3");
 
             var slider = await _sliderRepository.GetByIdWithImageAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
 

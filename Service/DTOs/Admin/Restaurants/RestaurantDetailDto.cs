@@ -8,7 +8,6 @@
         public string Email { get; set; }
         public decimal DeliveryFee { get; set; }
         public bool IsActive { get; set; }
-        public decimal MinimumOrder { get; set; }
         public int MinDeliveryTime { get; set; }
         public int Rating { get; set; }
         public double AverageRating { get; set; }

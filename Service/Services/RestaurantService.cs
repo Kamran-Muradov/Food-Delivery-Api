@@ -122,6 +122,12 @@ namespace Service.Services
         public async Task DeleteAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);
+            var allRestaurants = await _restaurantRepository.GetAllAsync();
+
+            if (allRestaurants.Count() <= 12)
+            {
+                throw new BadRequestException("Restaurant count cannot be less tha 12");
+            }
 
             var restaurant = await _restaurantRepository.GetByIdWithImagesAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
 

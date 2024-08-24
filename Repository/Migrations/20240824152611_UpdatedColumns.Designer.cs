@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -11,9 +12,10 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240824152611_UpdatedColumns")]
+    partial class UpdatedColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1011,40 +1013,6 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Settings");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedBy = "kamran_superadmin",
-                            CreatedDate = new DateTime(2024, 8, 24, 19, 39, 29, 508, DateTimeKind.Local).AddTicks(294),
-                            Key = "Address",
-                            Value = "28 May"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedBy = "kamran_superadmin",
-                            CreatedDate = new DateTime(2024, 8, 24, 19, 39, 29, 508, DateTimeKind.Local).AddTicks(296),
-                            Key = "Phone",
-                            Value = "+9945556622"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedBy = "kamran_superadmin",
-                            CreatedDate = new DateTime(2024, 8, 24, 19, 39, 29, 508, DateTimeKind.Local).AddTicks(297),
-                            Key = "Email",
-                            Value = "company@gmail.com"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedBy = "kamran_superadmin",
-                            CreatedDate = new DateTime(2024, 8, 24, 19, 39, 29, 508, DateTimeKind.Local).AddTicks(298),
-                            Key = "Logo",
-                            Value = "https://res.cloudinary.com/duta72kmn/image/upload/v1723800374/pngwing.com_prtuvw.png"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Slider", b =>

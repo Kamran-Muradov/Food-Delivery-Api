@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
-using Service.DTOs.Admin.Categories;
 
 namespace Service.DTOs.Admin.Brands
 {

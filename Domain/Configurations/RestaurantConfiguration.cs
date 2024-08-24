@@ -29,9 +29,6 @@ namespace Domain.Configurations
             builder.Property(m => m.MinDeliveryTime)
                 .IsRequired();
 
-            builder.Property(m => m.MinimumOrder)
-                .IsRequired();
-
             builder.Property(m => m.Phone)
                 .IsRequired()
                 .HasMaxLength(50);

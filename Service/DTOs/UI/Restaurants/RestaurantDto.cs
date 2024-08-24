@@ -14,7 +14,6 @@ namespace Service.DTOs.UI.Restaurants
         public double AverageRating { get; set; }
         public string Brand { get; set; }
         public int ReviewCount { get; set; }
-        public decimal MinimumOrder { get; set; }
         public decimal DeliveryFee { get; set; }
         public IEnumerable<TagDto> Tags { get; set; }
     }

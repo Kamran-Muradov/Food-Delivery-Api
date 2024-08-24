@@ -90,6 +90,9 @@ namespace Service.Services
         {
             ArgumentNullException.ThrowIfNull(id);
 
+            var allTags= await _tagRepository.GetAllAsync();
+            if (allTags.Count() <= 6) throw new BadRequestException("Tag count cannot be less than 6");
+
             var tag = await _tagRepository.GetByIdWithImageAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
 
             await _photoService.DeletePhoto(tag.TagImage.PublicId);

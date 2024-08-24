@@ -54,6 +54,41 @@ namespace Repository.Data
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(BaseEntity).Assembly);
 
+            modelBuilder.Entity<Setting>().HasData(
+                new Setting
+                {
+                    Id = 1,
+                    Key = "Address",
+                    Value = "28 May",
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "kamran_superadmin"
+                },
+                new Setting
+                {
+                    Id = 2,
+                    Key = "Phone",
+                    Value = "+9945556622",
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "kamran_superadmin"
+                },
+                new Setting
+                {
+                    Id = 3,
+                    Key = "Email",
+                    Value = "company@gmail.com",
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "kamran_superadmin"
+                },
+                new Setting
+                {
+                    Id = 4,
+                    Key = "Logo",
+                    Value = "https://res.cloudinary.com/duta72kmn/image/upload/v1723800374/pngwing.com_prtuvw.png",
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "kamran_superadmin"
+                }
+            );
+
             base.OnModelCreating(modelBuilder);
         }
 

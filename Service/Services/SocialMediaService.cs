@@ -39,6 +39,10 @@ namespace Service.Services
         public async Task DeleteAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);
+
+            var allSocialMedias = await _socialMediaRepository.GetAllAsync();
+            if (allSocialMedias.Count() <= 1) throw new BadRequestException("Social media count cannot be less than 1");
+
             var socialMedia = await _socialMediaRepository.GetByIdAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
             await _socialMediaRepository.DeleteAsync(socialMedia);
         }

@@ -10,7 +10,6 @@ namespace Service.DTOs.Admin.Restaurants
         public string Phone { get; set; }
         public string Email { get; set; }
         public decimal DeliveryFee { get; set; }
-        public decimal MinimumOrder { get; set; }
         public int MinDeliveryTime { get; set; }
         public string Address { get; set; }
         public string Website { get; set; }
@@ -72,12 +71,6 @@ namespace Service.DTOs.Admin.Restaurants
                 .WithMessage("Delivery fee is required")
                 .GreaterThan(0)
                 .WithMessage("Delivery fee must be greater than 0"); ;
-
-            RuleFor(m => m.MinimumOrder)
-                .NotEmpty()
-                .WithMessage("Minimum order is required")
-                .GreaterThan(0)
-                .WithMessage("Minimum order must be greater than 0");
 
             RuleFor(m => m.MinDeliveryTime)
                 .NotEmpty()

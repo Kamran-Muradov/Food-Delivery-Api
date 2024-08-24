@@ -80,6 +80,9 @@ namespace Service.Services
         {
             ArgumentNullException.ThrowIfNull(id);
 
+            var allAbouts = await _aboutRepository.GetAllAsync();
+            if (allAbouts.Count() <= 4) throw new BadRequestException("About count cannot be less than 4");
+
             var about = await _aboutRepository.GetByIdWithImageAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
 
             await _photoService.DeletePhoto(about.AboutImage.PublicId);
@@ -94,7 +97,7 @@ namespace Service.Services
 
             var sliders = await _aboutRepository.GetAllAsync();
             int totalPage = (int)Math.Ceiling((decimal)sliders.Count() / (int)take);
-            
+
             var mappedDatas = _mapper.Map<IEnumerable<AboutDto>>(await _aboutRepository.GetPaginateDatasAsync((int)page, (int)take));
 
             return new PaginationResponse<AboutDto>(mappedDatas, totalPage, (int)page);

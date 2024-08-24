@@ -12,7 +12,7 @@ namespace Food_Delivery_App.Controllers.Admin
             _restaurantImageService = restaurantImageService;
         }
 
-        [HttpGet("{restaurantId}")]
+        [HttpGet("{restaurantId:int}")]
         public async Task<IActionResult> GetAllByRestaurantId([FromRoute] int restaurantId)
         {
             return Ok(await _restaurantImageService.GetAllByRestaurantId(restaurantId));

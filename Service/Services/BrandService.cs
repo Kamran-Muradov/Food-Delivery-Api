@@ -74,10 +74,9 @@ namespace Service.Services
                         BrandId = brand.Id
                     };
 
-                    brand.BrandLogo = brandLogo;
+                    await _brandLogoRepository.CreateAsync(brandLogo);
                 }
 
-                brand.UpdatedDate = DateTime.Now;
                 await _brandRepository.EditAsync(_mapper.Map(model, brand));
             }
         }

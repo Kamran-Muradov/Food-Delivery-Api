@@ -13,7 +13,6 @@ namespace Service.DTOs.UI.Restaurants
         public string Email { get; set; }
         public decimal DeliveryFee { get; set; }
         public bool IsActive { get; set; }
-        public decimal MinimumOrder { get; set; }
         public int MinDeliveryTime { get; set; }
         public double AverageRating { get; set; }
         public string Address { get; set; }

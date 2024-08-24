@@ -13,7 +13,7 @@ namespace Service.Services.Interfaces
         Task<IEnumerable<CategorySelectDto>> GetAllForSelectAsync(int? excludeId = null);
         Task<PaginationResponse<DTOs.Admin.Categories.CategoryDto>> GetPaginateAsync(int? page, int? take,
             string? searchText);
-        Task<CategoryDto> GetByIdAsync(int? id);
+        Task<DTOs.Admin.Categories.CategoryDto> GetByIdAsync(int? id);
         Task<bool> ExistAsync(string name, int? excludeId = null);
     }
 }

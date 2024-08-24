@@ -128,12 +128,12 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<CategoryDto>>(await _categoryRepository.GetAllWithImageAsync());
         }
 
-        public async Task<CategoryDto> GetByIdAsync(int? id)
+        public async Task<DTOs.Admin.Categories.CategoryDto> GetByIdAsync(int? id)
         {
             ArgumentNullException.ThrowIfNull(id);
             var category = await _categoryRepository.GetByIdAsync((int)id) ?? throw new NotFoundException(ResponseMessages.NotFound);
 
-            return _mapper.Map<CategoryDto>(category);
+            return _mapper.Map<DTOs.Admin.Categories.CategoryDto>(category);
         }
 
         public async Task<bool> ExistAsync(string name, int? excludeId = null)

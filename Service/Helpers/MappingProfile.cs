@@ -134,6 +134,7 @@ namespace Service.Helpers
             CreateMap<Restaurant, RestaurantDetailDto>()
                 .ForMember(d => d.Tags, opt => opt.MapFrom(s => s.RestaurantTags.Select(m => m.Tag.Name)))
                 .ForMember(d => d.Brand, opt => opt.MapFrom(s => s.Brand != null ? s.Brand.Name : "N/A"))
+                .ForMember(d => d.Website, opt => opt.MapFrom(s => s.Website ?? "N/A"))
                 .ForMember(d => d.City, opt => opt.MapFrom(s => s.City.Name))
                 .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
                 .ForMember(d => d.UpdatedDate, opt => opt.MapFrom(s => s.UpdatedDate != null ? s.UpdatedDate.Value.ToString("MM/dd/yyyy") : "N/A"));

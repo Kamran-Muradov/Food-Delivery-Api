@@ -31,7 +31,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         policy =>
         {
-            policy.WithOrigins("https://localhost:7095")
+            policy.WithOrigins("https://food-delivery-mvc.azurewebsites.net", "https://localhost:7095")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
