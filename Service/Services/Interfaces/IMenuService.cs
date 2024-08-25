@@ -12,6 +12,6 @@ namespace Service.Services.Interfaces
         Task<IEnumerable<MenuSelectDto>> GetAllForSelectAsync(int? excludeId = null);
         Task<MenuDetailDto> GetByIdDetailAsync(int? id);
         Task<DTOs.UI.Menus.MenuDetailDto> GetByIdAsync(int? id);
-        Task<IEnumerable<MenuDto>> SearchByNameAndCategory(string searchText);
+        Task<IEnumerable<DTOs.UI.Menus.MenuDto>> SearchByRestaurantId(int? restaurantId, string? searchText);
     }
 }

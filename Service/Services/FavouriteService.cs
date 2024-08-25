@@ -37,10 +37,8 @@ namespace Service.Services
 
             if (user is null || restaurant is null) throw new NotFoundException(ResponseMessages.NotFound);
 
-            var favourite = await _favouriteRepository.GetFirstWithExpressionAsync(f => f.UserId == model.UserId && f.RestaurantId == model.RestaurantId);
-            if (favourite is not null) throw new BadRequestException(ResponseMessages.ExistData);
-
-            await _favouriteRepository.CreateAsync(_mapper.Map<Favourite>(model));
+            var existFavourite = await _favouriteRepository.GetFirstWithExpressionAsync(f => f.UserId == model.UserId && f.RestaurantId == model.RestaurantId);
+            if (existFavourite is null) await _favouriteRepository.CreateAsync(_mapper.Map<Favourite>(model));
         }
 
         public async Task DeleteAsync(string userId, int? restaurantId)
@@ -48,14 +46,12 @@ namespace Service.Services
             ArgumentNullException.ThrowIfNull(userId);
             ArgumentNullException.ThrowIfNull(restaurantId);
 
-            var favourite = await _favouriteRepository.GetFirstWithExpressionAsync(f => f.UserId == userId && f.RestaurantId == restaurantId);
-            if (favourite is null) throw new NotFoundException(ResponseMessages.NotFound);
-            await _favouriteRepository.DeleteAsync(favourite);
+            var existFavourite = await _favouriteRepository.GetFirstWithExpressionAsync(f => f.UserId == userId && f.RestaurantId == restaurantId);
+            if (existFavourite is not null) await _favouriteRepository.DeleteAsync(existFavourite);
         }
 
         public async Task<IEnumerable<FavouriteDto>> GetAllByUserIdAsync(string userId)
         {
-            var allByUserIdAsync = await _favouriteRepository.GetAllByUserIdAsync(userId);
             return _mapper.Map<IEnumerable<FavouriteDto>>(await _favouriteRepository.GetAllByUserIdAsync(userId));
         }
 

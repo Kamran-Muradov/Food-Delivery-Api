@@ -244,6 +244,8 @@ namespace Service.Services
                     .Count();
             }
 
+            var test=new PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>(mappedDatas, totalPage, model.Page);
+
             return new PaginationResponse<DTOs.UI.Restaurants.RestaurantDto>(mappedDatas, totalPage, model.Page);
         }
 

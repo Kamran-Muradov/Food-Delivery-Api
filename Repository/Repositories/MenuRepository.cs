@@ -53,10 +53,18 @@ namespace Repository.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Menu>> SearchByNameAndCategory(string searchText)
+        public async Task<IEnumerable<Menu>> SearchByRestaurantId(int restaurantId, string? searchText)
         {
-            return await Entities
-                .Where(m => m.Name.Contains(searchText) || m.Category.Name.Contains(searchText))
+            var query = Entities
+                .AsQueryable()
+                .Where(m => m.RestaurantId == restaurantId);
+
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                query = query.Where(m => m.Name.Contains(searchText) || m.Category.Name.Contains(searchText));
+            }
+
+            return await query
                 .Include(m => m.MenuImage)
                 .Include(m => m.Category)
                 .Include(m => m.MenuIngredients)

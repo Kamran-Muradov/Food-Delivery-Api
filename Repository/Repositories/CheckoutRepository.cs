@@ -38,6 +38,9 @@ namespace Repository.Repositories
             return await Entities
                 .Where(c => c.Id == id)
                 .Include(c => c.Restaurant)
+                .Include(c => c.Review)
+                .Include(c => c.CheckoutMenus)
+                .ThenInclude(cm => cm.Menu)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }

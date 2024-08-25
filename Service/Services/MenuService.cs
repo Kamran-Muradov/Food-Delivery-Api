@@ -161,10 +161,11 @@ namespace Service.Services
             return _mapper.Map<DTOs.UI.Menus.MenuDetailDto>(await _menuRepository.GetByIdWithAllDatasAsync((int)id));
         }
 
-        public async Task<IEnumerable<MenuDto>> SearchByNameAndCategory(string searchText)
+        public async Task<IEnumerable<DTOs.UI.Menus.MenuDto>> SearchByRestaurantId(int? restaurantId, string? searchText)
         {
-            ArgumentNullException.ThrowIfNull(searchText);
-            return _mapper.Map<IEnumerable<MenuDto>>(await _menuRepository.SearchByNameAndCategory(searchText));
+            ArgumentNullException.ThrowIfNull(restaurantId);
+
+            return _mapper.Map<IEnumerable<DTOs.UI.Menus.MenuDto>>(await _menuRepository.SearchByRestaurantId((int)restaurantId, searchText));
         }
     }
 }

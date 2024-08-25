@@ -13,9 +13,9 @@ namespace Food_Delivery_App.Controllers.UI
         }
 
         [HttpGet]
-        public async Task<IActionResult> Search([FromQuery] string searchText)
+        public async Task<IActionResult> Search([FromQuery] int restaurantId, [FromQuery] string? searchText = null)
         {
-            return Ok(await _menuService.SearchByNameAndCategory(searchText));
+            return Ok(await _menuService.SearchByRestaurantId(restaurantId, searchText));
         }
 
         [HttpGet("{id:int}")]

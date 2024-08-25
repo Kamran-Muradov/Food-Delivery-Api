@@ -101,6 +101,12 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<CheckoutDto>>(await _checkoutRepository.GetAllByUserIdAsync(userId));
         }
 
+        public async Task<CheckoutDetailDto> GetByIdAsync(int? id)
+        {
+            ArgumentNullException.ThrowIfNull(id);
+            return _mapper.Map<CheckoutDetailDto>(await _checkoutRepository.GetByIdWithAllDatasAsync((int)id));
+        }
+
         public async Task<PaginationResponse<DTOs.Admin.Checkouts.CheckoutDto>> GetPaginateAsync(int? page, int? take)
         {
             ArgumentNullException.ThrowIfNull(page);

@@ -222,6 +222,10 @@ namespace Service.Helpers
             CreateMap<Checkout, CheckoutDto>()
                 .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
                 .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Restaurant.Name));
+            CreateMap<Checkout, CheckoutDetailDto>()
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
+                .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Restaurant.Name))
+                .ForMember(d => d.Items, opt => opt.MapFrom(s => s.CheckoutMenus.Select(cm => cm.Menu.Name)));
             CreateMap<Checkout, DTOs.Admin.Checkouts.CheckoutDto>()
                 .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.CreatedDate.ToString("MM/dd/yyyy")))
                 .ForMember(d => d.UserName, opt => opt.MapFrom(s => s.User.UserName));

@@ -28,5 +28,11 @@ namespace Food_Delivery_App.Controllers.UI
         {
             return Ok(await _checkoutService.GetAllByUserIdAsync(userId));
         }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
+        {
+            return Ok(await _checkoutService.GetByIdAsync(id));
+        }
     }
 }
