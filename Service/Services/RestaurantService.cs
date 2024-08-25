@@ -310,12 +310,10 @@ namespace Service.Services
 
             var mainImage = restaurant.RestaurantImages.FirstOrDefault(m => m.IsMain);
             mainImage.IsMain = false;
-            mainImage.UpdatedDate = DateTime.Now;
-
             restaurantImage.IsMain = true;
-            restaurantImage.UpdatedDate = DateTime.Now;
 
-            await _restaurantRepository.EditAsync(restaurant);
+            await _restaurantImageRepository.EditAsync(mainImage);
+            await _restaurantImageRepository.EditAsync(restaurantImage);
         }
 
         public async Task DeleteImageAsync(MainAndDeleteImageDto model)

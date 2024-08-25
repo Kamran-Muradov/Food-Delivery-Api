@@ -33,7 +33,10 @@ namespace Service.Services
             var checkout = await _checkoutRepository.GetByIdWithAllDatasAsync(model.CheckoutId) ??
                            throw new NotFoundException(ResponseMessages.NotFound);
 
-            await _reviewRepository.CreateAsync(_mapper.Map<Review>(model));
+            var review = _mapper.Map<Review>(model);
+            if (string.IsNullOrWhiteSpace(model.Comment)) review.Comment = null;
+
+            await _reviewRepository.CreateAsync(review);
 
             var restaurant = checkout.Restaurant;
 

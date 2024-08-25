@@ -8,6 +8,8 @@ namespace Service.DTOs.UI.Checkouts
         public string CreatedDate { get; set; }
         public string Status { get; set; }
         public string Restaurant { get; set; }
+        public string Address { get; set; }
+        public string? Comments { get; set; }
         public ICollection<string> Items { get; set; }
         public ReviewDto Review { get; set; }
     }

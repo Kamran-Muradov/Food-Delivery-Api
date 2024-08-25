@@ -34,6 +34,7 @@ builder.Services.AddCors(options =>
             policy.WithOrigins("https://food-delivery-mvc.azurewebsites.net", "https://localhost:7095")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
+                .SetIsOriginAllowed((host) => true)
                 .AllowCredentials();
         });
 });
@@ -131,8 +132,6 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapHub<CheckoutHub>("/checkoutHub");
 });
-
-
 
 app.UseHttpsRedirection();
 
