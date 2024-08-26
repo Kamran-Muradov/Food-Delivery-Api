@@ -31,7 +31,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         policy =>
         {
-            policy.WithOrigins("https://food-delivery-mvc.azurewebsites.net", "https://localhost:7095")
+            policy.WithOrigins("https://localhost:7095")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .SetIsOriginAllowed((host) => true)
@@ -109,13 +109,20 @@ builder.Services.AddRouting(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwaggerUI();
 }
-
+//if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI(c =>
+//    {
+//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+//        c.RoutePrefix = string.Empty; // Serve Swagger UI at the app's root
+//    });
+//}
 
 app.UseCors("AllowSpecificOrigin");
 
